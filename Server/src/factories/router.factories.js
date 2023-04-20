@@ -5,6 +5,7 @@ import Views from "../controller/views.controller.js";
 import Products from "../controller/products.controller.js";
 import Carts from "../controller/carts.controller.js";
 import Chat from "../controller/chat.controller.js";
+import Email from "../controller/email.controller.js";
 
 export default class routerFactory {
   static getRouter(router) {
@@ -16,6 +17,7 @@ export default class routerFactory {
       products: new Products().getRouter(),
       carts: new Carts().getRouter(),
       chat: new Chat().getRouter(),
+      email: new Email().getRouter(),
     };
     return routers[router];
   }

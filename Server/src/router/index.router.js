@@ -7,6 +7,7 @@ const session = routerFactory.getRouter("session");
 const products = routerFactory.getRouter("products");
 const carts = routerFactory.getRouter("carts");
 const chat = routerFactory.getRouter("chat");
+const email = routerFactory.getRouter("email");
 
 const router = (app) => {
   app.use("/api/products", products);
@@ -16,6 +17,7 @@ const router = (app) => {
   app.use("/", views);
   app.use("/session", session);
   app.use("/api/chats", chat);
+  app.use("/email", email);
   app.use("/*", (req, res) => {
     res.status(404).json({ error: "algo estas haciendo mal" });
   });

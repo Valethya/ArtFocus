@@ -4,7 +4,7 @@ import {
   emailUser,
   passEmail,
   portEmailService,
-} from "../config/email.config";
+} from "../config/email.config.js";
 
 const transport = nodemailer.createTransport({
   service: emailService,
