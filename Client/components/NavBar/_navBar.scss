@@ -1,0 +1,65 @@
+.navBar{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+    max-height: 55px;
+    transition:  1s;
+    // background-color: rgba(144, 177, 147, 0.637);
+    // backdrop-filter:blur(10px);
+   
+    z-index: 1000;
+    ul{
+        width: 100%;
+        display: flex;
+        flex-direction: row;  
+        justify-content: space-around;
+        align-items: center;
+        li{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            list-style: none;
+            width: calc(100%*.5);
+            transition: 1s;
+        }
+        .page:hover{
+            letter-spacing: .5em;
+        }
+        .liAvatar{
+            justify-content: end;
+        }
+      
+    }
+
+    .linkNav{
+        text-decoration: none;
+        color:#000;
+    }
+
+}
+
+
+
+
+
+.header{
+    // background: url(https://live.staticflickr.com/8261/29123401354_2239fe4868_k.jpg);
+    background-image: url("https://images.unsplash.com/photo-1495745713439-7efd16a9555c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80");
+    // background: url("../../src/assets/img/beautifulWorld.jpeg");
+    background-attachment: fixed;
+    // background: url(https://p4.wallpaperbetter.com/wallpaper/584/522/555/gustav-klimt-gustav-klimt-the-kiss-wallpaper-preview.jpg);
+    height: 100vh;
+    background-position: 50% 100%;
+    background-size: cover;
+    // animation: scalar 200s linear forwards;
+    .phrase{
+        width: 70%;
+        position: absolute;
+        bottom: -45%;
+        left:5em;
+        color:black;
+    }
+}

@@ -1,0 +1,38 @@
+@import "./colors.scss";
+@import "./typography.scss";
+@import "../../../components/NavBar/navBar.scss";
+@import "../../../components/Avatar/avatar.scss";
+@import "../../../components/Arrows/arrows.scss";
+@import "../../../components/Logo/logo.scss";
+@import "../../../components/Card/card.scss";
+@import "../../../components/Container/container.scss";
+@import "../../../components/Button/button.scss";
+@import "../../../components/Cart/cart.scss";
+@keyframes scalar {
+    0% {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+    100% {
+        -webkit-transform: scale(2);
+        -ms-transform: scale(2);
+        transform: scale(2);
+    }
+}
+// body{
+//     height: 300vh;
+//     // background-color: rgb(250, 247, 236);
+// }
+// #root{
+//     height: 300vh;
+// }
+
+//colores 
+.shadow{
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+a{
+    text-decoration: none;
+    color: #000;
+}

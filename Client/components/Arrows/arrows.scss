@@ -1,0 +1,15 @@
+.arrow{
+    position:absolute;
+    bottom:1em;
+    right: 50%;
+    height: 3em;
+    width: 3em;
+    background-color: rgba(255, 255, 255, 0.356);
+    border-radius: 50%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    .arroSvg{
+        font-size: 1em;
+    }
+}

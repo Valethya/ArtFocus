@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: calc(10vh + 3em);
+    .subContainer{
+        width: 70%;
+    }
+    
+}
+.cardContainer{
+    display: flex;
+    flex-wrap: wrap;
+}

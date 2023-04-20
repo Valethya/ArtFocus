@@ -1,0 +1,14 @@
+.avatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.2em;
+    width: 2.2em;
+    // background:rgb(241, 224, 202);
+    background: $secondary-color;
+    border-radius: 50%;
+    
+    &:hover{
+        animation: growth forwards linear .5s;
+    }
+}
