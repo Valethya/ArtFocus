@@ -4,8 +4,8 @@ import { emailAdmin, passAdmin } from "../config/index.config.js";
 
 import managerFactory from "../factories/manager.factories.js";
 
-const auth = managerFactory.getManager("auth");
-const cartManager = managerFactory.getManager("carts");
+const auth = await managerFactory.getManager("auth");
+const cartManager = await managerFactory.getManager("carts");
 
 //
 async function authLogin(username, password) {

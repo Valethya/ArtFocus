@@ -1,6 +1,6 @@
 import messageManager from "./dao/Mongo/message.mongo.js";
 
-const messages = new messageManager();
+const messages = await new messageManager();
 
 async function find() {
   try {

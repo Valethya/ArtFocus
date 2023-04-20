@@ -1,7 +1,7 @@
 import managerFactory from "../factories/manager.factories.js";
 
-const users = managerFactory.getManager("users");
-const cartManager = managerFactory.getManager("carts");
+const users = await managerFactory.getManager("users");
+const cartManager = await managerFactory.getManager("carts");
 
 export default async function createUser(req, username, password) {
   const { firstName, lastName, email, age, cart } = req.body;

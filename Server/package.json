@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:fs": " set NODE_ENV=fs&& nodemon src/app.js ",
-    "start:mongo": " set NODE_ENV=mongo&& nodemon src/app.js "
+    "start:fs": " set NODE_ENV=fs && nodemon src/app.js ",
+    "start:mongo": " set NODE_ENV=mongo && nodemon src/app.js "
   },
   "keywords": [],
   "author": "",

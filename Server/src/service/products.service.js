@@ -1,6 +1,6 @@
 import managerFactory from "../factories/manager.factories.js";
 import fs from "fs";
-const manager = managerFactory.getManager("products");
+const manager = await managerFactory.getManager("products");
 
 //METODOS PARA PRODUCTOS
 

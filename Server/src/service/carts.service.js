@@ -3,8 +3,8 @@ import { findById as findByIdProd } from "./products.service.js";
 import mongoose from "mongoose";
 import { createTicket } from "./ticket.service.js";
 
-const manager = managerFactory.getManager("carts");
-const managerProd = managerFactory.getManager("products");
+const manager = await managerFactory.getManager("carts");
+const managerProd = await managerFactory.getManager("products");
 
 ///
 
