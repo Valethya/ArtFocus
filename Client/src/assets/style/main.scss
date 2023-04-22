@@ -8,17 +8,19 @@
 @import "../../../components/Container/container.scss";
 @import "../../../components/Button/button.scss";
 @import "../../../components/Cart/cart.scss";
+@import "../../../components/Frame/frame.scss";
+@import "../../../components/Chat/chat.scss";
 @keyframes scalar {
-    0% {
-        -webkit-transform: scale(1);
-        -ms-transform: scale(1);
-        transform: scale(1);
-    }
-    100% {
-        -webkit-transform: scale(2);
-        -ms-transform: scale(2);
-        transform: scale(2);
-    }
+  0% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(2);
+    -ms-transform: scale(2);
+    transform: scale(2);
+  }
 }
 // body{
 //     height: 300vh;
@@ -28,11 +30,26 @@
 //     height: 300vh;
 // }
 
-//colores 
-.shadow{
-    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+//colores
+.shadow {
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%),
+    0 1px 5px 0 rgb(0 0 0 / 20%);
 }
-a{
-    text-decoration: none;
-    color: #000;
+a {
+  text-decoration: none;
+  color: #000;
+}
+.iconChat {
+  background-color: $primary-color;
+  height: 50px;
+  width: 50px;
+  position: fixed;
+  z-index: 1500;
+  right: 0;
+  bottom: 0;
+  margin: 1em;
+  border-radius: 50%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }

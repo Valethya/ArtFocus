@@ -1,0 +1,17 @@
+.frame {
+  border: 1px solid rgba(128, 128, 128, 0.226);
+  padding: 1em;
+  .subFrame {
+    @extend .frame;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    h2 {
+      margin: 0px;
+    }
+    p {
+      margin: 0px;
+    }
+  }
+}
