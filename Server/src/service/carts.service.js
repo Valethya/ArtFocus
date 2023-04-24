@@ -11,12 +11,9 @@ const managerProd = await managerFactory.getManager("products");
 async function find() {
   try {
     const foundCarts = await manager.persistFind();
-    return {
-      status: 200,
-      message: foundCarts,
-    };
+    return foundCarts;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
@@ -25,17 +22,13 @@ async function findById(cid) {
     const response = await manager.persistFindById({ _id: cid });
 
     if (response == null) {
-      throw new Error({
-        status: 404,
-        message: `El carrito con id ${cid} no existe`,
-      });
+      const error = new Error(`El carrito con id ${cid} no existe`);
+      error.code = 404;
+      throw error;
     }
-    return {
-      status: 200,
-      message: response.products,
-    };
+    return response.products;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
@@ -44,7 +37,7 @@ async function create() {
     const cart = await manager.persistCreate();
     return cart;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
@@ -52,17 +45,13 @@ async function deleteCarts() {
   try {
     const deletedCarts = await manager.persistDelete();
     if (deletedCarts.deletedCount == 0) {
-      throw new Error({
-        status: 404,
-        message: "no hay productos para borrar",
-      });
+      const error = new Error("no hay productos para borrar");
+      error.code = 404;
+      throw error;
     }
-    return {
-      status: 204,
-      message: "carritos eliminados",
-    };
+    return "carritos eliminados";
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
@@ -70,41 +59,43 @@ async function deleteById(cid) {
   try {
     const cartDeleted = await manager.persistDeleteById({ _id: cid });
     if (cartDeleted.deletedCount == 0) {
-      throw new Error({
-        status: 404,
-        message: `El carrito con id ${cid} no existe`,
-      });
+      const error = new Error(`El carrito con id ${cid} no existe`);
+      error.code = 404;
+      throw error;
     }
-    return {
-      status: 204,
-      message: `carrito ${cid} eliminado`,
-    };
+    return `carrito ${cid} eliminado`;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
 async function CheckDocument(cid, pid) {
+  console.log(cid, pid, " estos son ids");
+  if (cid === ":cid" || pid === ":pid") {
+    const error = new Error(
+      `no se han proporcionado un carrito y / o producto`
+    );
+    error.code = 404;
+    throw error;
+  }
   const cart = await findById(cid);
   const prod = await findByIdProd(pid);
-
   if (!cart && !prod) {
-    throw new Error({
-      status: 404,
-      message: `El carrito con id ${cid} y el producto con id ${pid} no existen`,
-    });
+    const error = new Error(
+      `El carrito con id ${cid} y el producto con id ${pid} no existen`
+    );
+    error.code = 404;
+    throw error;
   }
   if (!cart) {
-    throw new Error({
-      status: 404,
-      message: `El carrito con id ${cid} no existe`,
-    });
+    const error = new Error(`El carrito con id ${cid} no existe`);
+    error.code = 404;
+    throw error;
   }
   if (!prod) {
-    throw new Error({
-      status: 404,
-      message: `El producto con id ${pid} no existe`,
-    });
+    const error = new Error(`El producto con id ${pid} no existe`);
+    error.code = 404;
+    throw error;
   }
 
   return true;
@@ -117,14 +108,14 @@ async function addProdToCart(cid, pid) {
     const add = await manager.persistAddProdToCart(cid, pid);
     return add;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
 async function updateProducts(cid, pid, qty) {
   try {
     await CheckDocument(cid, pid);
-    const result = await manager(cid, pid, qty);
+    const result = await manager.persistUpdateProducts(cid, pid, qty);
     return result;
   } catch (error) {
     return error.message;
@@ -136,7 +127,7 @@ async function deleteProduct(cid, pid) {
     const result = manager.persistDeleteProduct(cid, pid);
     return result;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
@@ -144,24 +135,20 @@ async function deleteAllProducts(cid) {
   try {
     const cart = await manager.persistFindById(cid);
     if (cart == null) {
-      throw new Error({
-        status: 404,
-        message: `El carrito con id ${cid} no existe`,
-      });
+      const error = new Error(`El carrito con id ${cid} no existe`);
+      error.code = 404;
+      throw error;
     }
     await manager.persistDeleteAllProducts(cid);
 
-    return {
-      status: 204,
-      message: `todos los productos fueron eliminados del carrito`,
-    };
+    return;
   } catch (error) {
     throw error;
   }
 }
 async function summaryCart(cid) {
   try {
-    const summary = manager.summaryCart(cid);
+    const summary = await manager.persistSummaryCart(cid);
     return summary;
   } catch (error) {
     throw error;
@@ -203,8 +190,8 @@ async function purchase(cid, email) {
     });
 
     await Promise.all(promise);
-    const ticket = createTicket(dataPurchase);
-    return { payload: { ticket, unpurchasedProducts } };
+    const ticket = await createTicket(dataPurchase);
+    return { ticket, unpurchasedProducts };
   } catch (error) {
     throw error;
   }
@@ -222,7 +209,3 @@ export {
   summaryCart,
   purchase,
 };
-
-// import cartsManager from "../dao/mongo/carts.mongo.js";
-
-// const manager = new cartsManager();

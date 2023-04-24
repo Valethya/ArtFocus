@@ -92,20 +92,23 @@ async function findById(pid) {
     const response = await manager.persistFindById(pid);
     console.log(response);
     if (response == null) {
-      throw new Error({
-        status: 404,
-        message: `El carrito con id ${pid} no existe`,
-      });
+      const error = new Error(`El producto con id ${pid} no existe`);
+      error.code = 404;
+      throw error;
     }
-    return { status: 200, message: response };
+    return response;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 }
 //crea un producto
 async function create(prod) {
-  await manager.persistCreate(prod);
-  return { status: 200, message: "producto fue creado" };
+  try {
+    await manager.persistCreate(prod);
+    return "producto fue creado";
+  } catch (error) {
+    throw error;
+  }
 }
 
 //populate
@@ -122,24 +125,28 @@ async function findProducts() {
 }
 
 async function populate(product) {
-  await manager.persistPopulate(product);
+  try {
+    await manager.persistPopulate(product);
+    return "productos cargados";
+  } catch (error) {
+    throw error;
+  }
 }
 //fin populate
 
 //borra todos los productos
 async function deleteProduct() {
   try {
-    const deletedProducts = await manager.persistDeleteMany();
+    const deletedProducts = await manager.persistDelete();
 
     if (deletedProducts.deletedCount == 0) {
-      throw new Error({
-        status: 404,
-        message: "no hay productos para borrar",
-      });
+      const error = new Error("no hay productos para borrar");
+      error.code = 404;
+      throw error;
     }
-    return { status: 204, message: "productos eliminados" };
+    return;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 }
 // borra un producto por id
@@ -147,14 +154,13 @@ async function deleteById(pid) {
   try {
     const productDeleted = await manager.persistDeleteOne({ _id: pid });
     if (productDeleted.deletedCount == 0) {
-      throw new Error({
-        status: 404,
-        message: `El producto con id ${pid} no existe`,
-      });
+      const error = new Error(`El producto con id ${pid} no existe`);
+      error.code = 404;
+      throw error;
     }
-    return { status: 204, message: `el producto ${pid} fue aliminado` };
+    return;
   } catch (error) {
-    return error.message;
+    throw error;
   }
 }
 

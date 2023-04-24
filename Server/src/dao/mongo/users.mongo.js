@@ -45,11 +45,19 @@ class usersManager {
   //     return error.errmsg;
   //   }
   // }
-  async persistFinUserByEmail(username) {
+  async persistFindUserByEmail(username) {
     try {
+      console.log("holaaa");
       const user = await usersModel.findOne({ email: username });
+      if (user) {
+        const error = new Error(`El usuario esta registrado`);
+        error.code = 409;
+        throw error;
+      }
       return user;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
   async persistCreateUser(newUserInfo) {
     try {
@@ -57,7 +65,7 @@ class usersManager {
 
       return newUser;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 }

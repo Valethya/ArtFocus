@@ -1,4 +1,7 @@
 .frame {
+  height: fit-content;
+  width: fit-content;
+  background: #fff;
   border: 1px solid rgba(128, 128, 128, 0.226);
   padding: 1em;
   .subFrame {

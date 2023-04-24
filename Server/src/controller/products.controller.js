@@ -10,29 +10,30 @@ import {
   update,
 } from "../service/products.service.js";
 import io from "../app.js";
+import handleResponse from "../middleware/handleResponse.js";
 
 class Products extends customRouter {
   init() {
-    this.get("/", ["PUBLIC"], async (req, res) => {
+    this.get("/", ["PUBLIC"], async (req, res, next) => {
       try {
         const response = await find(req);
-        res.json(response);
+        handleResponse(res, response, 200);
       } catch (error) {
-        res.json({ error: error.message });
+        next(error);
       }
     });
 
-    this.get("/:pid", ["PUBLIC"], async (req, res) => {
+    this.get("/:pid", ["PUBLIC"], async (req, res, next) => {
       try {
         const { pid } = req.params;
         const response = await findById(pid);
-        res.json({ result: "succes", payload: response });
+        handleResponse(res, response, 200);
       } catch (error) {
-        res.json({ error: error, message });
+        next(error);
       }
     });
 
-    // this.post("/",["ADMIN","SUPERIOR"], async (req, res) => {
+    // this.post("/",["ADMIN","SUPERIOR"], async (req, res,next) => {
     //   try {
     //     const { title, description, price, thumbnail, stock, category } = req.body;
 
@@ -56,26 +57,26 @@ class Products extends customRouter {
     // });
 
     /*---POPULATE---*/
-    this.post("/", ["ADMIN", "SUPERIOR"], async (req, res) => {
+    this.post("/", ["ADMIN", "SUPERIOR"], async (req, res, next) => {
       try {
         const foundProducts = await findProducts();
-        await populate(foundProducts);
-        res.json({ message: "productos cargados" });
+        const response = await populate(foundProducts);
+        handleResponse(res, response, 200);
       } catch (error) {
-        res.json({ error: error.message });
+        next(error);
       }
     });
     // //
-    this.delete("/", ["ADMIN", "SUPERIOR"], async (req, res) => {
+    this.delete("/", ["ADMIN", "SUPERIOR"], async (req, res, next) => {
       try {
         const response = await deleteProduct();
-        res.json({ result: "succes", payload: response });
+        handleResponse(res, response, 204);
       } catch (error) {
-        res.json({ error: error.message });
+        next(error);
       }
     });
 
-    this.delete("/:pid", ["ADMIN", "SUPERIOR"], async (req, res) => {
+    this.delete("/:pid", ["ADMIN", "SUPERIOR"], async (req, res, next) => {
       try {
         const { pid } = req.params;
         const response = await deleteById(pid);
@@ -84,28 +85,32 @@ class Products extends customRouter {
 
         io.emit("newProducts", allProducts);
 
-        res.json({ result: "succes", payload: response });
+        handleResponse(res, response, 204);
       } catch (error) {
-        res.json({ error: error.message });
+        next(error);
       }
     });
 
-    this.patch("/update/:pid", ["ADMIN", "SUPERIOR"], async (req, res) => {
-      try {
-        const { pid } = req.params;
-        const updateOps = {};
+    this.patch(
+      "/update/:pid",
+      ["ADMIN", "SUPERIOR"],
+      async (req, res, next) => {
+        try {
+          const { pid } = req.params;
+          const updateOps = {};
 
-        for (const [key, value] of Object.entries(req.body)) {
-          updateOps[key] = value;
+          for (const [key, value] of Object.entries(req.body)) {
+            updateOps[key] = value;
+          }
+
+          const response = await update(pid, updateOps);
+
+          handleResponse(res, response, 200);
+        } catch (error) {
+          next(error);
         }
-
-        const response = await update(pid, updateOps);
-
-        res.json({ result: "succes", payload: response });
-      } catch (error) {
-        res.json({ error: error.message });
       }
-    });
+    );
   }
 }
 

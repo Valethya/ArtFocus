@@ -8,7 +8,9 @@ class TicketsManager {
     try {
       const ticket = tickectsModels.create(dataTicket);
       return ticket;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 }
 export default TicketsManager;

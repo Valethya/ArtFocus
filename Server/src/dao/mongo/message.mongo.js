@@ -1,20 +1,17 @@
 import messageModels from "./models/message.models.js";
 
-export default class messageManager {
+class MessageManager {
   static #instance;
 
   static getInstance() {
-    return this.#instance ? this.#instance : new messageManager();
+    return this.#instance ? this.#instance : new MessageManager();
   }
   async persistFind() {
     try {
       const message = await messageModels.find();
       return message;
     } catch (error) {
-      return {
-        status: 404,
-        message: `no se logro concretar la solicitud por error: ${error}`,
-      };
+      throw error;
     }
   }
 
@@ -22,7 +19,7 @@ export default class messageManager {
     try {
       await messageModels.create(dataMessage);
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -31,7 +28,9 @@ export default class messageManager {
       const message = await messageModels.deleteMany();
       return message;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 }
+
+export default MessageManager;

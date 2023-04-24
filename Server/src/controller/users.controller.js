@@ -1,6 +1,7 @@
 // import userManager from "../dao/MongoManager/users.mongoManager.js";
 import passport from "passport";
 import customRouter from "../custom/router.custom.js";
+import createUser from "../service/users.service.js";
 
 // const users = new userManager();
 
@@ -27,15 +28,15 @@ class User extends customRouter {
     this.post(
       "/",
       ["PUBLIC"],
-      passport.authenticate("register", { failureRedirect: "/failRegister" }),
-      async (req, res) => {
+      passport.authenticate(
+        "register" /*{ failureRedirect: "/failRegister" }*/
+      ),
+      async (req, res, next) => {
         try {
-          res.json({ message: "Usuario registrado" });
+          const user = await createUser(req, username, password);
+          handleResponse(res, "usuario registrado", 200);
         } catch (error) {
-          console.log(error);
-          if (error.code === 11000)
-            return res.status(400).json({ error: "El usuario ya existe" });
-          res.status(500).json({ error: "Error interno del servidor" });
+          next(error);
         }
       }
     );

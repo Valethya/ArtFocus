@@ -10,7 +10,7 @@ export default function Card() {
       try {
         const response = await fetch("http://localhost:8080/api/products");
         const data = await response.json();
-        setData(data.payload);
+        setData(data.data.payload);
       } catch (error) {
         console.error(error);
       }
@@ -20,7 +20,7 @@ export default function Card() {
 
   return data.map((prod) => {
     return (
-      <div className="card ">
+      <div className="card" key={prod.id}>
         <div className="contentCard">
           <div className="contentImg">
             <img src={prod.thumbnail}></img>

@@ -1,20 +1,8 @@
-.logo{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    h3{
-        margin: 0;
-        &:hover{
-            animation: growth forwards linear .5s;
-        }
-    }
-}
-
-@keyframes growth {
-    0%{
-    transform: scale(100%);
-    }
-    100%{
-        transform: scale(130%);
-    }
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  h3 {
+    margin: 0;
+  }
 }

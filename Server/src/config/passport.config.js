@@ -2,7 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
-import createUSer from "../service/users.service.js";
+import managerFactory from "../factories/manager.factories.js";
 import {
   idGithub,
   secretKey,
@@ -15,6 +15,8 @@ import { cookieExtractor } from "../utils/cookieExtractor.js";
 import { authLogin, authGithub } from "../service/auth.service.js";
 import usersModel from "../dao/mongo/models/users.models.js";
 
+const users = await managerFactory.getManager("users");
+
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 
@@ -25,10 +27,14 @@ const initializePassport = () => {
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
         try {
-          const user = await createUSer(req, username, password);
+          const user = await users.persistFindUserByEmail(username);
           return done(null, user);
         } catch (error) {
-          return done(error);
+          return done({
+            status: "error",
+            message: error.message,
+            code: error.code,
+          });
         }
       }
     )
@@ -45,7 +51,11 @@ const initializePassport = () => {
         try {
           done(null, jwt_payload);
         } catch (error) {
-          done(error);
+          return done({
+            status: "error",
+            message: error.message,
+            code: error.code,
+          });
         }
       }
     )
@@ -60,9 +70,17 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
+          if (!jwt_payload) {
+            return done(null, false, { message: "Session not found" });
+          }
+
           done(null, jwt_payload);
         } catch (error) {
-          done(error);
+          return done({
+            status: "error",
+            message: error.message,
+            code: error.code,
+          });
         }
       }
     )
@@ -85,10 +103,14 @@ const initializePassport = () => {
       async (username, password, done) => {
         try {
           const user = await authLogin(username, password);
-          console.log(user);
+
           return done(null, user);
         } catch (error) {
-          done(error);
+          return done({
+            status: "error",
+            message: error.message,
+            code: error.code,
+          });
         }
       }
     )
@@ -102,12 +124,16 @@ const initializePassport = () => {
         clientSecret: secretGithub,
         callbackURL: "http://localhost:8080/auth/githubcallback",
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (profile, done) => {
         try {
           const user = await authGithub(profile);
           return done(null, user);
         } catch (error) {
-          done(error);
+          return done({
+            status: "error",
+            message: error.message,
+            code: error.code,
+          });
         }
       }
     )
@@ -121,12 +147,16 @@ const initializePassport = () => {
         clientSecret: secretGoogle,
         callbackURL: "http://localhost:8080/auth/google/callback",
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (profile, done) => {
         try {
           const user = await authGoogle(profile);
           return done(null, user);
         } catch (error) {
-          done(error);
+          return done({
+            status: "error",
+            message: error.message,
+            code: error.code,
+          });
         }
       }
     )

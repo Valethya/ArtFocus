@@ -1,41 +1,37 @@
-import messageManager from "./dao/Mongo/message.mongo.js";
+import managerFactory from "../factories/manager.factories.js";
 
-const messages = await new messageManager();
+const manager = await managerFactory.getManager("message");
 
 async function find() {
   try {
-    const message = await messages.persistFind();
-    return { status: 200, message: message };
+    const message = await manager.persistFind();
+    return message;
   } catch (error) {
-    return {
-      status: 404,
-      message: `no se logro concretar la solicitud por error: ${error}`,
-    };
+    throw error;
   }
 }
 
 async function create(dataMessage) {
   try {
-    await messages.persistCreate(dataMessage);
-    return { status: 201, message: "mensaje creado" };
+    await manager.persistCreate(dataMessage);
+    return "mensaje creado";
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
 async function deleteMessage() {
   try {
-    const message = await messages.persistDelete();
+    const message = await manager.persistDelete();
 
     if (message.deletedCount == 0) {
-      throw new Error({
-        status: 404,
-        message: "no hay productos para borrar",
-      });
+      const error = new Error("no hay productos para borrar");
+      error.code = 404;
+      throw error;
     }
-    return { status: 204, message: "productos eliminados" };
+    return "productos eliminados";
   } catch (error) {
-    return error.message;
+    throw error;
   }
 }
 

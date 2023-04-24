@@ -1,40 +1,26 @@
-import { StrictMode } from "react";
+import { StrictMode, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "../components/NavBar/NavBar";
+
 import "./assets/style/normalize.css";
 import "./assets/style/main.scss";
+import Catalog from "../layouts/catalog.layouts";
+import HomePage from "../layouts/homePage.layouts";
+import CartLayout from "../layouts/cart.layout";
+import { ApiContext, ApiContextProvider } from "../context/ApiContext";
 
-import Header from "../components/NavBar/Header";
-import CardContainer from "../components/Container/CardContainer";
-import Container from "../components/Container/Container";
-import Cart from "../components/Cart/Cart";
-import Chat from "../components/Chat/chat";
 function App() {
+  const { getCurrentSession } = useContext(ApiContext);
+  useEffect(() => {
+    getCurrentSession();
+  }, []);
   return (
     <Router>
       <StrictMode>
-        <NavBar />
         <Routes>
-          <Route path="/" element={<Header />}></Route>
-          <Route
-            path="/cuadros"
-            element={
-              <Container>
-                <CardContainer />
-              </Container>
-            }
-          ></Route>
-          <Route
-            path="/cart"
-            element={
-              <Container>
-                <Cart />
-              </Container>
-            }
-          ></Route>
+          <Route path="/" element={<HomePage />}></Route>
+          <Route path="/Cuadros" element={<Catalog />}></Route>
+          <Route path="/Cart" element={<CartLayout />}></Route>
         </Routes>
-        <Chat></Chat>
-        <div className="iconChat shadow">chat</div>
       </StrictMode>
     </Router>
   );

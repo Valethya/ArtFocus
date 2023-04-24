@@ -10,6 +10,8 @@
 @import "../../../components/Cart/cart.scss";
 @import "../../../components/Frame/frame.scss";
 @import "../../../components/Chat/chat.scss";
+@import "../../../components/Login/login.scss";
+@import "../../../components/Overlay/overlay.scss";
 @keyframes scalar {
   0% {
     -webkit-transform: scale(1);
@@ -38,18 +40,21 @@
 a {
   text-decoration: none;
   color: #000;
-}
-.iconChat {
-  background-color: $primary-color;
-  height: 50px;
-  width: 50px;
-  position: fixed;
-  z-index: 1500;
-  right: 0;
-  bottom: 0;
-  margin: 1em;
-  border-radius: 50%;
-  justify-content: center;
   display: flex;
+  justify-content: center;
   align-items: center;
+}
+.icon {
+  height: 1.5em;
+  margin-left: 1em;
+}
+
+input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.425);
+  margin-bottom: 1em;
+}
+input:focus-visible {
+  outline: none;
 }

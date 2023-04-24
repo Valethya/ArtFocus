@@ -19,17 +19,22 @@ async function authLogin(username, password) {
       // Ignoramos las excepciones arrojadas por validAdmin()
     }
     const user = await auth.persistLogin(username);
-    console.log(user);
+
     if (!user) {
-      console.log("Usuario no existe");
-      return false;
+      const error = new Error("credenciales no coinciden");
+      error.code = 404;
+      throw error;
     }
 
-    if (!cript.isValidPassword(user, password)) return false;
+    if (!cript.isValidPassword(user, password)) {
+      const error = new Error("credenciales no coinciden");
+      error.code = 404;
+      throw error;
+    }
 
     return user;
   } catch (error) {
-    return error.error;
+    throw error;
   }
 }
 
@@ -75,8 +80,7 @@ async function authGithub(profile) {
     }
     return user;
   } catch (error) {
-    console.log(error);
-    return error;
+    throw error;
   }
 }
 
@@ -103,7 +107,7 @@ async function authGoogle(profile) {
 
     return user;
   } catch (error) {
-    return error.errmsg;
+    throw error;
   }
 }
 

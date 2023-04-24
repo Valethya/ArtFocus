@@ -1,5 +1,5 @@
-import { verifyPermission } from "../utils/verifyAuth.utils.js";
-import { verifyToken } from "../utils/jwt.utils.js";
+import { verifyPermission } from "./verifyAuth.utils.js";
+import { verifyToken } from "./jwt.utils.js";
 
 function handlePolice(policies) {
   return (req, res, next) => {

@@ -1,5 +1,5 @@
 import Router from "express";
-import handlePolice from "../middleware/handlePolice.js";
+import handlePolice from "../utils/handlePolice.js";
 
 console.log("otra cosa mas me muero");
 
@@ -17,7 +17,7 @@ export default class customRouter {
     this.router.get(
       path,
       handlePolice(policies),
-      this.generateCustomResponse,
+      // this.generateCustomResponse,
       this.applyCallbacks(callbacks)
     );
   }
@@ -25,7 +25,7 @@ export default class customRouter {
     this.router.post(
       path,
       handlePolice(policies),
-      this.generateCustomResponse,
+      // this.generateCustomResponse,
       this.applyCallbacks(callbacks)
     );
   }
@@ -34,7 +34,7 @@ export default class customRouter {
     this.router.put(
       path,
       handlePolice(policies),
-      this.generateCustomResponse,
+      // this.generateCustomResponse,
       this.applyCallbacks(callbacks)
     );
   }
@@ -42,7 +42,7 @@ export default class customRouter {
     this.router.patch(
       path,
       handlePolice(policies),
-      this.generateCustomResponse,
+      // this.generateCustomResponse,
       this.applyCallbacks(callbacks)
     );
   }
@@ -50,7 +50,7 @@ export default class customRouter {
     this.router.delete(
       path,
       handlePolice(policies),
-      this.generateCustomResponse,
+      // this.generateCustomResponse,
       this.applyCallbacks(callbacks)
     );
   }
@@ -63,17 +63,17 @@ export default class customRouter {
       }
     });
   }
-  generateCustomResponse(req, res, next) {
-    res.sendSuccess = ({ payload, code }) =>
-      res
-        .status(code)
-        .json({ status: "success", message: payload, statusCode: code });
-    res.sendServerError = (error) =>
-      res
-        .status(500)
-        .json({ status: "error", message: "internal server error" });
-    res.sendUserError = ({ error, code }) =>
-      res.status(400).json({ status: "error", error, statusCode: code });
-    next();
-  }
+  // generateCustomResponse(req, res, next) {
+  //   res.sendSuccess = ({ payload, code }) =>
+  //     res
+  //       .status(code)
+  //       .json({ status: "success", message: payload, statusCode: code });
+  //   res.sendServerError = (error) =>
+  //     res
+  //       .status(500)
+  //       .json({ status: "error", message: "internal server error" });
+  //   res.sendUserError = ({ error, code }) =>
+  //     res.status(400).json({ status: "error", error, statusCode: code });
+  //   next();
+  // }
 }

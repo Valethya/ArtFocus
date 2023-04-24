@@ -15,7 +15,7 @@ class productsManager {
 
       return foundProducts;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
   //busca un producto por id
@@ -25,16 +25,24 @@ class productsManager {
 
       return response;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
   //crea un producto
   async persistCreate(prod) {
-    await productsModel.create(prod);
+    try {
+      await productsModel.create(prod);
+    } catch (error) {
+      throw error;
+    }
   }
   //crea muchos productos
   async persistPopulate(product) {
-    await productsModel.insertMany(product);
+    try {
+      await productsModel.insertMany(product);
+    } catch (error) {
+      throw error;
+    }
   }
 
   //borra todos los productos
@@ -43,7 +51,7 @@ class productsManager {
       const deletedProducts = await productsModel.deleteMany();
       return deletedProducts;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
   // borra un producto por id
@@ -52,7 +60,7 @@ class productsManager {
       const productDeleted = await productsModel.deleteOne({ _id: pid });
       return productDeleted;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
   // descontar stock
@@ -78,7 +86,9 @@ class productsManager {
       const result = await productsModel.updateOne({ _id: id }, { $set: ops });
 
       return result;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 }
 export default productsManager;

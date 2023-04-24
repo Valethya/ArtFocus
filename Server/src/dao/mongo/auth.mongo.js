@@ -13,7 +13,7 @@ class authManager {
 
       return user;
     } catch (error) {
-      return error.error;
+      throw error;
     }
   }
 
@@ -23,8 +23,7 @@ class authManager {
 
       return newUser;
     } catch (error) {
-      console.log(error);
-      return error;
+      throw error;
     }
   }
 
@@ -34,7 +33,7 @@ class authManager {
 
       return newUser;
     } catch (error) {
-      return error.errmsg;
+      throw error;
     }
   }
 }

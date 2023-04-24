@@ -2,7 +2,6 @@ import express from "express";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import { mongoConect } from "./db/index.db.js";
 import cors from "cors";
 import router from "./router/index.router.js";
 import initializePassport from "./config/passport.config.js";
@@ -10,11 +9,20 @@ import session from "express-session";
 import mongoStore from "connect-mongo";
 import { passSession } from "./config/index.config.js";
 import { mongoUri } from "./db/index.db.js";
-import handlerError from "./middleware/handleError.js";
+import handleError from "./middleware/handleError.js";
+
 console.log("inciando index.js");
 export const app = express();
 
 /*--EXPRESS--*/
+// app.use(
+//   session({
+//     store: false,
+//     secret: "tu_clave_secreta",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 app.use(
   session({
     store: mongoStore.create({
@@ -49,4 +57,4 @@ app.use(morgan("dev"));
 
 router(app);
 
-app.use(handlerError);
+app.use(handleError);

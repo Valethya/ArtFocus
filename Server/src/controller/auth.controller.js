@@ -3,8 +3,10 @@ import passport from "passport";
 import usersModel from "../dao/mongo/models/users.models.js";
 import { generateToken } from "../utils/jwt.utils.js";
 import customRouter from "../custom/router.custom.js";
+import handleResponse from "../middleware/handleResponse.js";
+import handleErrorPassport from "../middleware/handleErrorPassport.js";
 
-// this.post("/", async (req, res) => {
+// this.post("/", async (req, res,next) => {
 //   try {
 //     const { email, password } = req.body;
 
@@ -25,45 +27,39 @@ import customRouter from "../custom/router.custom.js";
 // });
 class Auth extends customRouter {
   init() {
-    this.get("/infoUser", ["PUBLIC"], (req, res) => {
+    this.get("/infoUser", ["PUBLIC"], (req, res, next) => {
       try {
-        console.log(req.user, " hay o no hay?");
         const { firstName, email } = req.user;
         const user = { firstName, email };
-        res.json({ user: user });
+        handleResponse(res, user, 200);
       } catch (error) {
         res.json({ message: "no hay una sesion activa" });
       }
     });
 
-    this.get("/logout", (req, res) => {
-      req.session.destroy((error) => {
-        if (error) return res.json({ error });
-        res.redirect("/login");
-      });
-    });
+    // this.get("/logout", (req, res, next) => {
+    //   req.session.destroy((error) => {
+    //     if (error) return res.json({ error });
+    //     res.redirect("/login");
+    //   });
+    // });
     //hola
-    this.post("/probando", ["PUBLIC"], async (req, res) => {
-      res.sendSuccess({ payload: "bien", code: 200 });
+    this.post("/probando", ["PUBLIC"], async (req, res, next) => {
+      res.json({ payload: "bien", code: 200 });
     });
     ///PROFE
     this.post(
       "/",
       ["PUBLIC"],
-      passport.authenticate("login", { failureRedirect: "auth/failLogin" }),
-      async (req, res) => {
+      handleErrorPassport("login"),
+      async (req, res, next) => {
         try {
-          if (!req.user)
-            return res.status(400).json({ error: "Credenciales invalidas" });
+          if (!req.user) {
+            const error = new Error("credenciales invalidas");
+            error.code = 404;
+            throw error;
+          }
 
-          // req.session.user = {
-          //   firstName: req.user.firstName,
-          //   lastName: req.user.lastName,
-          //   age: req.user.age,
-          //   email: req.user.email,
-          //   role: req.user.role,
-          // };
-          // console.log(req.session.user, " esto es session");
           const user = {
             firstName: req.user.firstName,
             email: req.user.email,
@@ -75,31 +71,42 @@ class Auth extends customRouter {
 
           res
             .cookie("authToken", token, { maxAge: 180000, httpOnly: true })
-            .sendSuccess({ payload: "Sesión iniciada", code: 200 });
+            .json({ payload: "Sesión iniciada", code: 200 });
           // res.json({ message: req.user });
         } catch (error) {
-          res.sendError({ error, code: 500 });
+          next(error);
         }
       }
     );
 
-    this.get("/failLogin", ["PUBLIC"], (req, res) => {
-      res.json({ error: "No se pudo iniciar sesión" });
+    this.get("/failLogin", ["PUBLIC"], (req, res, next) => {
+      handleResponse(res, "no se puso iniciar sesion", 401);
     });
 
     this.get(
       "/github",
       ["PUBLIC"],
       passport.authenticate("github", { scope: ["user: email"] }),
-      async (req, res) => {}
+      async (req, res, next) => {}
     );
 
     this.get(
       "/githubcallback",
       ["PUBLIC"],
       passport.authenticate("github", { failureRedirect: "/login" }),
-      async (req, res) => {
-        req.session.user = req.user;
+      async (req, res, next) => {
+        const user = {
+          firstName: req.user.firstName,
+          email: req.user.email,
+          lastName: req.user.lastName || "",
+          role: req.user.role,
+        };
+
+        const token = generateToken(user);
+
+        res
+          .cookie("authToken", token, { maxAge: 180000, httpOnly: true })
+          .json({ payload: "Sesión iniciada", code: 200 });
         res.redirect("/products");
       }
     );
@@ -108,34 +115,43 @@ class Auth extends customRouter {
       "/google",
       ["PUBLIC"],
       passport.authenticate("google", { scope: ["profile"] }),
-      async (req, res) => {}
+      async (req, res, next) => {}
     );
 
     this.get(
       "/google/callback",
       ["PUBLIC"],
       passport.authenticate("google", { failureRedirect: "/login" }),
-      async (req, res) => {
-        req.session.user = req.user;
-        res.redirect("/products");
+      async (req, res, next) => {
+        const user = {
+          firstName: req.user.firstName,
+          email: req.user.email,
+          lastName: req.user.lastName || "",
+          role: req.user.role,
+        };
+
+        const token = generateToken(user);
+
+        res
+          .cookie("authToken", token, { maxAge: 180000, httpOnly: true })
+          .json({ payload: "Sesión iniciada", code: 200 });
       }
     );
 
-    this.get("/logout", ["USER", "SUPERIOR"], (req, res) => {
-      req.session.destroy((error) => {
-        if (error) return res.json({ error });
-        res.redirect("/login");
-      });
-    });
+    // this.get("/logout", ["USER", "SUPERIOR"], (req, res, next) => {
+    //   req.session.destroy((error) => {
+    //     if (error) return res.json({ error });
+    //     res.redirect("/login");
+    //   });
+    // });
 
-    this.patch("/forgotPassword", ["PUBLIC"], async (req, res) => {
+    this.patch("/forgotPassword", ["PUBLIC"], async (req, res, next) => {
       try {
         const { email, password } = req.body;
 
         const passwordEncrypted = cript.createHash(password);
         await usersModel.updateOne({ email }, { password: passwordEncrypted });
-
-        res.json({ message: "Contraseña actualizada" });
+        handleResponse(res, "contraseña actualizada", 204);
       } catch (error) {}
     });
   }

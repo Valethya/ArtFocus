@@ -1,37 +1,38 @@
 import managerFactory from "../factories/manager.factories.js";
+import cript from "../utils/criptPassword.utils.js";
 
 const users = await managerFactory.getManager("users");
 const cartManager = await managerFactory.getManager("carts");
 
 export default async function createUser(req, username, password) {
-  const { firstName, lastName, email, age, cart } = req.body;
+  const { firstName, lastName, email, age } = req.body;
   try {
-    const user = await users.persistFinUserByEmail(username);
-    if (user) {
-      console.log("Usuario existe");
-      return false;
-    }
     if (!email) {
-      console.log("ingresa un email");
-      return false;
+      const error = new Error("ingresa un email");
+      error.code = 404;
+      throw error;
     }
     if (!firstName) {
-      console.log("ingresa tu nombre");
-      return false;
+      const error = new Error("ingresa tu nombre");
+      error.code = 404;
+      throw error;
     }
     if (!lastName) {
-      console.log("ingresa tu apellido");
-      return false;
+      const error = new Error("ingresa tu apellido");
+      error.code = 404;
+      throw error;
     }
     if (!age) {
-      console.log("ingresa tu edad");
-      return false;
+      const error = new Error("ingresa tu edad");
+      error.code = 404;
+      throw error;
     }
     if (!password) {
-      console.log("ingresa una contraseña");
-      return false;
+      const error = new Error("ingresa una contraseña");
+      error.code = 404;
+      throw error;
     }
-    const cart = await cartManager.create();
+    const cart = await cartManager.persistCreate();
     const newUserInfo = {
       firstName,
       lastName,
@@ -45,12 +46,6 @@ export default async function createUser(req, username, password) {
 
     return newUser;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
-
-// import cartsManager from "../dao/mongo/carts.mongo.js";
-// import usersManager from "../dao/mongo/users.mongo.js";
-
-// const users = usersManager.getInstance();
-// const cartManager = cartsManager.getInstance();

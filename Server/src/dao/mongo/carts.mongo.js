@@ -12,14 +12,17 @@ export default class cartsManager {
   async persistFind() {
     try {
       const products = await cartsModel.find();
+
       return products;
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
   // summary cart
-  async summaryCart(cid) {
+  async persistSummaryCart(cid) {
     try {
+      await this.persistFindById(cid);
+
       const summary = await cartsModel.aggregate([
         { $match: { _id: new mongoose.Types.ObjectId(cid) } },
         { $unwind: "$products" },
@@ -63,20 +66,25 @@ export default class cartsManager {
           },
         },
       ]);
-
+      console.log(summary, "esto es summary");
       return summary;
     } catch (error) {
-      return { message: "ups " + error };
+      throw error;
     }
   }
   //encuentra un carrito por su id
   async persistFindById(cid) {
     try {
       const cart = await cartsModel.findOne({ _id: cid });
-
+      console.log(cart, "esto es cart");
+      if (!cart) {
+        const error = new Error(`El carrito con id ${cid} no existe`);
+        error.code = 404;
+        throw error;
+      }
       return cart;
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
   // crea un carrito
@@ -85,7 +93,7 @@ export default class cartsManager {
       const cart = await cartsModel.create({ products: [] });
       return cart;
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
 
@@ -95,16 +103,23 @@ export default class cartsManager {
       await cartsModel.deleteMany();
       return "succes";
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
   //elimina un carrito
   async persistDeleteById(cid) {
     try {
       const cart = await cartsModel.deleteOne({ _id: cid });
+      if (!cart) {
+        if (!cart) {
+          const error = new Error(`El carrito con id ${cid} no existe`);
+          error.code = 404;
+          throw error;
+        }
+      }
       return cart;
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
 
@@ -129,13 +144,10 @@ export default class cartsManager {
           { $inc: { "products.$.qty": 1 } }
         );
       }
-      console.log("vamos pasandooooooooo");
-      return {
-        status: 204,
-        message: `el producto ${pid} fue agregado a tu carrito`,
-      };
+
+      return `el producto ${pid} fue agregado a tu carrito`;
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
   //se actualiza la cantidad de un producto especifico
@@ -146,12 +158,9 @@ export default class cartsManager {
         { $set: { "products.$.qty": qty } },
         { new: true }
       );
-      return {
-        status: 204,
-        message: `la cantidad de productos se ha actualizado en: ${qty}`,
-      };
+      return `la cantidad de productos se ha actualizado en: ${qty}`;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
   // elimina un productos del carrito
@@ -165,8 +174,6 @@ export default class cartsManager {
         { new: true }
       );
 
-      console.log(prodMenos, " bueno aqui se supone uno");
-
       /*si el carrito tiene una propiedad products con un campo qty igual a 0 
       este producto se elimina del carrito*/
 
@@ -176,12 +183,9 @@ export default class cartsManager {
         { new: true }
       );
       console.log(prodFuera, " se supone que deberia eliminarse");
-      return {
-        status: 204,
-        message: `el producto ${pid} fue eliminado de tu carrito`,
-      };
+      return `el producto ${pid} fue eliminado de tu carrito`;
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   }
   //elimina todos los productos del carrito
@@ -193,12 +197,18 @@ export default class cartsManager {
       );
 
       return response;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
   /*--PURCHASE--*/
 
   async persistPurchase() {
-    const foundProduct = await this.persistFind();
-    return foundProduct;
+    try {
+      const foundProduct = await this.persistFind();
+      return foundProduct;
+    } catch (error) {
+      throw error;
+    }
   }
 }
