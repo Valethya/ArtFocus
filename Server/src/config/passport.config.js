@@ -70,9 +70,7 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          if (!jwt_payload) {
-            return done(null, false, { message: "Session not found" });
-          }
+          console.log(jwt_payload, "paso por aqui?");
 
           done(null, jwt_payload);
         } catch (error) {
@@ -103,7 +101,6 @@ const initializePassport = () => {
       async (username, password, done) => {
         try {
           const user = await authLogin(username, password);
-
           return done(null, user);
         } catch (error) {
           return done({

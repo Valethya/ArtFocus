@@ -68,9 +68,13 @@ class Auth extends customRouter {
           };
 
           const token = generateToken(user);
-
           res
-            .cookie("authToken", token, { maxAge: 180000, httpOnly: true })
+            .cookie("authToken", token, {
+              maxAge: 180000,
+              httpOnly: true,
+              sameSite: "none",
+              secure: true,
+            })
             .json({ payload: "Sesión iniciada", code: 200 });
           // res.json({ message: req.user });
         } catch (error) {

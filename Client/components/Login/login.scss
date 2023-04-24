@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: space-around;
   border: 1px solid rgba(128, 128, 128, 0.226);
-  padding: 1em;
+  padding: 2em;
   z-index: 1400;
   position: fixed;
   right: 1em;
@@ -25,4 +25,9 @@
 .register:hover {
   letter-spacing: 5px;
   border-bottom: 1px solid #81d4fa;
+}
+.invalid {
+  font-size: 80%;
+  color: red;
+  margin: 0;
 }

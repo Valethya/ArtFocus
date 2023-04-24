@@ -1,65 +1,75 @@
-import { useContext, useState } from "react";
-import Overlay from "../Overlay/Overlay";
-import { setRef } from "@mui/material";
-
+import { useContext, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import Input from "../Form/Input";
+import { ApiContext } from "../../context/ApiContext";
 function Login({ display }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { getCurrentSession } = useContext(ApiContext);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    defaultValues: {
+      email: "artfocus@artfocus.com",
+      password: "ingrese su password",
+    },
+  });
 
   const url = "http://localhost:8080/auth";
 
-  const handleSubmit = async (event) => {
+  const onSubmit = async (dataForm, event) => {
     event.preventDefault();
-    if (message === undefined) {
-      event.preventDefault();
-    }
+
     try {
       const response = await fetch(url, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataMessage),
+        body: JSON.stringify(dataForm),
       });
       const data = await response.json();
       console.log(data);
     } catch (error) {
       console.log(error);
     }
-    setEmail("");
-    setPassword("");
-  };
-  const handleChange = (event) => {
-    event.preventDefault();
-    setEmail(event.target.value);
-    setPassword(event.target.value);
+    getCurrentSession();
+
+    setValue("email");
+    setValue("password");
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key == "Enter" && message === undefined) {
+  const handleKeyDown = (event, dataForm) => {
+    if (event.key == "Enter") {
       event.preventDefault();
-    }
-    if (event.key == "Enter" && message !== undefined) {
-      handleSubmit(event);
+      onSubmit(dataForm, event);
     }
   };
   return (
     <div>
-      <form action="" className="formLogin shadow" style={{ display: display }}>
-        <label htmlFor="">
-          Usuario{" "}
-          <input placeholder="Ingresa tu email..." type="email" name="email" />
-        </label>
-
-        <label htmlFor="">
-          Password{" "}
-          <input
-            placeholder="Ingresa tu contraseña..."
-            type="password"
-            name="password"
-          />
-        </label>
-
+      <form
+        action=""
+        className="formLogin shadow"
+        onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={handleKeyDown}
+        style={{ display: display }}
+      >
+        <Input label="email" register={register} required />
+        {errors.email?.type === "required" && (
+          <p className="invalid" role="alert">
+            Email campo es requerido
+          </p>
+        )}
+        <Input label="password" register={register} required />
+        {errors.password?.type === "required" && (
+          <p className="invalid" role="alert">
+            Password campo es requerido
+          </p>
+        )}
         <button className="btn" type="submit">
           Iniciar Sesión
         </button>

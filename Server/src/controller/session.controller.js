@@ -2,6 +2,7 @@ import passport from "passport";
 import customRouter from "../custom/router.custom.js";
 import InfoDto from "../DTO/infoUser.dto.js";
 import handleErrorPassport from "../middleware/handleErrorPassport.js";
+import handleResponse from "../middleware/handleResponse.js";
 
 class Session extends customRouter {
   init() {
@@ -15,6 +16,7 @@ class Session extends customRouter {
       (req, res) => {
         try {
           const response = new InfoDto(req.user);
+
           handleResponse(res, response, 200);
         } catch (error) {
           next(error);

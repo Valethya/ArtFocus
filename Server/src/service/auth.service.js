@@ -39,9 +39,7 @@ async function authLogin(username, password) {
 }
 
 function validAdmin(username, password) {
-  console.log(username == emailAdmin);
   if (username == emailAdmin) {
-    console.log(password == passAdmin);
     if (password == passAdmin) {
       const user = {
         firstName: "admin",

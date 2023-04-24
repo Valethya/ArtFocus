@@ -11,7 +11,6 @@ import { passSession } from "./config/index.config.js";
 import { mongoUri } from "./db/index.db.js";
 import handleError from "./middleware/handleError.js";
 
-console.log("inciando index.js");
 export const app = express();
 
 /*--EXPRESS--*/
@@ -41,7 +40,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /*--CORS--*/
 
-app.use(cors({ origin: "http://127.0.0.1:5173" }));
+app.use(cors({ credentials: true, origin: "http://127.0.0.1:5173" }));
 
 /*--PASSPORT--*/
 
@@ -50,9 +49,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /*--COOKIES--*/
-
 app.use(cookieParser());
-
 app.use(morgan("dev"));
 
 router(app);

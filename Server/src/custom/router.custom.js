@@ -1,8 +1,6 @@
 import Router from "express";
 import handlePolice from "../utils/handlePolice.js";
 
-console.log("otra cosa mas me muero");
-
 export default class customRouter {
   constructor() {
     this.router = Router();

@@ -1,5 +1,5 @@
 const handleError = (err, req, res, next) => {
-  console.log(err.message, " hay un error?");
+  console.log("pASAAAA");
   let response = {};
   const status = err.code || 500;
 
@@ -16,7 +16,6 @@ const handleError = (err, req, res, next) => {
       statusCode: 500,
     };
   }
-
   return res.status(status).json(response);
   next(err);
 };

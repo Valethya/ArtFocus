@@ -1,7 +1,7 @@
 import passport from "passport";
 const handleErrorPassport = (strategy) => (req, res, next) => {
   passport.authenticate(strategy, (err, user, info) => {
-    if (err) {
+    if (err != null) {
       return next(err);
     }
     if (!user) {
@@ -9,6 +9,7 @@ const handleErrorPassport = (strategy) => (req, res, next) => {
       error.code = 401;
       return next(error);
     }
+
     req.user = user;
     next();
   })(req, res, next);
