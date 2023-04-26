@@ -9,7 +9,7 @@ const carts = routerFactory.getRouter("carts");
 const chat = routerFactory.getRouter("chat");
 const email = routerFactory.getRouter("email");
 const message = routerFactory.getRouter("message");
-
+const mocking = routerFactory.getRouter("mocking");
 const router = (app) => {
   app.use("/api/products", products);
   app.use("/api/carts", carts);
@@ -20,6 +20,7 @@ const router = (app) => {
   app.use("/api/chats", chat);
   app.use("/email", email);
   app.use("/api/message", message);
+  app.use("/mockingproducts", mocking);
   app.use("/*", (req, res) => {
     res.status(404).json({ error: "algo estas haciendo mal" });
   });

@@ -7,6 +7,7 @@ import Carts from "../controller/carts.controller.js";
 import Chat from "../controller/chat.controller.js";
 import Email from "../controller/email.controller.js";
 import Message from "../controller/message.controller.js";
+import Mocking from "../controller/mocking.controller.js";
 
 export default class routerFactory {
   static getRouter(router) {
@@ -20,6 +21,7 @@ export default class routerFactory {
       chat: new Chat().getRouter(),
       email: new Email().getRouter(),
       message: new Message().getRouter(),
+      mocking: new Mocking().getRouter(),
     };
     return routers[router];
   }

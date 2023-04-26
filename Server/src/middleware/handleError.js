@@ -1,5 +1,4 @@
 const handleError = (err, req, res, next) => {
-  console.log("pASAAAA");
   let response = {};
   const status = err.code || 500;
 
