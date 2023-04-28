@@ -10,6 +10,7 @@ import mongoStore from "connect-mongo";
 import { passSession } from "./config/index.config.js";
 import { mongoUri } from "./db/index.db.js";
 import handleError from "./middleware/handleError.js";
+import { asyncWrapper } from "./utils/asyncWrapper.js";
 
 export const app = express();
 

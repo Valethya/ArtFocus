@@ -1,5 +1,9 @@
 import managerFactory from "../factories/manager.factories.js";
 import fs from "fs";
+import CustomError from "../utils/errors/custom.error.js";
+import { EnumError } from "../utils/errors/enums.errors.js";
+import messagesError from "../utils/errors/message.error.js";
+import causeError from "../utils/errors/cause.error.js";
 const manager = await managerFactory.getManager("products");
 
 //METODOS PARA PRODUCTOS
@@ -8,23 +12,14 @@ const manager = await managerFactory.getManager("products");
 function processData(products, req) {
   //mapeo de datos de documentos para mostrar la informacion correctamente
   const documents = products.docs.map(
-    ({
-      _id,
-      title,
-      description,
-      price,
-      thumbnail,
-      stock,
-      status,
-      category,
-    }) => ({
+    ({ _id, title, description, price, thumbnail, stock, code, category }) => ({
       id: _id,
       title,
       description,
       price,
       thumbnail,
       stock,
-      status,
+      code,
       category,
     })
   );
@@ -42,7 +37,7 @@ function processData(products, req) {
 
   //se contruye un nuevo objeto con el fin de poder mostrar la informacion requerida como lo es por ejemplo el payload o prevLink y nextLink
   const response = {
-    status: "succes",
+    code: "succes",
     payload: documents,
     totalPages,
     prevPage,
@@ -59,12 +54,12 @@ function processData(products, req) {
 //busca todos los productos
 async function find(req) {
   try {
-    const status = req.query.status;
+    const code = req.query.code;
     const category = req.query.category;
     const title = req.query.title;
 
-    const query = status
-      ? { status: status }
+    const query = code
+      ? { code: code }
       : category
       ? { category: category }
       : title
@@ -92,9 +87,13 @@ async function findById(pid) {
     const response = await manager.persistFindById(pid);
     console.log(response);
     if (response == null) {
-      const error = new Error(`El producto con id ${pid} no existe`);
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.ID_NOT_FOUND,
+        message: messagesError.PRODUCT_NOT_FOUND,
+        statusCode: 404,
+        code: EnumError.PRODUCT_NOT_FOUND,
+      });
+      next(error);
     }
     return response;
   } catch (error) {
@@ -154,9 +153,13 @@ async function deleteById(pid) {
   try {
     const productDeleted = await manager.persistDeleteOne({ _id: pid });
     if (productDeleted.deletedCount == 0) {
-      const error = new Error(`El producto con id ${pid} no existe`);
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.ID_NOT_FOUND,
+        message: messagesError.PRODUCT_NOT_FOUND,
+        statusCode: 404,
+        code: EnumError.PRODUCT_NOT_FOUND,
+      });
+      next(error);
     }
     return;
   } catch (error) {

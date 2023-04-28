@@ -25,11 +25,11 @@ async function deleteMessage() {
     const message = await manager.persistDelete();
 
     if (message.deletedCount == 0) {
-      const error = new Error("no hay productos para borrar");
+      const error = new Error("no hay mensajes para borrar");
       error.code = 404;
       throw error;
     }
-    return "productos eliminados";
+    return "mensajes eliminados";
   } catch (error) {
     throw error;
   }

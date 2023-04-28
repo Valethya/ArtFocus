@@ -1,10 +1,9 @@
 class CustomError {
-  static createError({ name = "Error", cause, message, code = 1 }) {
+  static createError({ cause, message, code = 0, statusCode }) {
     const error = new Error(message);
-    error.name = name;
     error.cause = cause;
     error.code = code;
-
+    error.statusCode = statusCode;
     throw error;
   }
 }

@@ -17,18 +17,17 @@ import {
 //REQ DE CARRITOS
 class Carts extends customRouter {
   init() {
-    this.get("/", ["USER", "EXCLUSIVE"], async (req, res, next) => {
+    this.get("/", ["PUBLIC"], async (req, res, next) => {
       try {
         const response = await find();
         handleResponse(res, response, 200);
       } catch (error) {
-        handleResponse(res, error.message, error.code);
+        next(error);
       }
     });
 
     this.get("/:cid", ["USER", "SUPERIOR"], async (req, res, next) => {
       try {
-        console.log("entre");
         const { cid } = req.params;
         const response = await summaryCart(cid);
         handleResponse(res, response, 200);

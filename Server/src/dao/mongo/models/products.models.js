@@ -23,7 +23,7 @@ const productsSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  status: {
+  code: {
     type: Boolean,
     default: true,
     index: true,

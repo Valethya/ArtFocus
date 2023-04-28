@@ -8,14 +8,14 @@ const TicketsManager = await persistFactory.getPersist("tickets");
 
 export default class managerFactory {
   static async getManager(manager) {
-    const managers = {
+    const managers = Object.freeze({
       products: await ProductsManager.default.getInstance(),
       carts: CartsManager.default.getInstance(),
       users: UsersManager.default.getInstance(),
       auth: AuthManager.default.getInstance(),
       message: MessageManager.default.getInstance(),
       ticket: TicketsManager.default.getInstance(),
-    };
+    });
     return managers[manager];
   }
 }

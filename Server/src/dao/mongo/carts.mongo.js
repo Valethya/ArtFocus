@@ -1,3 +1,7 @@
+import causeError from "../../utils/errors/cause.error.js";
+import CustomError from "../../utils/errors/custom.error.js";
+import { EnumError } from "../../utils/errors/enums.errors.js";
+import messagesError from "../../utils/errors/message.error.js";
 import cartsModel from "./models/carts.models.js";
 import mongoose from "mongoose";
 
@@ -76,11 +80,14 @@ export default class cartsManager {
   async persistFindById(cid) {
     try {
       const cart = await cartsModel.findOne({ _id: cid });
-      console.log(cart, "esto es cart");
+      console.log(!cart, "esto es cart");
       if (!cart) {
-        const error = new Error(`El carrito con id ${cid} no existe`);
-        error.code = 404;
-        throw error;
+        CustomError.createError({
+          cause: causeError.ID_NOT_FOUND,
+          message: messagesError.CART_NOT_FOUND,
+          statusCode: 404,
+          code: EnumError.CART_NOT_FOUND,
+        });
       }
       return cart;
     } catch (error) {
@@ -112,9 +119,12 @@ export default class cartsManager {
       const cart = await cartsModel.deleteOne({ _id: cid });
       if (!cart) {
         if (!cart) {
-          const error = new Error(`El carrito con id ${cid} no existe`);
-          error.code = 404;
-          throw error;
+          CustomError.createError({
+            cause: causeError.ID_NOT_FOUND,
+            message: messagesError.CART_NOT_FOUND,
+            statusCode: 404,
+            code: EnumError.CART_NOT_FOUND,
+          });
         }
       }
       return cart;

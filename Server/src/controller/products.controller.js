@@ -43,7 +43,7 @@ class Products extends customRouter {
     //       price,
     //       thumbnail,
     //       stock,
-    //       status: true,
+    //       code: true,
     //       category,
     //     };
     //     const response = await create(product);

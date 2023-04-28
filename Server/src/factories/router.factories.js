@@ -11,7 +11,7 @@ import Mocking from "../controller/mocking.controller.js";
 
 export default class routerFactory {
   static getRouter(router) {
-    const routers = {
+    const routers = Object.freeze({
       auth: new Auth().getRouter(),
       views: new Views().getRouter(),
       users: new User().getRouter(),
@@ -22,7 +22,7 @@ export default class routerFactory {
       email: new Email().getRouter(),
       message: new Message().getRouter(),
       mocking: new Mocking().getRouter(),
-    };
+    });
     return routers[router];
   }
 }

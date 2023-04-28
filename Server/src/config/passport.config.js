@@ -30,11 +30,7 @@ const initializePassport = () => {
           const user = await users.persistFindUserByEmail(username);
           return done(null, user);
         } catch (error) {
-          return done({
-            status: "error",
-            message: error.message,
-            code: error.code,
-          });
+          return done(error);
         }
       }
     )
@@ -51,11 +47,7 @@ const initializePassport = () => {
         try {
           done(null, jwt_payload);
         } catch (error) {
-          return done({
-            status: "error",
-            message: error.message,
-            code: error.code,
-          });
+          return done(error);
         }
       }
     )
@@ -74,11 +66,7 @@ const initializePassport = () => {
 
           done(null, jwt_payload);
         } catch (error) {
-          return done({
-            status: "error",
-            message: error.message,
-            code: error.code,
-          });
+          return done(error);
         }
       }
     )
@@ -103,11 +91,7 @@ const initializePassport = () => {
           const user = await authLogin(username, password);
           return done(null, user);
         } catch (error) {
-          return done({
-            status: "error",
-            message: error.message,
-            code: error.code,
-          });
+          return done(error);
         }
       }
     )
@@ -126,11 +110,7 @@ const initializePassport = () => {
           const user = await authGithub(profile);
           return done(null, user);
         } catch (error) {
-          return done({
-            status: "error",
-            message: error.message,
-            code: error.code,
-          });
+          return done(error);
         }
       }
     )
@@ -149,11 +129,7 @@ const initializePassport = () => {
           const user = await authGoogle(profile);
           return done(null, user);
         } catch (error) {
-          return done({
-            status: "error",
-            message: error.message,
-            code: error.code,
-          });
+          return done(error);
         }
       }
     )

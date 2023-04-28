@@ -2,6 +2,9 @@ import managerFactory from "../factories/manager.factories.js";
 import { findById as findByIdProd } from "./products.service.js";
 import mongoose from "mongoose";
 import { createTicket } from "./ticket.service.js";
+import causeError from "../utils/errors/cause.error.js";
+import messagesError from "../utils/errors/message.error.js";
+import { EnumError } from "../utils/errors/enums.errors.js";
 
 const manager = await managerFactory.getManager("carts");
 const managerProd = await managerFactory.getManager("products");
@@ -21,11 +24,14 @@ async function findById(cid) {
   try {
     const response = await manager.persistFindById({ _id: cid });
 
-    if (response == null) {
-      const error = new Error(`El carrito con id ${cid} no existe`);
-      error.code = 404;
-      throw error;
-    }
+    // if (response == null) {
+    //   CustomError.createError({
+    //     cause: causeError.ID_NOT_FOUND,
+    //     message: messagesError.CART_NOT_FOUND,
+    //     statusCode: 404,
+    //     code: EnumError.CART_NOT_FOUND,
+    //   });
+    // }
     return response.products;
   } catch (error) {
     throw error;
@@ -59,9 +65,12 @@ async function deleteById(cid) {
   try {
     const cartDeleted = await manager.persistDeleteById({ _id: cid });
     if (cartDeleted.deletedCount == 0) {
-      const error = new Error(`El carrito con id ${cid} no existe`);
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.ID_NOT_FOUND,
+        message: messagesError.CART_NOT_FOUND,
+        statusCode: 404,
+        code: EnumError.CART_NOT_FOUND,
+      });
     }
     return `carrito ${cid} eliminado`;
   } catch (error) {

@@ -1,21 +1,28 @@
-const handleError = (err, req, res, next) => {
+const handleError = (error, req, res, next) => {
   let response = {};
-  const status = err.code || 500;
 
-  if (status === 400 || status === 401 || status === 404 || status === 409) {
-    response = {
-      status: "error",
-      message: err.message,
-      statusCode: status,
-    };
-  } else {
+  const statusCode = error.statusCode || 500;
+  const messageServer = {
+    status: "error",
+    code: error.code,
+    error: error.cause,
+  };
+  console.log(messageServer);
+
+  if (statusCode == 500) {
     response = {
       status: "error",
       message: "Internal Server Error",
       statusCode: 500,
     };
+  } else {
+    response = {
+      status: "error",
+      message: error.message,
+      statusCode: statusCode,
+    };
   }
-  return res.status(status).json(response);
+  return res.status(statusCode).json(response);
   next(err);
 };
 

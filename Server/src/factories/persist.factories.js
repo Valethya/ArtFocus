@@ -3,7 +3,7 @@ import { persist } from "../config/index.config.js";
 
 class persistFactory {
   static async getPersist(collection) {
-    const persists = {
+    const persists = Object.freeze({
       MONGO: async () => {
         mongoConect();
 
@@ -12,7 +12,7 @@ class persistFactory {
       FS: async () => {
         return await import(`../dao/fs/${collection}.fs.js`);
       },
-    };
+    });
 
     return persists[persist]();
   }

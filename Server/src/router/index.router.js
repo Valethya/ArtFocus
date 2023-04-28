@@ -1,5 +1,6 @@
 import routerFactory from "../factories/router.factories.js";
-
+import CustomError from "../utils/errors/custom.error.js";
+import { EnumError } from "../utils/errors/enums.errors.js";
 const auth = routerFactory.getRouter("auth");
 const views = routerFactory.getRouter("views");
 const users = routerFactory.getRouter("users");
@@ -21,8 +22,16 @@ const router = (app) => {
   app.use("/email", email);
   app.use("/api/message", message);
   app.use("/mockingproducts", mocking);
-  app.use("/*", (req, res) => {
-    res.status(404).json({ error: "algo estas haciendo mal" });
+  app.use("*", (req, res, next) => {
+    CustomError.createError({
+      cause: `Incorrect path`,
+      message: `Requested path ${req.protocol}://${req.get("host")}${
+        req.baseUrl
+      } not found`,
+      statusCode: 404,
+      code: EnumError.URL_NOT_fOUND,
+    });
+    next(error);
   });
 };
 

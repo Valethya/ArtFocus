@@ -3,7 +3,7 @@ import transport from "../utils/gmail.util.js";
 
 class Email extends customRouter {
   init() {
-    this.get("/", ["PUBLIC"], async (req, res) => {
+    this.get("/", ["PUBLIC"], async (req, res, next) => {
       try {
         const response = await transport.sendMail({
           from: "mailingartfocus@gmail.com",
@@ -14,7 +14,7 @@ class Email extends customRouter {
         });
         handleResponse(res, response, 200);
       } catch (error) {
-        handleResponse(res, error.message, error.code);
+        next(error);
       }
     });
   }

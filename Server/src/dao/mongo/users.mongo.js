@@ -1,3 +1,7 @@
+import causeError from "../../utils/errors/cause.error.js";
+import CustomError from "../../utils/errors/custom.error.js";
+import { EnumError } from "../../utils/errors/enums.errors.js";
+import messagesError from "../../utils/errors/message.error.js";
 import usersModel from "./models/users.models.js";
 
 class usersManager {
@@ -14,7 +18,7 @@ class usersManager {
   //       password: passwordEncrypted,
   //     };
   //     const newUser = await usersModel.create(userHash);
-  //     return { status: 201, message: "Usuario fue creado", user: newUser };
+  //     return { code: 201, message: "Usuario fue creado", user: newUser };
   //   } catch (error) {
   //     return error.errmsg;
   //   }
@@ -50,9 +54,12 @@ class usersManager {
       console.log("holaaa");
       const user = await usersModel.findOne({ email: username });
       if (user) {
-        const error = new Error(`El usuario esta registrado`);
-        error.code = 409;
-        throw error;
+        CustomError.createError({
+          cause: causeError.USER_ALREADY_EXISTS,
+          message: messagesError.USER_ALREADY_EXISTS,
+          statusCode: 404,
+          code: EnumError.USER_ALREADY_EXISTS,
+        });
       }
       return user;
     } catch (error) {

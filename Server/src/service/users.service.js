@@ -1,5 +1,9 @@
 import managerFactory from "../factories/manager.factories.js";
 import cript from "../utils/criptPassword.utils.js";
+import causeError from "../utils/errors/cause.error.js";
+import CustomError from "../utils/errors/custom.error.js";
+import { EnumError } from "../utils/errors/enums.errors.js";
+import messagesError from "../utils/errors/message.error.js";
 
 const users = await managerFactory.getManager("users");
 const cartManager = await managerFactory.getManager("carts");
@@ -8,29 +12,44 @@ export default async function createUser(req, username, password) {
   const { firstName, lastName, email, age } = req.body;
   try {
     if (!email) {
-      const error = new Error("ingresa un email");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.REQUIRED_FIELDS,
+        message: messagesError.REQUIRED_EMAIL,
+        statusCode: 404,
+        code: EnumError.INCOMPLET_FIELDS,
+      });
     }
     if (!firstName) {
-      const error = new Error("ingresa tu nombre");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.REQUIRED_FIELDS,
+        message: messagesError.REQUIRED_NAME,
+        statusCode: 404,
+        code: EnumError.INCOMPLET_FIELDS,
+      });
     }
     if (!lastName) {
-      const error = new Error("ingresa tu apellido");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.REQUIRED_FIELDS,
+        message: messagesError.REQUIRED_LAST_NAME,
+        statusCode: 404,
+        code: EnumError.INCOMPLET_FIELDS,
+      });
     }
     if (!age) {
-      const error = new Error("ingresa tu edad");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.REQUIRED_FIELDS,
+        message: messagesError.REQUIRED_AGE,
+        statusCode: 404,
+        code: EnumError.INCOMPLET_FIELDS,
+      });
     }
     if (!password) {
-      const error = new Error("ingresa una contraseña");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.REQUIRED_FIELDS,
+        message: messagesError.REQUIRED_PASSWORD,
+        statusCode: 404,
+        code: EnumError.INCOMPLET_FIELDS,
+      });
     }
     const cart = await cartManager.persistCreate();
     const newUserInfo = {

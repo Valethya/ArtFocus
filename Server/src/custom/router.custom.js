@@ -64,14 +64,14 @@ export default class customRouter {
   // generateCustomResponse(req, res, next) {
   //   res.sendSuccess = ({ payload, code }) =>
   //     res
-  //       .status(code)
-  //       .json({ status: "success", message: payload, statusCode: code });
+  //       .code(code)
+  //       .json({ code: "success", message: payload, statusCode: code });
   //   res.sendServerError = (error) =>
   //     res
-  //       .status(500)
-  //       .json({ status: "error", message: "internal server error" });
+  //       .code(500)
+  //       .json({ code: "error", message: "internal server error" });
   //   res.sendUserError = ({ error, code }) =>
-  //     res.status(400).json({ status: "error", error, statusCode: code });
+  //     res.code(400).json({ code: "error", error, statusCode: code });
   //   next();
   // }
 }

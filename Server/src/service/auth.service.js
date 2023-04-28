@@ -1,8 +1,11 @@
 import usersModel from "../dao/mongo/models/users.models.js";
 import cript from "../utils/criptPassword.utils.js";
 import { emailAdmin, passAdmin } from "../config/index.config.js";
-
+import messagesError from "../utils/errors/message.error.js";
 import managerFactory from "../factories/manager.factories.js";
+import { EnumError } from "../utils/errors/enums.errors.js";
+import CustomError from "../utils/errors/custom.error.js";
+import causeError from "../utils/errors/cause.error.js";
 
 const auth = await managerFactory.getManager("auth");
 const cartManager = await managerFactory.getManager("carts");
@@ -21,15 +24,21 @@ async function authLogin(username, password) {
     const user = await auth.persistLogin(username);
 
     if (!user) {
-      const error = new Error("credenciales no coinciden");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.EMAIL_NOT_FOUND,
+        message: messagesError.INVALID_CREDENTIALS,
+        statusCode: 404,
+        code: EnumError.INVALID_CREDENTIALS,
+      });
     }
 
     if (!cript.isValidPassword(user, password)) {
-      const error = new Error("credenciales no coinciden");
-      error.code = 404;
-      throw error;
+      CustomError.createError({
+        cause: causeError.INVALID_PASSWORD,
+        message: messagesError.INVALID_CREDENTIALS,
+        statusCode: 404,
+        code: EnumError.INVALID_CREDENTIALS,
+      });
     }
 
     return user;
