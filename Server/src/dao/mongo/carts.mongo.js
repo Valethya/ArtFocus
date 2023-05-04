@@ -70,7 +70,6 @@ export default class cartsManager {
           },
         },
       ]);
-      console.log(summary, "esto es summary");
       return summary;
     } catch (error) {
       throw error;
@@ -80,7 +79,7 @@ export default class cartsManager {
   async persistFindById(cid) {
     try {
       const cart = await cartsModel.findOne({ _id: cid });
-      console.log(!cart, "esto es cart");
+
       if (!cart) {
         CustomError.createError({
           cause: causeError.ID_NOT_FOUND,
@@ -192,7 +191,7 @@ export default class cartsManager {
         { $pull: { products: { qty: 0 } } },
         { new: true }
       );
-      console.log(prodFuera, " se supone que deberia eliminarse");
+
       return `el producto ${pid} fue eliminado de tu carrito`;
     } catch (error) {
       throw error;

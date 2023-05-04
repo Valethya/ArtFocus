@@ -7,7 +7,6 @@ const handleError = (error, req, res, next) => {
     code: error.code,
     error: error.cause,
   };
-  console.log(messageServer);
 
   if (statusCode == 500) {
     response = {

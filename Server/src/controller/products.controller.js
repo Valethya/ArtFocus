@@ -11,27 +11,28 @@ import {
 } from "../service/products.service.js";
 import io from "../app.js";
 import handleResponse from "../middleware/handleResponse.js";
+import asyncWrapper from "../utils/asyncWrapper.js";
 
 class Products extends customRouter {
   init() {
-    this.get("/", ["PUBLIC"], async (req, res, next) => {
-      try {
+    this.get(
+      "/",
+      ["PUBLIC"],
+      asyncWrapper(async (req, res, next) => {
         const response = await find(req);
         handleResponse(res, response, 200);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
 
-    this.get("/:pid", ["PUBLIC"], async (req, res, next) => {
-      try {
+    this.get(
+      "/:pid",
+      ["PUBLIC"],
+      asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
         const response = await findById(pid);
         handleResponse(res, response, 200);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
 
     // this.post("/",["ADMIN","SUPERIOR"], async (req, res,next) => {
     //   try {
@@ -57,27 +58,29 @@ class Products extends customRouter {
     // });
 
     /*---POPULATE---*/
-    this.post("/", ["ADMIN", "SUPERIOR"], async (req, res, next) => {
-      try {
+    this.post(
+      "/",
+      ["ADMIN", "SUPERIOR"],
+      asyncWrapper(async (req, res, next) => {
         const foundProducts = await findProducts();
         const response = await populate(foundProducts);
         handleResponse(res, response, 200);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
     // //
-    this.delete("/", ["ADMIN", "SUPERIOR"], async (req, res, next) => {
-      try {
+    this.delete(
+      "/",
+      ["ADMIN", "SUPERIOR"],
+      asyncWrapper(async (req, res, next) => {
         const response = await deleteProduct();
         handleResponse(res, response, 204);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
 
-    this.delete("/:pid", ["ADMIN", "SUPERIOR"], async (req, res, next) => {
-      try {
+    this.delete(
+      "/:pid",
+      ["ADMIN", "SUPERIOR"],
+      asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
         const response = await deleteById(pid);
 
@@ -86,30 +89,24 @@ class Products extends customRouter {
         io.emit("newProducts", allProducts);
 
         handleResponse(res, response, 204);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
 
     this.patch(
       "/update/:pid",
       ["ADMIN", "SUPERIOR"],
-      async (req, res, next) => {
-        try {
-          const { pid } = req.params;
-          const updateOps = {};
+      asyncWrapper(async (req, res, next) => {
+        const { pid } = req.params;
+        const updateOps = {};
 
-          for (const [key, value] of Object.entries(req.body)) {
-            updateOps[key] = value;
-          }
-
-          const response = await update(pid, updateOps);
-
-          handleResponse(res, response, 200);
-        } catch (error) {
-          next(error);
+        for (const [key, value] of Object.entries(req.body)) {
+          updateOps[key] = value;
         }
-      }
+
+        const response = await update(pid, updateOps);
+
+        handleResponse(res, response, 200);
+      })
     );
   }
 }

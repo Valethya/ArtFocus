@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:fs": " set NODE_ENV=fs&& nodemon src/app.js ",
-    "start:mongo": " set NODE_ENV=mongo&& nodemon src/app.js "
+    "start:dev": " set NODE_ENV=dev&& nodemon src/app.js ",
+    "start:prod": " set NODE_ENV=prod&& nodemon src/app.js "
   },
   "keywords": [],
   "author": "",
@@ -32,7 +32,8 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "socket.io": "^4.6.1",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0"

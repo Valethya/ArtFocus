@@ -11,6 +11,7 @@ const chat = routerFactory.getRouter("chat");
 const email = routerFactory.getRouter("email");
 const message = routerFactory.getRouter("message");
 const mocking = routerFactory.getRouter("mocking");
+const logger = routerFactory.getRouter("logger");
 const router = (app) => {
   app.use("/api/products", products);
   app.use("/api/carts", carts);
@@ -22,6 +23,7 @@ const router = (app) => {
   app.use("/email", email);
   app.use("/api/message", message);
   app.use("/mockingproducts", mocking);
+  app.use("/loggerTest", logger);
   app.use("*", (req, res, next) => {
     CustomError.createError({
       cause: `Incorrect path`,
@@ -36,15 +38,3 @@ const router = (app) => {
 };
 
 export default router;
-
-// import carts from "../controller/carts.controller.js";
-// import products from "../controller/products.controller.js";
-// import User from "../controller/users.controller.js";
-// import Auth from "../controller/auth.controller.js";
-// import Views from "../controller/views.controller.js";
-// import Session from "../controller/session.controller.js";
-
-// const users = new User().getRouter();
-// const auth = new Auth().getRouter();
-// const views = new Views().getRouter();
-// const session = new Session().getRouter();

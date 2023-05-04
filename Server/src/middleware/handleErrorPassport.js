@@ -1,7 +1,6 @@
 import passport from "passport";
 const handleErrorPassport = (strategy) => (req, res, next) => {
   passport.authenticate(strategy, (err, user, info) => {
-    console.log(err, "esto es error?");
     if (err != null) {
       return next(err);
     }

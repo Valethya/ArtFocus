@@ -5,7 +5,6 @@ import generateProducts from "../utils/mock.utils.js";
 class Mocking extends customRouter {
   init() {
     this.get("/", ["PUBLIC"], (req, res, next) => {
-      console.log("hola");
       try {
         const response = generateProducts();
         handleResponse(res, response, 200);

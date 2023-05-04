@@ -1,20 +1,23 @@
 import customRouter from "../custom/router.custom.js";
 import { create, deleteMessage, find } from "../service/message.service.js";
+import asyncWrapper from "../utils/asyncWrapper.js";
 
 class Message extends customRouter {
   init() {
-    this.get("/", ["USER", "SUPERIOR"], async (req, res, next) => {
-      try {
+    this.get(
+      "/",
+      ["USER", "SUPERIOR"],
+      asyncWrapper(async (req, res, next) => {
         const response = await find();
-        console.log(response, " esto es response");
-        handleResponse(res, response, 200);
-      } catch (error) {
-        next(error);
-      }
-    });
 
-    this.post("/", ["USER", "SUPERIOR"], async (req, res, next) => {
-      try {
+        handleResponse(res, response, 200);
+      })
+    );
+
+    this.post(
+      "/",
+      ["USER", "SUPERIOR"],
+      asyncWrapper(async (req, res, next) => {
         const { userEmail, userMessage } = req.body;
         const dataMessage = {
           user: userEmail,
@@ -24,19 +27,17 @@ class Message extends customRouter {
         const response = await create(dataMessage);
 
         handleResponse(res, response, 201);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
 
-    this.delete("/", ["USER", "SUPERIOR"], async (req, res, next) => {
-      try {
+    this.delete(
+      "/",
+      ["USER", "SUPERIOR"],
+      asyncWrapper(async (req, res, next) => {
         const response = await deleteMessage();
         handleResponse(res, response, 200);
-      } catch (error) {
-        next(error);
-      }
-    });
+      })
+    );
   }
 }
 

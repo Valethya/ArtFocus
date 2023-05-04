@@ -1,19 +1,22 @@
-import { port, secretKey } from "./config/index.config.js";
+import { port } from "./config/index.config.js";
 import { app } from "./index.js";
 import { Server } from "socket.io";
 import managerFactory from "./factories/manager.factories.js";
+import loggerFactory from "./factories/logger.factories.js";
+const logger = await loggerFactory.getLogger();
 
 const message = managerFactory.getManager("message");
 const httpServer = app.listen(port, () => {
-  console.log(`server running at port ${port}`);
+  logger.default.info(`server running at port ${port}`);
 });
 
 const io = new Server(httpServer);
 
 io.on("connection", async (socket) => {
-  console.log("nos hemos conectado señores");
+  logger.default.info("nos hemos conectado señores");
+
   socket.on("message", async (data) => {
-    const allMessages = await messages.find();
+    const allMessages = await message.find();
 
     io.emit("allMessages", allMessages.message);
   });

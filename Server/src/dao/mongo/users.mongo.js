@@ -51,7 +51,6 @@ class usersManager {
   // }
   async persistFindUserByEmail(username) {
     try {
-      console.log("holaaa");
       const user = await usersModel.findOne({ email: username });
       if (user) {
         CustomError.createError({

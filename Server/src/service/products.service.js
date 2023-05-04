@@ -85,7 +85,7 @@ async function find(req) {
 async function findById(pid) {
   try {
     const response = await manager.persistFindById(pid);
-    console.log(response);
+
     if (response == null) {
       CustomError.createError({
         cause: causeError.ID_NOT_FOUND,

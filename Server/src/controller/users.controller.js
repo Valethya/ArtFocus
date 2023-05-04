@@ -42,7 +42,6 @@ class User extends customRouter {
     );
 
     this.get("/failRegister", ["PUBLIC"], async (req, res) => {
-      console.log("Falló el registro");
       res.json({ error: "Falló" });
     });
   }

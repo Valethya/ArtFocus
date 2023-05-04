@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
+export let enviroment = process.env.NODE_ENV;
 export let persist = process.env.PERSISTENCE;
 export let port = process.env.PORT;
 export let pass = process.env.PASS;

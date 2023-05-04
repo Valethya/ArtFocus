@@ -79,7 +79,6 @@ async function deleteById(cid) {
 }
 
 async function CheckDocument(cid, pid) {
-  console.log(cid, pid, " estos son ids");
   if (cid === ":cid" || pid === ":pid") {
     const error = new Error(
       `no se han proporcionado un carrito y / o producto`

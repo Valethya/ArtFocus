@@ -6,7 +6,6 @@ class persistFactory {
     const persists = Object.freeze({
       MONGO: async () => {
         mongoConect();
-
         return await import(`../dao/mongo/${collection}.mongo.js`);
       },
       FS: async () => {

@@ -62,8 +62,6 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          console.log(jwt_payload, "paso por aqui?");
-
           done(null, jwt_payload);
         } catch (error) {
           return done(error);

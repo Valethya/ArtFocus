@@ -10,7 +10,8 @@ import mongoStore from "connect-mongo";
 import { passSession } from "./config/index.config.js";
 import { mongoUri } from "./db/index.db.js";
 import handleError from "./middleware/handleError.js";
-import { asyncWrapper } from "./utils/asyncWrapper.js";
+
+import addLogger from "./middleware/logger.midleware.js";
 
 export const app = express();
 
@@ -51,8 +52,8 @@ app.use(passport.session());
 
 /*--COOKIES--*/
 app.use(cookieParser());
-app.use(morgan("dev"));
-
+// app.use(morgan("dev"));
+app.use(addLogger);
 router(app);
 
 app.use(handleError);
