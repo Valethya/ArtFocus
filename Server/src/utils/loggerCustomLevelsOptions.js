@@ -1,14 +1,14 @@
 import winston from "winston";
 
 const customLevelOptions = {
-  levels: { fatal: 0, error: 1, warning: 2, info: 3, http: 4, debug: 5 },
+  levels: { fatal: 0, error: 1, warn: 2, info: 3, http: 4, debug: 5 },
   colors: {
-    fatal: "red",
-    error: "brightRed",
-    warning: "yellow",
-    info: "blue",
+    debug: "blue",
     http: "green",
-    debug: "magenta",
+    info: "cyan",
+    warning: "yellow",
+    error: "red",
+    fatal: "magenta",
   },
 };
 export default customLevelOptions;

@@ -1,4 +1,4 @@
-function handleResponse(res, payload, code = 500) {
+function handleResponse(res, payload, code = 200) {
   let response = {};
   if (code === 200 || code === 201 || code === 204) {
     response = {
@@ -7,6 +7,7 @@ function handleResponse(res, payload, code = 500) {
       statusCode: code,
     };
   }
+  console.log(response);
   return res.status(code).json(response);
 }
 
