@@ -52,14 +52,6 @@ class usersManager {
   async persistFindUserByEmail(username) {
     try {
       const user = await usersModel.findOne({ email: username });
-      if (user) {
-        CustomError.createError({
-          cause: causeError.USER_ALREADY_EXISTS,
-          message: messagesError.USER_ALREADY_EXISTS,
-          statusCode: 404,
-          code: EnumError.USER_ALREADY_EXISTS,
-        });
-      }
       return user;
     } catch (error) {
       throw error;
@@ -70,6 +62,14 @@ class usersManager {
       const newUser = await usersModel.create(newUserInfo);
 
       return newUser;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async persistUpdateUser(id, ops) {
+    try {
+      const result = await usersModel.updateOne({ _id: id }, { $set: ops });
+      return result;
     } catch (error) {
       throw error;
     }

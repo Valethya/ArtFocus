@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../context/ApiContext";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+import Icon from "@mui/material/Icon";
 function Avatar({ handle }) {
   const { user } = useContext(ApiContext);
-  const [icon, setIcon] = useState(<AccountCircleIcon />);
+  const [icon, setIcon] = useState(<Icon>person</Icon>);
 
   useEffect(() => {
     if (user) {
       const letter = user.name.split("");
-      console.log(letter, "letter?");
       setIcon(letter[0].toUpperCase());
+    } else {
+      setIcon(<Icon>person</Icon>);
     }
   }, [JSON.stringify(user)]);
 

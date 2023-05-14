@@ -65,9 +65,10 @@ class Auth extends customRouter {
             email: req.user.email,
             lastName: req.user.lastName || "",
             role: req.user.role,
+            cart: req.user.cart._id,
           };
 
-          const token = generateToken(user);
+          const token = generateToken(user, "180000s");
           res
             .cookie("authToken", token, {
               maxAge: 180000,
@@ -151,7 +152,7 @@ class Auth extends customRouter {
 
     this.patch("/forgotPassword", ["PUBLIC"], async (req, res, next) => {
       try {
-        const { email, password } = req.body;
+        const { email, newPassword, confirmPassword } = req.body;
 
         const passwordEncrypted = cript.createHash(password);
         await usersModel.updateOne({ email }, { password: passwordEncrypted });

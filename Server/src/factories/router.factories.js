@@ -4,8 +4,6 @@ import User from "../controller/users.controller.js";
 import Views from "../controller/views.controller.js";
 import Products from "../controller/products.controller.js";
 import Carts from "../controller/carts.controller.js";
-import Chat from "../controller/chat.controller.js";
-import Email from "../controller/email.controller.js";
 import Message from "../controller/message.controller.js";
 import Mocking from "../controller/mocking.controller.js";
 import Logger from "../controller/logger.controller.js";
@@ -19,8 +17,6 @@ export default class routerFactory {
       session: new Session().getRouter(),
       products: new Products().getRouter(),
       carts: new Carts().getRouter(),
-      chat: new Chat().getRouter(),
-      email: new Email().getRouter(),
       message: new Message().getRouter(),
       mocking: new Mocking().getRouter(),
       logger: new Logger().getRouter(),

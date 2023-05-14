@@ -1,43 +1,80 @@
 import React from "react";
+import { useContext } from "react";
 import { useState, useEffect } from "react";
-
+import { ApiContext } from "../../context/ApiContext";
+// import DeleteIcon from "@mui/icons-material/Delete";
+import Icon from "@mui/material/Icon";
 export function ItemCart() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          "http://localhost:8080/api/carts/63f293aad6a291d75d03c98f",
-          {
-            credentials: "include",
-          }
-        );
-        const data = await response.json();
-        const products = data.data;
-        setData(products);
-      } catch (error) {
-        console.error(error);
-      }
+  const [summaryCart, setSummaryCart] = useState("");
+  const { cartId } = useContext(ApiContext);
+  console.log(summaryCart);
+  async function fetchSummaryCart() {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/carts/summary/${cartId}`,
+        {
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      const products = data.data;
+      products[0]
+        ? setSummaryCart(products[0].summaryByProducts)
+        : setSummaryCart("");
+    } catch (error) {
+      console.error(error);
     }
-    fetchData();
-  }, []);
-  const datito = data.map((prod) => prod);
-  return data.map((prod) => {
-    return (
-      <div className="itemCart shadow" key={prod.product._id}>
-        <div className="imgCart">
-          <img src={prod.product.thumbnail}></img>
+  }
+  useEffect(() => {
+    fetchSummaryCart();
+  }, [cartId]);
+
+  async function fetchDelete(prod) {
+    const url = `http://localhost:8080/api/carts/${cartId}/product/${prod}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+    fetchSummaryCart();
+  }
+
+  function handleRemove(prod) {
+    fetchDelete(prod);
+  }
+
+  return (
+    summaryCart &&
+    summaryCart.map((prod) => {
+      return (
+        <div className="itemCart shadow" key={prod.productId}>
+          <div className="imgCart">
+            <img src={prod.thumb}></img>
+          </div>
+          <div className="cartDetail">
+            <h4>
+              <b>{prod.title}</b>
+            </h4>
+            <p>cantidad: {prod.totalQuantity}</p>
+            <p>precio: {prod.value}</p>
+            <p>total: {prod.totalValue}</p>
+            <Icon
+              onClick={() => {
+                handleRemove(prod.productId);
+              }}
+            >
+              delete
+            </Icon>
+          </div>
         </div>
-        <div className="cartDetail">
-          <h4>
-            <b>{prod.product.title}</b>
-          </h4>
-          <p>cantidad: {prod.qty}</p>
-          <p>precio: {prod.product.price}</p>
-          <p>total: {prod.product.price * prod.qty}</p>
-        </div>
-      </div>
-    );
-  });
+      );
+    })
+  );
 }

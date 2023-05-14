@@ -3,57 +3,42 @@ import { io } from "socket.io-client";
 import IconChat from "./IconChat";
 import { ApiContext } from "../../context/ApiContext";
 import Overlay from "../Overlay/Overlay";
+import { Icon } from "@mui/material";
+import { useForm } from "react-hook-form";
 
 export default function Chat() {
-  const socket = io();
-  const [message, setMessage] = useState("");
+  const { register, handleSubmit, reset } = useForm();
+  const socket = io("http://localhost:8080");
   const [allMessage, setAllMessage] = useState([]);
-  const [style, setStyle] = useState("");
+  const { user } = useContext(ApiContext);
   const [display, setDisplay] = useState("none");
-  const { current } = useContext(ApiContext);
-
-  const url = "http://localhost:8080/api/message";
-
-  const dataMessage = {
-    userEmail: "hola",
-    userMessage: message,
-  };
 
   /*--SEND MESSAGE--*/
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (message === undefined) {
-      event.preventDefault();
+  const onSubmit = async (data) => {
+    if (data.userMessage === undefined) {
+      return;
     }
     try {
+      const url = "http://localhost:8080/api/message";
       const response = await fetch(url, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataMessage),
+        body: JSON.stringify({
+          userEmail: user.email,
+          userMessage: data.userMessage,
+        }),
       });
-      const data = await response.json();
-      console.log(data);
+      const responseData = await response.json();
+      console.log(responseData);
+      reset();
     } catch (error) {
       console.log(error);
     }
-    socket.emit("message", message);
-    setMessage("");
-  };
-
-  const handleChange = (event) => {
-    event.preventDefault();
-    setMessage(event.target.value);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key == "Enter" && message === undefined) {
-      event.preventDefault();
-    }
-    if (event.key == "Enter" && message !== undefined) {
-      handleSubmit(event);
-    }
+    socket.emit("message", data.userMessage);
+    reset();
   };
 
   socket.on("allMessages", async (data) => {
@@ -74,27 +59,32 @@ export default function Chat() {
       <div className="chatBox shadow" style={{ display: display }}>
         <div className="messageBox">
           {allMessage.map((message) => {
-            const verify = message.user == current.email ? "own" : "other";
-            setStyle(verify);
-            return `<div class="message  ${style}">
-                           <p>${message.message}</p>
-                      </div>`;
+            if (user.email) {
+              return (
+                <div
+                  className={`message ${
+                    message.user === user.email ? "own" : "other"
+                  }`}
+                  key={message._id}
+                >
+                  <p>{message.message}</p>
+                </div>
+              );
+            }
           })}
         </div>
         <div>
-          <form id="formMessage" onSubmit={handleSubmit}>
+          <form id="formMessage" onSubmit={handleSubmit(onSubmit)}>
             <div className="formMessage">
               <textarea
                 type="text"
                 id="userMessage"
                 placeholder="Escribe tu mensaje..."
                 name="userMessage"
-                value={message}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
+                {...register("userMessage")}
               ></textarea>
               <button type="submit" id="sendMessage">
-                Enviar
+                <Icon>send</Icon>
               </button>
             </div>
           </form>

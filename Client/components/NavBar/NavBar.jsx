@@ -4,7 +4,8 @@ import Avatar from "../Avatar/Avatar";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Logo from "../Logo/Logo";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
+import Icon from "@mui/material/Icon";
 import Login from "../Login/Login";
 import { ApiContext } from "../../context/ApiContext";
 const pages = ["Cuadros", "Blog", "Nosotros"];
@@ -96,7 +97,7 @@ function NavBar() {
 
           <li id="iconCart" key="cart">
             <Link to={"/Cart"}>
-              <ShoppingCartIcon />
+              <Icon>shopping_cart</Icon>
             </Link>
           </li>
           <li id="liAvatar" key="avatar">

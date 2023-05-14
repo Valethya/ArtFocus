@@ -23,16 +23,16 @@ const productsSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  code: {
-    type: Boolean,
-    default: true,
-    index: true,
-  },
   category: {
     type: String,
     index: true,
   },
   code: { type: String, default: uuid() },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    default: "admin",
+  },
 });
 
 productsSchema.plugin(mongoosePaginate);

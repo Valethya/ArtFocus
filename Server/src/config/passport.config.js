@@ -14,6 +14,7 @@ import jwt, { ExtractJwt } from "passport-jwt";
 import { cookieExtractor } from "../utils/cookieExtractor.js";
 import { authLogin, authGithub } from "../service/auth.service.js";
 import usersModel from "../dao/mongo/models/users.models.js";
+import { register } from "../service/users.service.js";
 
 const users = await managerFactory.getManager("users");
 
@@ -27,7 +28,7 @@ const initializePassport = () => {
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
         try {
-          const user = await users.persistFindUserByEmail(username);
+          const user = await register(req, password, username);
           return done(null, user);
         } catch (error) {
           return done(error);

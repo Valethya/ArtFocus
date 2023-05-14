@@ -7,7 +7,7 @@ class InfoDto {
       ? infoUser.firstName + " " + infoUser.lastName
       : infoUser.firstName;
     this.email = infoUser.email ? infoUser.email : "";
-    // this.cartId = infoUser.cart._id;
+    this.cartId = infoUser.cart;
   }
 }
 export default InfoDto;

@@ -14,11 +14,8 @@
   z-index: 900;
   height: 100vh;
   background: rgb(241 242 245);
-  display: flex;
   flex-direction: column;
-  padding: 1em;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+
   justify-content: flex-end;
   position: fixed;
   right: 0;
@@ -26,10 +23,14 @@
   border-radius: 2px;
 }
 .messageBox {
+  display: flex;
   width: 100%;
   height: 80vh;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
+  overflow-y: auto;
+  flex-direction: column;
+  scroll-behavior: smooth;
 }
 #formMessage {
   display: flex;
@@ -40,7 +41,7 @@
   flex-direction: row;
   width: 100%;
   height: 100%;
-
+  padding: 1em;
   justify-content: space-between;
 }
 #userMessage {
@@ -64,16 +65,17 @@
 .message {
   padding: 0.5em;
   border-radius: 5px;
+  margin: 1em;
 }
 .message p {
   margin: 0;
 }
 .own {
-  background: rgb(177, 166, 243);
+  background: $secondary-color;
   align-self: flex-end;
 }
 .other {
-  background: rgb(216, 213, 238);
+  background: $secondary-color-light;
   align-self: flex-start;
 }
 .iconChat {

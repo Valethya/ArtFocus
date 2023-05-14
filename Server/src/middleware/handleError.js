@@ -1,3 +1,7 @@
+import loggerFactory from "../factories/logger.factories.js";
+
+const logger = await loggerFactory.getLogger();
+
 const handleError = (error, req, res, next) => {
   let response = {};
 
@@ -7,7 +11,7 @@ const handleError = (error, req, res, next) => {
     code: error.code,
     error: error.cause,
   };
-
+  logger.default.error(JSON.stringify(messageServer));
   if (statusCode == 500) {
     response = {
       status: "error",
@@ -22,7 +26,6 @@ const handleError = (error, req, res, next) => {
     };
   }
   return res.status(statusCode).json(response);
-  next(err);
 };
 
 export default handleError;

@@ -1,12 +1,13 @@
 import customRouter from "../custom/router.custom.js";
 import { create, deleteMessage, find } from "../service/message.service.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
+import handleResponse from "../middleware/handleResponse.js";
 
 class Message extends customRouter {
   init() {
     this.get(
       "/",
-      ["USER", "SUPERIOR"],
+      ["USER", "PREMIUM", "ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const response = await find();
 
@@ -16,8 +17,8 @@ class Message extends customRouter {
 
     this.post(
       "/",
-      ["USER", "SUPERIOR"],
-      asyncWrapper(async (req, res, next) => {
+      ["USER", "PREMIUM"],
+      asyncWrapper(async (req, res) => {
         const { userEmail, userMessage } = req.body;
         const dataMessage = {
           user: userEmail,
@@ -32,7 +33,7 @@ class Message extends customRouter {
 
     this.delete(
       "/",
-      ["USER", "SUPERIOR"],
+      ["USER", "PREMIUM", "ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const response = await deleteMessage();
         handleResponse(res, response, 200);

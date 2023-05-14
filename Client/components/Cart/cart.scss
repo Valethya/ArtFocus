@@ -31,9 +31,14 @@
         width: 100%;
         border: 1px solid rgba(128, 128, 128, 0.226);
         padding: 1em;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
         h4 {
           margin-top: 0;
           margin-bottom: 0.5em;
+          width: 100%;
           b {
             margin: 0;
           }

@@ -45,6 +45,8 @@ export default class cartsManager {
             summaryByProducts: {
               $push: {
                 productId: "$product._id",
+                title: "$product.title",
+                thumb: "$product.thumbnail",
                 value: "$product.price",
                 totalValue: {
                   $multiply: ["$products.qty", "$product.price"],

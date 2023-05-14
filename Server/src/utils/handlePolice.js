@@ -1,40 +1,40 @@
-import { verifyPermission } from "./verifyAuth.utils.js";
+import causeError from "./errors/cause.error.js";
+import CustomError from "./errors/custom.error.js";
+import { EnumError } from "./errors/enums.errors.js";
+import messagesError from "./errors/message.error.js";
 import { verifyToken } from "./jwt.utils.js";
 
 function handlePolice(policies) {
   return (req, res, next) => {
-    const police = {
-      PUBLIC: 1,
-      USER: 2,
-      ADMIN: 3,
-    };
-
-    const requiredLevel = police[policies[0]];
-    if (requiredLevel === police.PUBLIC) {
-      // Acceso público, se permite el acceso sin necesidad de autenticación
-      next();
-    } else {
+    try {
+      if ("PUBLIC" == policies) {
+        return next();
+      }
       const token = req.cookies.authToken;
       if (!token) {
-        const error = {
-          code: 401,
-          message: "No se proporcionó el token de autenticación",
-        };
-        return next(error);
-      } else {
-        // Verificar si el token es válido y si el usuario tiene los permisos necesarios
-        try {
-          const user = verifyToken(token);
-          const role = user.role.toUpperCase();
-          const userLevel = police[role];
-          const type = policies[1].toLowerCase();
-
-          verifyPermission(userLevel, requiredLevel, type, next);
-        } catch (error) {
-          res.status(401).json({ error: "Token inválido" });
-          return;
-        }
+        CustomError.createError({
+          cause: causeError.NOT_AUTHENTICATED,
+          message: messagesError.NOT_AUTHENTICATED,
+          statusCode: 403,
+          code: EnumError.NOT_AUTHENTICATED,
+        });
       }
+
+      const user = verifyToken(token);
+      const role = user.role.toUpperCase();
+
+      if ([].concat(policies).includes(role)) {
+        return next();
+      } else {
+        CustomError.createError({
+          cause: causeError.NOT_AUTHORIZED,
+          message: messagesError.NOT_AUTHORIZED,
+          statusCode: 401,
+          code: EnumError.NOT_AUTHORIZED,
+        });
+      }
+    } catch (error) {
+      return next(error);
     }
   };
 }

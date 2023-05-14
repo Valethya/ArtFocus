@@ -18,7 +18,7 @@ class Products extends customRouter {
     this.get(
       "/",
       ["PUBLIC"],
-      asyncWrapper(async (req, res, next) => {
+      asyncWrapper(async (req, res) => {
         const response = await find(req);
         handleResponse(res, response, 200);
       })
@@ -60,7 +60,7 @@ class Products extends customRouter {
     /*---POPULATE---*/
     this.post(
       "/",
-      ["ADMIN", "SUPERIOR"],
+      ["ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const foundProducts = await findProducts();
         const response = await populate(foundProducts);
@@ -70,7 +70,7 @@ class Products extends customRouter {
     // //
     this.delete(
       "/",
-      ["ADMIN", "SUPERIOR"],
+      ["ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const response = await deleteProduct();
         handleResponse(res, response, 204);
@@ -79,7 +79,7 @@ class Products extends customRouter {
 
     this.delete(
       "/:pid",
-      ["ADMIN", "SUPERIOR"],
+      ["ADMIN", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
         const response = await deleteById(pid);
@@ -94,7 +94,7 @@ class Products extends customRouter {
 
     this.patch(
       "/update/:pid",
-      ["ADMIN", "SUPERIOR"],
+      ["ADMIN", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
         const updateOps = {};

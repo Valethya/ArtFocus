@@ -3,7 +3,9 @@ import customRouter from "../custom/router.custom.js";
 import InfoDto from "../DTO/infoUser.dto.js";
 import handleErrorPassport from "../middleware/handleErrorPassport.js";
 import handleResponse from "../middleware/handleResponse.js";
-
+import loggerFactory from "../factories/logger.factories.js";
+import asyncWrapper from "../utils/asyncWrapper.js";
+const logger = loggerFactory.getLogger();
 class Session extends customRouter {
   init() {
     // this.get("/", ["USER", "SUPERIOR"], (req, res) => {
@@ -13,15 +15,10 @@ class Session extends customRouter {
       "/current",
       /*["USER", "SUPERIOR"]*/ ["PUBLIC"],
       handleErrorPassport("current"),
-      (req, res) => {
-        try {
-          const response = new InfoDto(req.user);
-
-          handleResponse(res, response, 200);
-        } catch (error) {
-          next(error);
-        }
-      }
+      asyncWrapper((req, res) => {
+        const response = new InfoDto(req.user);
+        handleResponse(res, response, 200);
+      })
     );
   }
 }

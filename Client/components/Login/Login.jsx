@@ -53,22 +53,30 @@ function Login({ display }) {
     <div>
       <form
         action=""
-        className="formLogin shadow"
+        className="login shadow"
         onSubmit={handleSubmit(onSubmit)}
         onKeyDown={handleKeyDown}
         style={{ display: display }}
       >
-        <Input label="email" register={register} required />
-        {errors.email?.type === "required" && (
-          <p className="invalid" role="alert">
-            Email campo es requerido
-          </p>
+        <Input
+          label="email"
+          type="email"
+          name="email"
+          register={register}
+          required={{ value: true, message: "Ingrese su correo electrónico" }}
+        />
+        {errors.email && (
+          <span className="invalid">{errors.email.message}</span>
         )}
-        <Input label="password" register={register} required />
-        {errors.password?.type === "required" && (
-          <p className="invalid" role="alert">
-            Password campo es requerido
-          </p>
+        <Input
+          label="contraseña"
+          type="password"
+          name="password"
+          register={register}
+          required={{ value: true, message: "Ingrese su contraseña" }}
+        />
+        {errors.password && (
+          <span className="invalid">{errors.password.message}</span>
         )}
         <button className="btn" type="submit">
           Iniciar Sesión
@@ -76,7 +84,7 @@ function Login({ display }) {
         <a className="register" href="/signup">
           registrate
         </a>
-        <a className="register" href="forgotPassword">
+        <a className="register" href="/password/reset/request">
           Olvide la contraseña
         </a>
         <button className="btn">

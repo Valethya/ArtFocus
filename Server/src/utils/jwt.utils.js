@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { secretKey } from "../config/index.config.js";
 
-export const generateToken = (user) => {
+export const generateToken = (user, time) => {
   const token = jwt.sign({ ...user }, secretKey, {
-    expiresIn: "180s",
+    expiresIn: time,
   });
 
   return token;

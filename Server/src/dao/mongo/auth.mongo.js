@@ -10,7 +10,6 @@ class authManager {
   async persistLogin(username) {
     try {
       const user = await usersModel.findOne({ email: username });
-
       return user;
     } catch (error) {
       throw error;

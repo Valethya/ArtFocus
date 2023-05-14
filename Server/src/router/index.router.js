@@ -7,8 +7,6 @@ const users = routerFactory.getRouter("users");
 const session = routerFactory.getRouter("session");
 const products = routerFactory.getRouter("products");
 const carts = routerFactory.getRouter("carts");
-const chat = routerFactory.getRouter("chat");
-const email = routerFactory.getRouter("email");
 const message = routerFactory.getRouter("message");
 const mocking = routerFactory.getRouter("mocking");
 const logger = routerFactory.getRouter("logger");
@@ -19,8 +17,6 @@ const router = (app) => {
   app.use("/auth", auth);
   app.use("/", views);
   app.use("/session", session);
-  app.use("/api/chats", chat);
-  app.use("/email", email);
   app.use("/api/message", message);
   app.use("/mockingproducts", mocking);
   app.use("/loggerTest", logger);

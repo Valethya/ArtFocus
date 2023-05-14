@@ -1,13 +1,16 @@
-.formLogin {
+%form {
   height: auto;
   width: 30%;
   background: white;
-  display: none;
   flex-direction: column;
   justify-content: space-around;
-  border: 1px solid rgba(128, 128, 128, 0.226);
   padding: 2em;
   z-index: 1400;
+}
+.login {
+  @extend %form;
+  border: 1px solid rgba(128, 128, 128, 0.226);
+  display: none;
   position: fixed;
   right: 1em;
   top: 5em;

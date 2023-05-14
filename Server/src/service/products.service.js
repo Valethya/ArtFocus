@@ -93,7 +93,6 @@ async function findById(pid) {
         statusCode: 404,
         code: EnumError.PRODUCT_NOT_FOUND,
       });
-      next(error);
     }
     return response;
   } catch (error) {
