@@ -4,22 +4,9 @@ import Button from "../Button/Button";
 import { ApiContext } from "../../context/ApiContext";
 
 export default function Card() {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   // const [prodId, setProdId] = useState([]);
-  const { cartId } = useContext(ApiContext);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch("http://localhost:8080/api/products");
-        const data = await response.json();
-        setData(data.data.payload);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchData();
-  }, []);
+  const { cartId, products } = useContext(ApiContext);
 
   async function fetchData(prod) {
     console.log(cartId);
@@ -40,7 +27,7 @@ export default function Card() {
   function handleAdd(prod) {
     fetchData(prod);
   }
-  return data.map((prod) => {
+  return products.map((prod) => {
     return (
       <div className="card" key={prod.id}>
         <div className="contentCard">

@@ -1,0 +1,70 @@
+.subscription {
+  .btn {
+    width: 30%;
+  }
+}
+.nameUser {
+  color: $secondary-color;
+}
+.productsTable {
+  padding: 1em;
+  margin-right: 2em;
+  .tdThumbnail {
+    width: 4.5em;
+    display: flex;
+  }
+  img {
+    width: 100%;
+  }
+}
+.evenRow {
+  background: rgba(128, 128, 128, 0.226);
+}
+td {
+  text-align: center;
+}
+.edit {
+  width: 15%;
+  padding: 0.5em;
+  position: relative;
+  div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .delete {
+    font-size: 130%;
+    color: color("grey", "darken-2");
+    margin-bottom: 1em;
+    transition: 1s;
+    &:hover {
+      color: $primary-color-dark;
+    }
+  }
+  .btnEdit:hover {
+    @extend %hoverList;
+  }
+}
+.btnEdit {
+  background: none;
+  border: none;
+
+  color: $primary-color-dark;
+  transition: 1s;
+}
+
+.createProduct {
+  width: 50%;
+  margin-top: 2em;
+}
+.optionProduct {
+  display: flex;
+  width: 65%;
+  flex-direction: row;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.226);
+  li {
+    text-align: center;
+    margin: 1em;
+    width: calc(100% / 2);
+  }
+}

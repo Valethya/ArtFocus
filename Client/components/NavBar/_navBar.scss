@@ -53,6 +53,14 @@
     .dataUser {
       font-size: 80%;
       // display: none;
+      a {
+        justify-content: flex-start;
+        .premium {
+          font-size: 130%;
+          margin-left: 0.5em;
+          color: goldenrod;
+        }
+      }
     }
   }
   .linkNav {

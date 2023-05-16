@@ -90,5 +90,19 @@ class productsManager {
       throw error;
     }
   }
+  async persistVerifyOwner(email, id) {
+    try {
+      const result = await productsModel.findById(id);
+      console.log(result.owner, email, "mira esto");
+      console.log(result.owner === email);
+      if (result && result.owner === email) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 export default productsManager;

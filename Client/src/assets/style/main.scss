@@ -14,6 +14,9 @@
 @import "../../../components/Overlay/overlay.scss";
 @import "../../../components/passWordReset/recoverPassword.scss";
 @import "../../../components/Login/singUp.scss";
+@import "../../../components/Aside/aside.scss";
+@import "../../../components/Perfil/perfil.scss";
+@import "../../../components/Pagination/pagination.scss";
 @keyframes scalar {
   0% {
     -webkit-transform: scale(1);
@@ -38,6 +41,13 @@
 .shadow {
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%),
     0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+%hoverAnchor {
+  letter-spacing: 5px;
+  border-bottom: 1px solid #81d4fa;
+}
+%hoverList {
+  letter-spacing: 5px;
 }
 a {
   text-decoration: none;
@@ -66,4 +76,11 @@ input:focus-visible {
   height: 100vh;
   display: grid;
   place-content: center;
+}
+li {
+  list-style: none;
+  transition: 1s;
+  &:hover {
+    @extend %hoverList;
+  }
 }

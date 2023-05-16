@@ -20,14 +20,13 @@
   margin: 0;
 }
 .register {
-  color: #81d4fa;
+  color: $primary-color-dark;
   align-self: center;
   transition: 1s;
   margin-bottom: 0.5em;
 }
 .register:hover {
-  letter-spacing: 5px;
-  border-bottom: 1px solid #81d4fa;
+  @extend %hoverAnchor;
 }
 .invalid {
   font-size: 80%;

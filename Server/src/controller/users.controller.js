@@ -58,8 +58,17 @@ class User extends customRouter {
       "/premium/:uid",
       ["PUBLIC"],
       asyncWrapper(async (req, res, next) => {
-        const user = await updateUser();
-        handleResponse(res, "usuario registrado exitosamente", 200);
+        const email = req.params.uid;
+
+        const user = await findUserByEmail(email);
+
+        const role = user.role == "user" ? "premium" : "user";
+        const options = {
+          role,
+        };
+        console.log(user.role, "rol");
+        const updatedUser = await updateUser(user.id, options);
+        handleResponse(res, `Ahora eres ${role}`, 200);
       })
     );
 

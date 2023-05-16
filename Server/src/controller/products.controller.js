@@ -8,10 +8,13 @@ import {
   deleteById,
   deleteProduct,
   update,
+  verifyOwner,
 } from "../service/products.service.js";
 import io from "../app.js";
 import handleResponse from "../middleware/handleResponse.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
+import { verifyToken } from "../utils/jwt.utils.js";
+import CustomError from "../utils/errors/custom.error.js";
 
 class Products extends customRouter {
   init() {
@@ -34,33 +37,38 @@ class Products extends customRouter {
       })
     );
 
-    // this.post("/",["ADMIN","SUPERIOR"], async (req, res,next) => {
-    //   try {
-    //     const { title, description, price, thumbnail, stock, category } = req.body;
+    this.post("/", ["ADMIN", "PREMIUM"], async (req, res, next) => {
+      try {
+        const { title, description, price, thumbnail, stock, category } =
+          req.body;
+        const decoded = verifyToken(req.cookies.authToken);
+        const email = decoded.email;
+        const role = decoded.role;
 
-    //     const product = {
-    //       title,
-    //       description,
-    //       price,
-    //       thumbnail,
-    //       stock,
-    //       code: true,
-    //       category,
-    //     };
-    //     const response = await create(product);
+        const product = {
+          title,
+          description,
+          price,
+          thumbnail,
+          stock,
+          code: true,
+          category,
+          owner: role == "premium" ? email : "admin",
+        };
+        const response = await create(product);
 
-    //     const allProducts = await find(req);
-    //     io.emit("newProducts", allProducts);
-    //     res.status(201).json({ result: "succes", payload: response });
-    //   } catch (error) {
-    //     res.json({ message: error.message });
-    //   }
-    // });
+        const allProducts = await find(req);
+        io.emit("newProducts", allProducts);
+        res.status(201).json({ result: "succes", payload: response });
+      } catch (error) {
+        res.json({ message: error.message });
+      }
+    });
 
     /*---POPULATE---*/
     this.post(
-      "/",
-      ["ADMIN"],
+      "/populate",
+      ["PUBLIC"],
       asyncWrapper(async (req, res, next) => {
         const foundProducts = await findProducts();
         const response = await populate(foundProducts);
@@ -70,7 +78,7 @@ class Products extends customRouter {
     // //
     this.delete(
       "/",
-      ["ADMIN"],
+      ["PUBLIC"],
       asyncWrapper(async (req, res, next) => {
         const response = await deleteProduct();
         handleResponse(res, response, 204);
@@ -82,11 +90,28 @@ class Products extends customRouter {
       ["ADMIN", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
+        const decoded = verifyToken(req.cookies.authToken);
+        const email = decoded.email;
+        const role = decoded.role;
+
+        if (role !== "admin") {
+          const isOwner = await verifyOwner(email, pid);
+          console.log(isOwner, "es el due;o o no?");
+          if (!isOwner) {
+            CustomError.createError({
+              cause: "Usuario no es propietario del producto",
+              message: "Para borrar este producto debes ser el creador",
+              statusCode: 404,
+              code: 1009,
+            });
+          }
+        }
+
         const response = await deleteById(pid);
 
-        const allProducts = await find(req);
+        // const allProducts = await find(req);
 
-        io.emit("newProducts", allProducts);
+        // io.emit("newProducts", allProducts);
 
         handleResponse(res, response, 204);
       })

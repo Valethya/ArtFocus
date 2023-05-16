@@ -4,6 +4,7 @@ import { ApiContext } from "../../context/ApiContext";
 import Icon from "@mui/material/Icon";
 function Avatar({ handle }) {
   const { user } = useContext(ApiContext);
+
   const [icon, setIcon] = useState(<Icon>person</Icon>);
 
   useEffect(() => {

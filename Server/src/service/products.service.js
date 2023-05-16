@@ -12,7 +12,17 @@ const manager = await managerFactory.getManager("products");
 function processData(products, req) {
   //mapeo de datos de documentos para mostrar la informacion correctamente
   const documents = products.docs.map(
-    ({ _id, title, description, price, thumbnail, stock, code, category }) => ({
+    ({
+      _id,
+      title,
+      description,
+      price,
+      thumbnail,
+      stock,
+      code,
+      category,
+      owner,
+    }) => ({
       id: _id,
       title,
       description,
@@ -21,6 +31,7 @@ function processData(products, req) {
       stock,
       code,
       category,
+      owner,
     })
   );
 
@@ -116,7 +127,7 @@ async function findProducts() {
   if (fs.existsSync(file)) {
     const data = await fs.promises.readFile(file);
     const response = JSON.parse(data);
-
+    console.log(response);
     return response;
   }
   return "no se encuentra el archivo";
@@ -150,7 +161,7 @@ async function deleteProduct() {
 // borra un producto por id
 async function deleteById(pid) {
   try {
-    const productDeleted = await manager.persistDeleteOne({ _id: pid });
+    const productDeleted = await manager.persistDeleteById({ _id: pid });
     if (productDeleted.deletedCount == 0) {
       CustomError.createError({
         cause: causeError.ID_NOT_FOUND,
@@ -160,7 +171,7 @@ async function deleteById(pid) {
       });
       next(error);
     }
-    return;
+    return "Producto fue eliminado";
   } catch (error) {
     throw error;
   }
@@ -169,6 +180,14 @@ async function deleteById(pid) {
 async function update(id, ops) {
   try {
     const result = await manager.persistUpdate(id, ops);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+async function verifyOwner(email, id) {
+  try {
+    const result = await manager.persistVerifyOwner(email, id);
     return result;
   } catch (error) {
     throw error;
@@ -184,6 +203,7 @@ export {
   findProducts,
   populate,
   update,
+  verifyOwner,
 };
 
 // import productsManager from "../dao/mongo/products.mongo.js";

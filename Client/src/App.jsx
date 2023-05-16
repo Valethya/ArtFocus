@@ -8,6 +8,7 @@ import CartLayout from "../layouts/cart.layout.jsx";
 import PasswordReset from "../layouts/passwordReset.layout.jsx";
 import PasswordResetRequest from "../layouts/passwordResetRequest.layout.jsx";
 import SignUp from "../components/Login/SignUp.jsx";
+import Perfil from "../layouts/perfil.layout";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           ></Route>
           <Route path="/password/reset" element={<PasswordReset />}></Route>
           <Route path="/signUp" element={<SignUp />}></Route>
+          <Route path="/perfil" element={<Perfil></Perfil>}></Route>
         </Routes>
       </StrictMode>
     </Router>

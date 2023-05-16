@@ -1,14 +1,16 @@
-.container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: calc(10vh + 3em);
-    .subContainer{
-        width: 70%;
-    }
-    
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: calc(10vh + 3em);
+  position: relative;
+  align-items: stretch;
+  .subContainer {
+    width: 70%;
+    min-height: 80vh;
+  }
 }
-.cardContainer{
-    display: flex;
-    flex-wrap: wrap;
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
 }

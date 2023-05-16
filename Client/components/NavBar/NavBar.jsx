@@ -19,7 +19,7 @@ function NavBar() {
   const { user } = useContext(ApiContext);
   const location = useLocation();
   const [display, setDisplay] = useState("none");
-
+  const [icon, setIcon] = useState("");
   //cambiar de color y agrega sombra al nav segun este en el home o no
   useEffect(() => {
     if (location.pathname == "/") {
@@ -68,13 +68,17 @@ function NavBar() {
   const handleLogin = () => {
     if (user) {
       setDisplay("none");
-    } else if (display == "flex") {
-      setDisplay("none");
     } else {
-      setDisplay("flex");
+      setDisplay(display === "flex" ? "none" : "flex");
     }
   };
-
+  useEffect(() => {
+    if (user.role == "premium") {
+      setIcon(<Icon className="premium">star</Icon>);
+    } else {
+      setIcon("");
+    }
+  }, [JSON.stringify(user)]);
   return (
     <>
       <nav
@@ -105,8 +109,15 @@ function NavBar() {
           </li>
         </ul>
         <div className="dataUserBox">
-          <span className="dataUser">{user ? user.name : ""}</span>
-          <span className="dataUser">{user ? user.email : ""}</span>
+          <span className="dataUser">
+            <Link to="/perfil">
+              {user ? user.name : ""}
+              {icon}
+            </Link>
+          </span>
+          <span className="dataUser">
+            <Link to="/perfil">{user ? user.email : ""}</Link>
+          </span>
         </div>
       </nav>
       <Login display={display} />

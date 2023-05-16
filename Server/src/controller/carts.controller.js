@@ -13,7 +13,10 @@ import {
   summaryCart,
   purchase,
 } from "../service/carts.service.js";
+import { verifyOwner } from "../service/products.service.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
+import CustomError from "../utils/errors/custom.error.js";
+import { verifyToken } from "../utils/jwt.utils.js";
 
 //REQ DE CARRITOS
 class Carts extends customRouter {
@@ -81,7 +84,22 @@ class Carts extends customRouter {
       asyncWrapper(async (req, res, next) => {
         const { cid, pid } = req.params;
         // const prodId = pid || data;
+        const decoded = verifyToken(req.cookies.authToken);
+        const email = decoded.email;
+        const role = decoded.role;
 
+        if (role !== "user") {
+          const isOwner = await verifyOwner(email, pid);
+          console.log(true);
+          if (isOwner) {
+            CustomError.createError({
+              cause: "Usuario no puede comprar productos que el haya creado",
+              message: "No puedes comprar tus propios productos",
+              statusCode: 404,
+              code: 1010,
+            });
+          }
+        }
         const response = await addProdToCart(cid, pid);
         handleResponse(res, response, 201);
       })

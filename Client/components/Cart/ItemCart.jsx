@@ -2,7 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { useState, useEffect } from "react";
 import { ApiContext } from "../../context/ApiContext";
-// import DeleteIcon from "@mui/icons-material/Delete";
+
 import Icon from "@mui/material/Icon";
 export function ItemCart() {
   const [summaryCart, setSummaryCart] = useState("");

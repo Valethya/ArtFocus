@@ -1,0 +1,13 @@
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .page {
+    padding: 1em;
+    list-style: none;
+    &:hover {
+      color: $secondary-color-dark;
+      letter-spacing: 0px;
+    }
+  }
+}

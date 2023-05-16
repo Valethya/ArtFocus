@@ -104,7 +104,7 @@ async function findUserByEmail(email) {
 async function updateUser(id, ops) {
   try {
     await users.persistUpdateUser(id, ops);
-    return "Cambio de contraseña exitoso";
+    return "Actualizacion exitosa";
   } catch (error) {
     throw error;
   }

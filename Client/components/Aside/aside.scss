@@ -1,0 +1,17 @@
+.aside {
+  width: 20%;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    justify-content: space-evenly;
+    align-content: flex-end;
+    height: 50%;
+    text-align: center;
+  }
+}

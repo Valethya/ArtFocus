@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import Input from "../Form/Input";
 import { ApiContext } from "../../context/ApiContext";
 function Login({ display }) {
-  const { getCurrentSession } = useContext(ApiContext);
+  const { getCurrentSession, user } = useContext(ApiContext);
 
   const {
     register,
@@ -38,6 +38,7 @@ function Login({ display }) {
       console.log(error);
     }
     getCurrentSession();
+    console.log(getCurrentSession(), "que es esto?");
 
     setValue("email");
     setValue("password");
@@ -49,6 +50,10 @@ function Login({ display }) {
       onSubmit(dataForm, event);
     }
   };
+
+  if (user) {
+    return null;
+  }
   return (
     <div>
       <form
