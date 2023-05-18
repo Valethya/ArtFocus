@@ -25,6 +25,7 @@ const handleError = (error, req, res, next) => {
       statusCode: statusCode,
     };
   }
+  console.log(response, "esto es response");
   return res.status(statusCode).json(response);
 };
 

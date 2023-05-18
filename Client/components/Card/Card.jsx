@@ -3,27 +3,24 @@ import { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import { ApiContext } from "../../context/ApiContext";
 
-export default function Card() {
+export default function Card({ products }) {
   // const [data, setData] = useState([]);
   // const [prodId, setProdId] = useState([]);
-  const { cartId, products } = useContext(ApiContext);
+  const { cartId } = useContext(ApiContext);
 
   async function fetchData(prod) {
-    console.log(cartId);
     const url = `http://localhost:8080/api/carts/${cartId}/product/${prod}`;
 
     try {
-      const response = await fetch(url, {
+      await fetch(url, {
         method: "POST",
         credentials: "include",
       });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      console.error(error);
     }
   }
+
   function handleAdd(prod) {
     fetchData(prod);
   }

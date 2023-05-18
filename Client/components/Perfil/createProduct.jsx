@@ -16,6 +16,7 @@ function CreateProduct() {
     defaultValues: {
       title: "Fotografia",
       description: "Hermosa fotografia",
+      image: "Ingrese la url de su imagen",
       price: 15000,
       stock: 20,
       category: "alguna",
@@ -81,6 +82,16 @@ function CreateProduct() {
         />
         {errors.description && (
           <span className="invalid">{errors.description.message}</span>
+        )}
+        <Input
+          label="Url de la imagen"
+          type="text"
+          name="image"
+          register={register}
+          required={{ value: true, message: "Ingrese una url" }}
+        />
+        {errors.image && (
+          <span className="invalid">{errors.image.message}</span>
         )}
         <Input
           label="Precio"

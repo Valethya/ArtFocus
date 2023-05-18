@@ -3,16 +3,37 @@ import { ApiContext } from "../../context/ApiContext";
 import { Icon } from "@mui/material";
 import Pagination from "../Pagination/pagination";
 function EditProducts() {
-  const { products, user, fetchProducts, urlPage } = useContext(ApiContext);
-  console.log(user.email);
-  const filteredProducts = products.filter((prod) => prod.owner === user.email);
+  const { user } = useContext(ApiContext);
 
+  ///FEEEETCHHHHH
+  const [products, setProducts] = useState([]);
+  const [url, setUrl] = useState("http://localhost:8080/api/products");
+  const [page, setPage] = useState("");
+
+  const urlFilter = `${url}?owner=${user.email}`;
+
+  async function fetchProducts() {
+    try {
+      const response = await fetch(urlFilter);
+      const data = await response.json();
+      setPage(data.data);
+      setProducts(data.data.payload);
+      return data.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
-    fetchProducts(urlPage);
-  }, [JSON.stringify(urlPage)]);
+    fetchProducts();
+  }, [JSON.stringify(url)]);
+
+  function handlePage(urlPage) {
+    setUrl(urlPage);
+  }
+
+  //////FIN FECTH
 
   async function handleDelete(id) {
-    console.log(id, "esto es id en delete");
     const url = `http://localhost:8080/api/products/${id}`;
     try {
       const response = await fetch(url, {
@@ -22,11 +43,10 @@ function EditProducts() {
           "Content-Type": "application/json",
         },
       });
-      console.log(response, "esta es la respuesta");
-      const data = await response.json();
-      console.log(data);
+      fetchProducts();
+      console.log("Borrado exitosamente");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   function truncateText(text, maxLength) {
@@ -35,53 +55,59 @@ function EditProducts() {
     }
     return text.slice(0, maxLength) + "...";
   }
+  console.log(!products, "esto es productos");
   return (
     <>
-      {" "}
-      <table className="productsTable">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Thumbnail</th>
-            <th>descripcion</th>
-            <th>price</th>
-            <th>stock</th>
-            <th>category</th>
-            <th>code</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredProducts.map((prod, index) => {
-            const truncatedDescription = truncateText(prod.description, 35);
-            const rowClass = index % 2 === 0 ? "evenRow" : "";
-            return (
-              <tr key={prod.id} className={rowClass}>
-                <td>{prod.title}</td>
-                <td className="tdThumbnail">
-                  <img src={prod.thumbnail} />
-                </td>
-                <td>{truncatedDescription}</td>
-                <td>{prod.price}</td>
-                <td>{prod.stock}</td>
-                <td>{prod.category}</td>
-                <td>{prod.code}</td>
-                <td className="edit">
-                  <div>
-                    <Icon
-                      className="delete"
-                      onClick={() => handleDelete(prod.id)}
-                    >
-                      delete
-                    </Icon>
-                    <button className="btnEdit">Editar</button>
-                  </div>
-                </td>
+      {products.length == 0 ? (
+        <h3>No tienes ningun producto creado por ti :(</h3>
+      ) : (
+        <>
+          <table className="productsTable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Thumbnail</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Código</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <Pagination />
+            </thead>
+            <tbody>
+              {products.map((prod, index) => {
+                const truncatedDescription = truncateText(prod.description, 35);
+                const rowClass = index % 2 === 0 ? "evenRow" : "";
+                return (
+                  <tr key={prod.id} className={rowClass}>
+                    <td>{prod.title}</td>
+                    <td className="tdThumbnail">
+                      <img src={prod.thumbnail} alt="Thumbnail" />
+                    </td>
+                    <td>{truncatedDescription}</td>
+                    <td>{prod.price}</td>
+                    <td>{prod.stock}</td>
+                    <td>{prod.category}</td>
+                    <td>{prod.code}</td>
+                    <td className="edit">
+                      <div>
+                        <Icon
+                          className="delete"
+                          onClick={() => handleDelete(prod.id)}
+                        >
+                          delete
+                        </Icon>
+                        <button className="btnEdit">Editar</button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <Pagination page={page} handle={handlePage} />
+        </>
+      )}
     </>
   );
 }

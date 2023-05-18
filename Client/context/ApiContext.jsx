@@ -3,7 +3,7 @@ export const ApiContext = createContext();
 export function ApiContextProvider({ children }) {
   const [user, setUser] = useState("");
   const [cartId, setCartId] = useState("");
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [page, setPage] = useState("");
   const [urlPage, setUrlPage] = useState("http://localhost:8080/api/products");
 
@@ -28,16 +28,17 @@ export function ApiContextProvider({ children }) {
     }
   }
   //fecth de prodcutos
-  async function fetchProducts(url) {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setPage(data.data);
-      setProducts(data.data.payload);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function fetchProducts(url) {
+  //   try {
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     setPage(data.data);
+  //     setProducts(data.data.payload);
+  //     return data.data;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <ApiContext.Provider
@@ -45,8 +46,8 @@ export function ApiContextProvider({ children }) {
         user,
         cartId,
         getCurrentSession,
-        fetchProducts,
-        products,
+        // fetchProducts,
+        // products,
         page,
         urlPage,
         setUrlPage,

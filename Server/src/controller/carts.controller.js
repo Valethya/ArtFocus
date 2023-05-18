@@ -95,7 +95,7 @@ class Carts extends customRouter {
             CustomError.createError({
               cause: "Usuario no puede comprar productos que el haya creado",
               message: "No puedes comprar tus propios productos",
-              statusCode: 404,
+              statusCode: 400,
               code: 1010,
             });
           }

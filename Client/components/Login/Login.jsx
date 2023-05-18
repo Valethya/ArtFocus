@@ -37,8 +37,8 @@ function Login({ display }) {
     } catch (error) {
       console.log(error);
     }
+
     getCurrentSession();
-    console.log(getCurrentSession(), "que es esto?");
 
     setValue("email");
     setValue("password");

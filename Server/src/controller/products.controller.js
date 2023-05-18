@@ -68,7 +68,7 @@ class Products extends customRouter {
     /*---POPULATE---*/
     this.post(
       "/populate",
-      ["PUBLIC"],
+      ["ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const foundProducts = await findProducts();
         const response = await populate(foundProducts);
@@ -78,7 +78,7 @@ class Products extends customRouter {
     // //
     this.delete(
       "/",
-      ["PUBLIC"],
+      ["ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const response = await deleteProduct();
         handleResponse(res, response, 204);

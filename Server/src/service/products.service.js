@@ -68,6 +68,7 @@ async function find(req) {
     const code = req.query.code;
     const category = req.query.category;
     const title = req.query.title;
+    const owner = req.query.owner;
 
     const query = code
       ? { code: code }
@@ -75,8 +76,10 @@ async function find(req) {
       ? { category: category }
       : title
       ? { title: title }
+      : owner
+      ? { owner: owner }
       : {};
-
+    console.log(owner, "esto es owner");
     const options = {
       page: req.query.page || 1,
       limit: req.query.limit || 10,

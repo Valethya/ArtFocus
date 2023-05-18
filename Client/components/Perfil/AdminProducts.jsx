@@ -4,7 +4,7 @@ import EditProducts from "./EditProducts.jsx";
 import CreateProduct from "./createProduct.jsx";
 
 function AdminProducts() {
-  const [selectedOpt, setSelectedOpt] = useState("");
+  const [selectedOpt, setSelectedOpt] = useState("edit");
 
   const options = {
     edit: <EditProducts />,

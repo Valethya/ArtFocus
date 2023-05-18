@@ -7,7 +7,7 @@ import Icon from "@mui/material/Icon";
 export function ItemCart() {
   const [summaryCart, setSummaryCart] = useState("");
   const { cartId } = useContext(ApiContext);
-  console.log(summaryCart);
+
   async function fetchSummaryCart() {
     try {
       const response = await fetch(

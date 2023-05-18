@@ -1,17 +1,14 @@
 import { useContext } from "react";
 import { ApiContext } from "../../context/ApiContext";
 
-function Pagination() {
-  const { setUrlPage, page } = useContext(ApiContext);
-  console.log(page);
+function Pagination({ handle, page }) {
   function handlePage(pages) {
-    console.log(pages);
-    setUrlPage(pages);
+    handle(pages);
   }
-  console.log(page, "donde estaaaaa?");
+
   return (
     <div className="pagination">
-      <ul class="pagination">
+      <ul className="pagination">
         <li className="page" onClick={() => handlePage(page.prevLink)}>
           {" << antes"}
         </li>
