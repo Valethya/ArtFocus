@@ -9,8 +9,9 @@ function EditProducts() {
   const [products, setProducts] = useState([]);
   const [url, setUrl] = useState("http://localhost:8080/api/products");
   const [page, setPage] = useState("");
-
-  const urlFilter = `${url}?owner=${user.email}`;
+  const filter = user.role == "admin" ? "" : `?owner=${user.email}`;
+  console.log(user.role == "admin", "esto es filter");
+  const urlFilter = `${url}${filter}`;
 
   async function fetchProducts() {
     try {
@@ -36,7 +37,7 @@ function EditProducts() {
   async function handleDelete(id) {
     const url = `http://localhost:8080/api/products/${id}`;
     try {
-      const response = await fetch(url, {
+      await fetch(url, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -55,7 +56,7 @@ function EditProducts() {
     }
     return text.slice(0, maxLength) + "...";
   }
-  console.log(!products, "esto es productos");
+  console.log(products.length == 0, "esto es productos");
   return (
     <>
       {products.length == 0 ? (
