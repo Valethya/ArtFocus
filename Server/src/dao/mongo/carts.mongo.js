@@ -177,20 +177,20 @@ export default class cartsManager {
   // elimina un productos del carrito
   async persistDeleteProduct(cid, pid) {
     try {
-      /*se busca un carrito por su id y de que este tenga una propiedad products 
+      /*se busca un carrito por su id y de que este tenga una propiedad products
       que contenga un campo product igual a pid, si este existe decrementa en 1*/
-      const prodMenos = await cartsModel.updateOne(
+      await cartsModel.updateOne(
         { _id: cid, "products.product": pid },
         { $inc: { "products.$.qty": -1 } },
         { new: true }
       );
 
-      /*si el carrito tiene una propiedad products con un campo qty igual a 0 
+      /*si el carrito tiene una propiedad products con un campo qty igual a 0
       este producto se elimina del carrito*/
 
-      const prodFuera = await cartsModel.updateOne(
+      await cartsModel.updateOne(
         { _id: cid, "products.product": pid },
-        { $pull: { products: { qty: 0 } } },
+        { $pull: { products: { qty: -0 } } },
         { new: true }
       );
 

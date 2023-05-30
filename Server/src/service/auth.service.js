@@ -15,6 +15,7 @@ async function authLogin(username, password) {
   try {
     try {
       const admin = validAdmin(username, password);
+
       if (admin) {
         return admin;
       }
@@ -27,7 +28,7 @@ async function authLogin(username, password) {
       CustomError.createError({
         cause: causeError.EMAIL_NOT_FOUND,
         message: messagesError.INVALID_CREDENTIALS,
-        statusCode: 404,
+        statusCode: 400,
         code: EnumError.INVALID_CREDENTIALS,
       });
     }
@@ -36,7 +37,7 @@ async function authLogin(username, password) {
       CustomError.createError({
         cause: causeError.INVALID_PASSWORD,
         message: messagesError.INVALID_CREDENTIALS,
-        statusCode: 404,
+        statusCode: 400,
         code: EnumError.INVALID_CREDENTIALS,
       });
     }
@@ -54,7 +55,6 @@ function validAdmin(username, password) {
         firstName: "admin",
         email: username,
         role: "admin",
-        id: "123456789101",
       };
       return user;
     } else {

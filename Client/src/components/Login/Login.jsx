@@ -1,0 +1,101 @@
+import { useForm } from "react-hook-form";
+import Input from "../Form/Input";
+import fetchCurrent from "../../services/userService";
+import { useDispatch, useSelector } from "react-redux";
+import apiRequest from "../../services/api";
+function Login({ display }) {
+  const user = useSelector((state) => state.user);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    defaultValues: {
+      email: "artfocus@artfocus.com",
+      password: "ingrese su password",
+    },
+  });
+  const dispatch = useDispatch();
+
+  const onSubmit = async (dataForm, event) => {
+    event.preventDefault();
+
+    const data = await apiRequest("/auth", "POST", dataForm);
+
+    if (data.status == "success") {
+      await fetchCurrent(dispatch);
+    } else {
+      console.log("Inicio de sesión fallido: ", data.message);
+    }
+
+    setValue("email");
+    setValue("password");
+  };
+
+  const handleKeyDown = (event, dataForm) => {
+    if (event.key == "Enter") {
+      event.preventDefault();
+      onSubmit(dataForm, event);
+    }
+  };
+
+  if (user.user) {
+    return null;
+  }
+  return (
+    <div>
+      <form
+        action=""
+        className="login shadow"
+        onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={handleKeyDown}
+        style={{ display: display }}
+      >
+        <Input
+          label="email"
+          type="email"
+          name="email"
+          register={register}
+          required={{ value: true, message: "Ingrese su correo electrónico" }}
+        />
+        {errors.email && (
+          <span className="invalid">{errors.email.message}</span>
+        )}
+        <Input
+          label="contraseña"
+          type="password"
+          name="password"
+          register={register}
+          required={{ value: true, message: "Ingrese su contraseña" }}
+        />
+        {errors.password && (
+          <span className="invalid">{errors.password.message}</span>
+        )}
+        <button className="btn" type="submit">
+          Iniciar Sesión
+        </button>
+        <a className="register" href="/signup">
+          registrate
+        </a>
+        <a className="register" href="/password/reset/request">
+          Olvide la contraseña
+        </a>
+        <button className="btn">
+          <a href="/auth/github">
+            Entrar con Github
+            <img className="icon" src="/img/github.png" />
+          </a>
+        </button>
+        <button className="btn">
+          <a href="/auth/google">
+            Entrar con Google
+            <img className="icon" src="/img/google.png" />
+          </a>
+        </button>
+      </form>
+    </div>
+  );
+}
+export default Login;

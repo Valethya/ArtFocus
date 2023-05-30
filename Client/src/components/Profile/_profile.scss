@@ -1,0 +1,85 @@
+.subcription {
+  width: 40%;
+  .btn {
+    width: 100%;
+  }
+}
+.nameUser {
+  color: $secondary-color;
+}
+
+.evenRow {
+  background: rgba(128, 128, 128, 0.226);
+}
+td {
+  text-align: center;
+}
+.edit {
+  width: 15%;
+  padding: 0.5em;
+  position: relative;
+  div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .delete {
+    font-size: 130%;
+    color: color("grey", "darken-2");
+    margin-bottom: 1em;
+    transition: 1s;
+    &:hover {
+      color: $primary-color-dark;
+    }
+  }
+  .btnEdit:hover {
+    @extend %hoverList;
+  }
+}
+.btnEdit {
+  background: none;
+  border: none;
+
+  color: $primary-color-dark;
+  transition: 1s;
+}
+
+.editProduct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.createProduct {
+  margin-top: 2em;
+  width: 40%;
+}
+
+.optionProduct {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.226);
+  margin-bottom: 2em;
+  li {
+    text-align: center;
+    margin: 1em;
+    width: calc(100% / 2);
+  }
+}
+.productsTable {
+  padding: 1em;
+  width: 100%;
+  .tdThumbnail {
+    width: 4.5em;
+    display: flex;
+  }
+  img {
+    width: 100%;
+  }
+}
+.cont {
+  grid-area: 2 / 2 / span 1/ 6;
+}
+.headerProfile {
+  grid-area: 1 / 2 / 2 / 6;
+}

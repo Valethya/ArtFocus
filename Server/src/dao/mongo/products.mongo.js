@@ -84,7 +84,6 @@ class productsManager {
   async persistUpdate(id, ops) {
     try {
       const result = await productsModel.updateOne({ _id: id }, { $set: ops });
-
       return result;
     } catch (error) {
       throw error;
@@ -93,8 +92,7 @@ class productsManager {
   async persistVerifyOwner(email, id) {
     try {
       const result = await productsModel.findById(id);
-      console.log(result.owner, email, "mira esto");
-      console.log(result.owner === email);
+
       if (result && result.owner === email) {
         return true;
       } else {

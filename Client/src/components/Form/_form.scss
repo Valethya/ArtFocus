@@ -1,0 +1,37 @@
+input {
+  width: 100%;
+  border: none;
+  height: 2em;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.425);
+  margin-bottom: 1em;
+  transition: 0.5s;
+  &:hover {
+    border-bottom: 1px solid $primary-color-dark;
+  }
+  &:focus {
+    border-bottom: 1px solid $secondary-color-dark;
+  }
+}
+input:focus-visible {
+  outline: none;
+}
+
+select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 2em;
+  border: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.425);
+  margin-bottom: 1em;
+  &:focus {
+    border-bottom: 1px solid $secondary-color-dark;
+  }
+  &:hover {
+    border-bottom: 1px solid $primary-color-dark;
+  }
+}
+select:focus-visible {
+  outline: none;
+}

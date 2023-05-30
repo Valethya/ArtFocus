@@ -1,0 +1,130 @@
+openapi: 3.0.1
+info:
+  title: Auth API
+  description: API for user authentication
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /auth/infoUser:
+    get:
+      tags:
+        - Authentication
+      summary: Get user information
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  email:
+                    type: string
+  /auth/probando:
+    post:
+      tags:
+        - Authentication
+      summary: Test endpoint
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: string
+                  code:
+                    type: integer
+  /auth:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: string
+                  code:
+                    type: integer
+        "404":
+          description: Invalid credentials
+  /auth/failLogin:
+    get:
+      tags:
+        - Authentication
+      summary: Failed login
+      responses:
+        "401":
+          description: Failed login
+          content:
+            application/json:
+              schema:
+                type: string
+  /auth/github:
+    get:
+      tags:
+        - Authentication
+      summary: Authenticate with GitHub
+      security: []
+      responses:
+        "302":
+          description: Redirect to GitHub authentication
+  /auth/githubcallback:
+    get:
+      tags:
+        - Authentication
+      summary: Callback endpoint for GitHub authentication
+      security: []
+      responses:
+        "302":
+          description: Redirect to home page
+  /auth/google:
+    get:
+      tags:
+        - Authentication
+      summary: Authenticate with Google
+      security: []
+      responses:
+        "302":
+          description: Redirect to Google authentication
+  /auth/googlecallback:
+    get:
+      tags:
+        - Authentication
+      summary: Callback endpoint for Google authentication
+      security: []
+      responses:
+        "302":
+          description: Redirect to home page
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

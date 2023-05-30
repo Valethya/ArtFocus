@@ -147,9 +147,10 @@ async function deleteAllProducts(cid) {
       error.code = 404;
       throw error;
     }
-    await manager.persistDeleteAllProducts(cid);
-
-    return;
+    const response = await manager.persistDeleteAllProducts(cid);
+    if (response.modifiedCount != 0) {
+      return "carrito vaciado exitosamente";
+    }
   } catch (error) {
     throw error;
   }

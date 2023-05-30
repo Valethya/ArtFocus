@@ -3,7 +3,7 @@ import customRouter from "../custom/router.custom.js";
 class Views extends customRouter {
   init() {
     this.get("/", ["PUBLIC"], (req, res) => {
-      const token = req.cookie.authToken;
+      const token = tokenExtractor(req);
       const user = verifyToken(token);
       res.render("profile.handlebars", { user });
     });

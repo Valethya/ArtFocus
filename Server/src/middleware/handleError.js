@@ -3,6 +3,7 @@ import loggerFactory from "../factories/logger.factories.js";
 const logger = await loggerFactory.getLogger();
 
 const handleError = (error, req, res, next) => {
+  console.log(error);
   let response = {};
 
   const statusCode = error.statusCode || 500;
@@ -25,7 +26,7 @@ const handleError = (error, req, res, next) => {
       statusCode: statusCode,
     };
   }
-  console.log(response, "esto es response");
+
   return res.status(statusCode).json(response);
 };
 

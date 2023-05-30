@@ -1,13 +1,12 @@
 function handleResponse(res, payload, code = 200) {
   let response = {};
-  if (code === 200 || code === 201 || code === 204) {
+  if (code === 200 || code === 201) {
     response = {
-      code: "success",
+      status: "success",
       data: payload,
       statusCode: code,
     };
   }
-
   return res.status(code).json(response);
 }
 

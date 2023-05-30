@@ -1,0 +1,11 @@
+.counter {
+  width: 18px;
+  height: 18px;
+  background: $primary-color-dark;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  font-size: 75%;
+  font-weight: bold;
+  position: absolute;
+}

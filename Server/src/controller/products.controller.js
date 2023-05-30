@@ -15,6 +15,7 @@ import handleResponse from "../middleware/handleResponse.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import { verifyToken } from "../utils/jwt.utils.js";
 import CustomError from "../utils/errors/custom.error.js";
+import { tokenExtractor } from "../utils/tokenExtractor.js";
 
 class Products extends customRouter {
   init() {
@@ -37,11 +38,14 @@ class Products extends customRouter {
       })
     );
 
-    this.post("/", ["ADMIN", "PREMIUM"], async (req, res, next) => {
-      try {
-        const { title, description, price, thumbnail, stock, category } =
+    this.post(
+      "/",
+      ["ADMIN", "PREMIUM"],
+      asyncWrapper(async (req, res, next) => {
+        const { title, description, price, thumbnail, stock, category, code } =
           req.body;
-        const decoded = verifyToken(req.cookies.authToken);
+        const token = tokenExtractor(req);
+        const decoded = verifyToken(token);
         const email = decoded.email;
         const role = decoded.role;
 
@@ -51,7 +55,7 @@ class Products extends customRouter {
           price,
           thumbnail,
           stock,
-          code: true,
+          code,
           category,
           owner: role == "premium" ? email : "admin",
         };
@@ -59,29 +63,27 @@ class Products extends customRouter {
 
         const allProducts = await find(req);
         io.emit("newProducts", allProducts);
-        res.status(201).json({ result: "succes", payload: response });
-      } catch (error) {
-        res.json({ message: error.message });
-      }
-    });
+        handleResponse(res, response, 201);
+      })
+    );
 
     /*---POPULATE---*/
     this.post(
       "/populate",
-      ["ADMIN"],
+      ["PUBLIC"],
       asyncWrapper(async (req, res, next) => {
         const foundProducts = await findProducts();
         const response = await populate(foundProducts);
-        handleResponse(res, response, 200);
+        handleResponse(res, response, 201);
       })
     );
     // //
     this.delete(
       "/",
-      ["ADMIN"],
+      ["PUBLIC", "ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const response = await deleteProduct();
-        handleResponse(res, response, 204);
+        handleResponse(res, response, 200);
       })
     );
 
@@ -90,13 +92,14 @@ class Products extends customRouter {
       ["ADMIN", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
-        const decoded = verifyToken(req.cookies.authToken);
+        const token = tokenExtractor(req);
+        const decoded = verifyToken(token);
         const email = decoded.email;
         const role = decoded.role;
 
         if (role !== "admin") {
           const isOwner = await verifyOwner(email, pid);
-          console.log(isOwner, "es el due;o o no?");
+
           if (!isOwner) {
             CustomError.createError({
               cause: "Usuario no es propietario del producto",
@@ -113,7 +116,7 @@ class Products extends customRouter {
 
         // io.emit("newProducts", allProducts);
 
-        handleResponse(res, response, 204);
+        handleResponse(res, response, 200);
       })
     );
 
@@ -123,11 +126,11 @@ class Products extends customRouter {
       asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
         const updateOps = {};
-
         for (const [key, value] of Object.entries(req.body)) {
-          updateOps[key] = value;
+          if (key != "_id" || key != "code") {
+            updateOps[key] = value;
+          }
         }
-
         const response = await update(pid, updateOps);
 
         handleResponse(res, response, 200);

@@ -17,6 +17,7 @@ import { verifyOwner } from "../service/products.service.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import CustomError from "../utils/errors/custom.error.js";
 import { verifyToken } from "../utils/jwt.utils.js";
+import { tokenExtractor } from "../utils/tokenExtractor.js";
 
 //REQ DE CARRITOS
 class Carts extends customRouter {
@@ -32,7 +33,7 @@ class Carts extends customRouter {
 
     this.get(
       "/:cid",
-      ["USER", "PREMUM", "ADMIN"],
+      ["USER", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { cid } = req.params;
         const response = await findById(cid);
@@ -41,7 +42,7 @@ class Carts extends customRouter {
     );
     this.get(
       "/summary/:cid",
-      ["USER", "PREMIUM", "ADMIN"],
+      ["USER", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { cid } = req.params;
         const response = await summaryCart(cid);
@@ -62,7 +63,7 @@ class Carts extends customRouter {
       ["ADMIN"],
       asyncWrapper(async (req, res, next) => {
         const response = await deleteCarts();
-        handleResponse(res, response, 204);
+        handleResponse(res, response, 200);
       })
     );
     //borra un carrito en especifico
@@ -84,13 +85,14 @@ class Carts extends customRouter {
       asyncWrapper(async (req, res, next) => {
         const { cid, pid } = req.params;
         // const prodId = pid || data;
-        const decoded = verifyToken(req.cookies.authToken);
+        const token = tokenExtractor(req);
+        const decoded = verifyToken(token);
         const email = decoded.email;
         const role = decoded.role;
 
         if (role !== "user") {
           const isOwner = await verifyOwner(email, pid);
-          console.log(true);
+
           if (isOwner) {
             CustomError.createError({
               cause: "Usuario no puede comprar productos que el haya creado",
@@ -123,7 +125,7 @@ class Carts extends customRouter {
         const { cid, pid } = req.params;
 
         const response = await deleteProduct(cid, pid);
-        handleResponse(res, response, 204);
+        handleResponse(res, response, 200);
       })
     );
     //elimina todos los productos de un carrito seleccionado
@@ -133,7 +135,7 @@ class Carts extends customRouter {
       asyncWrapper(async (req, res, next) => {
         const { cid } = req.params;
         const response = await deleteAllProducts(cid);
-        handleResponse(res, response, 204);
+        handleResponse(res, response, 200);
       })
     );
 
@@ -144,9 +146,11 @@ class Carts extends customRouter {
       asyncWrapper(async (req, res, next) => {
         //validar stock de productos
         const { cid } = req.params;
-        const email = req.user.email;
+        const token = tokenExtractor(req);
+        const decoded = verifyToken(token);
+        const email = decoded.email;
         const response = await purchase(cid, email);
-        res.json({ result: "succes", payload: response });
+        handleResponse(res, response, 200);
       })
     );
   }

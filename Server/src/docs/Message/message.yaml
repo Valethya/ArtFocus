@@ -1,0 +1,67 @@
+swagger: 2.0
+info:
+  version: 1.0.0
+  title: Message API
+  description: API para gestionar mensajes
+
+tags:
+  - name: Message
+    description: Endpoints to manage messages
+
+paths:
+  /message:
+    get:
+      summary: Get all messages
+      tags: [Message]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "500":
+          description: Error interno del servidor
+
+    post:
+      summary: Create a new message
+      tags: [Message]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: body
+          name: message
+          description: Objeto de mensaje
+          required: true
+          schema:
+            type: object
+            properties:
+              userEmail:
+                type: string
+              userMessage:
+                type: string
+            example:
+              userEmail: john@example.com
+              userMessage: ¡Hola, cómo estás?
+      responses:
+        "201":
+          description: Mensaje creado exitosamente
+        "400":
+          description: Solicitud incorrecta
+        "401":
+          description: Unauthorized
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      summary: Delete all messages
+      tags: [Message]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Mensajes eliminados exitosamente
+        "401":
+          description: Unauthorized
+        "500":
+          description: Error interno del servidor

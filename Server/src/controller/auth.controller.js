@@ -65,10 +65,11 @@ class Auth extends customRouter {
             email: req.user.email,
             lastName: req.user.lastName || "",
             role: req.user.role,
-            cart: req.user.cart._id,
+            cart: req.user.cart?._id || "",
           };
 
           const token = generateToken(user, "180000s");
+
           res
             .cookie("authToken", token, {
               maxAge: 180000,
@@ -76,9 +77,14 @@ class Auth extends customRouter {
               sameSite: "none",
               secure: true,
             })
-            .json({ payload: "Sesión iniciada", code: 200 });
+            .json({
+              status: "success",
+              data: "session iniciada",
+              statusCode: 200,
+            });
           // res.json({ message: req.user });
         } catch (error) {
+          console.error(error);
           next(error);
         }
       }
@@ -107,7 +113,7 @@ class Auth extends customRouter {
           role: req.user.role,
         };
 
-        const token = generateToken(user);
+        const token = generateToken(user, "180000s");
 
         res
           .cookie("authToken", token, { maxAge: 180000, httpOnly: true })
@@ -135,7 +141,7 @@ class Auth extends customRouter {
           role: req.user.role,
         };
 
-        const token = generateToken(user);
+        const token = generateToken(user, "180000s");
 
         res
           .cookie("authToken", token, { maxAge: 180000, httpOnly: true })
@@ -149,16 +155,6 @@ class Auth extends customRouter {
     //     res.redirect("/login");
     //   });
     // });
-
-    this.patch("/forgotPassword", ["PUBLIC"], async (req, res, next) => {
-      try {
-        const { email, newPassword, confirmPassword } = req.body;
-
-        const passwordEncrypted = cript.createHash(password);
-        await usersModel.updateOne({ email }, { password: passwordEncrypted });
-        handleResponse(res, "contraseña actualizada", 204);
-      } catch (error) {}
-    });
   }
 }
 

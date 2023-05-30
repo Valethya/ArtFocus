@@ -3,6 +3,7 @@ import passport from "passport";
 import customRouter from "../custom/router.custom.js";
 import {
   createUser,
+  deleteUser,
   findUserByEmail,
   updateUser,
 } from "../service/users.service.js";
@@ -66,9 +67,19 @@ class User extends customRouter {
         const options = {
           role,
         };
-        console.log(user.role, "rol");
+
         const updatedUser = await updateUser(user.id, options);
         handleResponse(res, `Ahora eres ${role}`, 200);
+      })
+    );
+    this.delete(
+      "/delete/:uid",
+      ["USER", "PREMIUM", "ADMIN"],
+      asyncWrapper(async (req, res, next) => {
+        const { uid } = req.params;
+        const result = await deleteUser(uid);
+        console.log(result, " aqui eliminamos uno");
+        handleResponse(res, result, 200);
       })
     );
 
@@ -106,12 +117,12 @@ class User extends customRouter {
       ["PUBLIC"],
       asyncWrapper(async (req, res, next) => {
         const password = req.body.newPassword;
-        const token = req.cookies.resetPassword;
+        const token = tokenExtractor(req);
         const decoded = verifyToken(token);
         const email = decoded.email;
-        console.log("hola");
+
         const user = await comparePassword(email, password);
-        console.log(password, " user user hola");
+
         const ops = {
           password: cript.createHash(password),
         };

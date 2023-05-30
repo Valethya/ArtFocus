@@ -17,6 +17,7 @@ class Session extends customRouter {
       handleErrorPassport("current"),
       asyncWrapper((req, res) => {
         const response = new InfoDto(req.user);
+
         handleResponse(res, response, 200);
       })
     );

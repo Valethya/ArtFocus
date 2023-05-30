@@ -1,0 +1,154 @@
+openapi: 3.0.1
+info:
+  title: Product API
+  description: API para gestionar productos
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: Buscar productos
+      parameters:
+        - name: code
+          in: query
+          description: Código del producto
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Categoría del producto
+          schema:
+            type: string
+        - name: title
+          in: query
+          description: Título del producto
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: Propietario del producto
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Número de página
+          schema:
+            type: integer
+            minimum: 1
+        - name: limit
+          in: query
+          description: Límite de resultados por página
+          schema:
+            type: integer
+            minimum: 1
+        - name: sort
+          in: query
+          description: Orden de clasificación de los resultados
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/ProductResponse"
+    post:
+      tags:
+        - Products
+      summary: Crear un producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              ref: "#/components/schemas/ProductRequest"
+      responses:
+        "200":
+          description: Producto creado exitosamente
+        "400":
+          description: Solicitud incorrecta
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Obtener un producto por ID
+      parameters:
+        - name: id
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/Product"
+        "404":
+          description: Producto no encontrado
+    delete:
+      tags:
+        - Products
+      summary: Eliminar un producto por ID
+      parameters:
+        - name: id
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado exitosamente
+        "404":
+          description: Producto no encontrado
+  /products/populate:
+    post:
+      tags:
+        - Products
+      summary: Cargar productos desde archivo
+      responses:
+        "200":
+          description: Productos cargados exitosamente
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        thumbnail:
+          type: string
+        stock:
+          type: integer
+        code:
+          type: string
+        category:
+          type: string
+        owner:
+          type: string
+    ProductRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        thumbnail:
+          type: string
+        stock:
+          type: integer

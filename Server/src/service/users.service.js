@@ -109,6 +109,13 @@ async function updateUser(id, ops) {
     throw error;
   }
 }
+async function deleteUser(id) {
+  try {
+    await users.persistDeleteUser(id);
+  } catch (error) {
+    throw error;
+  }
+}
 async function comparePassword(email, password) {
   try {
     const user = await findUserByEmail(email);
@@ -126,4 +133,11 @@ async function comparePassword(email, password) {
     throw error;
   }
 }
-export { findUserByEmail, createUser, comparePassword, register, updateUser };
+export {
+  findUserByEmail,
+  createUser,
+  comparePassword,
+  register,
+  updateUser,
+  deleteUser,
+};

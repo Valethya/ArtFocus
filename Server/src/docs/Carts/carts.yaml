@@ -1,0 +1,270 @@
+openapi: 3.0.1
+info:
+  title: API de Carritos
+  description: API para gestionar carritos y productos en carritos
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /carts:
+    get:
+      tags:
+        - Carts
+      summary: Obtener todos los carritos
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  ref: "#/components/schemas/Cart"
+    post:
+      tags:
+        - Carts
+      summary: Crear un nuevo carrito
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Carrito creado exitosamente
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/Cart"
+    delete:
+      tags:
+        - Carts
+      summary: Eliminar todos los carritos
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Carritos eliminados exitosamente
+  /carts/{cid}:
+    get:
+      tags:
+        - Carts
+      summary: Obtener un carrito por ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/Cart"
+    delete:
+      tags:
+        - Carts
+      summary: Eliminar un carrito por ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Carrito eliminado exitosamente
+  /carts/summary/{cid}:
+    get:
+      tags:
+        - Carts
+      summary: Obtener resumen de un carrito por ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/CartSummary"
+  /carts/{cid}/product/{pid}:
+    post:
+      tags:
+        - Carts
+      summary: Agregar un producto a un carrito
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Producto agregado al carrito exitosamente
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/CartItem"
+    put:
+      tags:
+        - Carts
+      summary: Actualizar la cantidad de un producto en un carrito
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qty:
+                  type: integer
+                  description: Nueva cantidad del producto
+                  example: 5
+      responses:
+        "200":
+          description: Cantidad de producto actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/CartItem"
+    delete:
+      tags:
+        - Carts
+      summary: Eliminar un producto de un carrito
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado exitosamente del carrito
+  /carts/{cid}/purchase:
+    get:
+      tags:
+        - Carts
+      summary: Realizar una compra de un carrito
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                ref: "#/components/schemas/PurchaseResult"
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID del carrito
+          example: 12345
+        name:
+          type: string
+          description: Nombre del carrito
+          example: Mi carrito
+        items:
+          type: array
+          description: Productos en el carrito
+          items:
+            ref: "#/components/schemas/CartItem"
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID del producto en el carrito
+          example: 54321
+        name:
+          type: string
+          description: Nombre del producto
+          example: Camiseta
+        quantity:
+          type: integer
+          description: Cantidad del producto en el carrito
+          example: 2
+        price:
+          type: number
+          description: Precio del producto
+          example: 19.99
+    CartSummary:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total de productos en el carrito
+          example: 5
+        totalPrice:
+          type: number
+          description: Precio total del carrito
+          example: 99.95
+    PurchaseResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indica si la compra se realizó con éxito
+          example: true
+        message:
+          type: string
+          description: Mensaje de la compra
+          example: Compra realizada exitosamente

@@ -1,0 +1,21 @@
+.searchBar {
+  display: flex;
+
+  width: 40%;
+
+  .searchIcon {
+    @extend %center;
+    width: 1.35em;
+    background-color: $primary-color-light;
+    height: 1.35em;
+    border-radius: 50%;
+    transition: 1s;
+    color: $primary-color-dark;
+    margin-left: 0.5em;
+    &:hover {
+      background: $primary-color-dark;
+      color: $primary-color-light;
+    }
+  }
+  margin-bottom: 2em;
+}

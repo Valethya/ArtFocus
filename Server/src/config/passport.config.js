@@ -11,7 +11,7 @@ import {
   secretGoogle,
 } from "./index.config.js";
 import jwt, { ExtractJwt } from "passport-jwt";
-import { cookieExtractor } from "../utils/cookieExtractor.js";
+import { tokenExtractor } from "../utils/tokenExtractor.js";
 import { authLogin, authGithub } from "../service/auth.service.js";
 import usersModel from "../dao/mongo/models/users.models.js";
 import { register } from "../service/users.service.js";
@@ -41,7 +41,7 @@ const initializePassport = () => {
     "jwt",
     new JWTStrategy(
       {
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        jwtFromRequest: ExtractJwt.fromExtractors([tokenExtractor]),
         secretOrKey: secretKey,
       },
       async (jwt_payload, done) => {
@@ -58,7 +58,7 @@ const initializePassport = () => {
     "current",
     new JWTStrategy(
       {
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        jwtFromRequest: ExtractJwt.fromExtractors([tokenExtractor]),
         secretOrKey: secretKey,
       },
       async (jwt_payload, done) => {

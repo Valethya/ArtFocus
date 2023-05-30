@@ -1,16 +1,19 @@
+import { tokenExtractor } from "./tokenExtractor.js";
 import causeError from "./errors/cause.error.js";
 import CustomError from "./errors/custom.error.js";
 import { EnumError } from "./errors/enums.errors.js";
 import messagesError from "./errors/message.error.js";
 import { verifyToken } from "./jwt.utils.js";
-
+import { secretKey } from "../config/index.config.js";
+import jwt from "jsonwebtoken";
 function handlePolice(policies) {
   return (req, res, next) => {
     try {
       if ("PUBLIC" == policies) {
         return next();
       }
-      const token = req.cookies.authToken;
+      let token = tokenExtractor(req);
+
       if (!token) {
         CustomError.createError({
           cause: causeError.NOT_AUTHENTICATED,
@@ -19,8 +22,8 @@ function handlePolice(policies) {
           code: EnumError.NOT_AUTHENTICATED,
         });
       }
+      const user = jwt.verify(token, secretKey);
 
-      const user = verifyToken(token);
       const role = user.role.toUpperCase();
 
       if ([].concat(policies).includes(role)) {

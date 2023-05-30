@@ -1,0 +1,94 @@
+swagger: 3.0.1
+info:
+  version: 1.0.0
+  title: Documentación de la API deUsers
+paths:
+  /api/users:
+    post:
+      tags:
+        - Users
+      summary: Registro de usuario
+      security:
+        - PUBLIC: []
+      responses:
+        "200":
+          description: Usuario registrado exitosamente
+    get:
+      tags:
+        - Users
+      summary: Falló en el registro
+      security:
+        - PUBLIC: []
+      responses:
+        "200":
+          description: Falló en el registro
+
+  /users/premium/{uid}:
+    post:
+      tags:
+        - Users
+      summary: Actualizar rol de usuario a premium
+      security:
+        - PUBLIC: []
+      parameters:
+        - name: uid
+          in: path
+          description: ID de usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Rol actualizado exitosamente
+
+  /users/password/reset/Request:
+    post:
+      tags:
+        - Users
+      summary: Solicitar restablecimiento de contraseña
+      security:
+        - PUBLIC: []
+      parameters:
+        - name: email
+          in: body
+          description: Correo electrónico del usuario
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+      responses:
+        "200":
+          description: Solicitud de restablecimiento de contraseña enviada exitosamente
+
+  /users/password/reset:
+    put:
+      tags:
+        - Users
+      summary: Restablecer contraseña
+      security:
+        - PUBLIC: []
+      parameters:
+        - name: newPassword
+          in: body
+          description: Nueva contraseña del usuario
+          required: true
+          schema:
+            type: object
+            properties:
+              newPassword:
+                type: string
+        - name: resetPassword
+          in: cookie
+          description: Token de restablecimiento de contraseña
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Contraseña restablecida exitosamente
+
+securityDefinitions:
+  PUBLIC:
+    type: apiKey
+    name: Authorization
+    in: header

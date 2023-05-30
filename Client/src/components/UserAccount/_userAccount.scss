@@ -1,0 +1,22 @@
+.perfil {
+  justify-content: flex-start;
+  width: 6%;
+  margin-left: 1em;
+  transition: 0.5s;
+  &:hover {
+    color: $primary-color-dark;
+  }
+  .dataUserBox {
+    display: flex;
+    flex-direction: column;
+    .dataUser {
+      font-size: 80%;
+      // display: none;
+      .premium {
+        font-size: 130%;
+        margin-left: 0.5em;
+        color: goldenrod;
+      }
+    }
+  }
+}

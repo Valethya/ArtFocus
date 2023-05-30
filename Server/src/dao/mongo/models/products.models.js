@@ -27,7 +27,7 @@ const productsSchema = new mongoose.Schema({
     type: String,
     index: true,
   },
-  code: { type: String, default: uuid() },
+  code: { type: String },
   owner: {
     type: String,
     default: "admin",
@@ -36,12 +36,6 @@ const productsSchema = new mongoose.Schema({
 });
 
 productsSchema.plugin(mongoosePaginate);
-productsSchema.pre("create", function (next) {
-  if (!this.owner) {
-    this.owner = "admin"; // Valor predeterminado para 'owner'
-  }
-  next();
-});
 
 const productsModel = mongoose.model(productsCollection, productsSchema);
 

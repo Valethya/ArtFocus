@@ -10,8 +10,11 @@ import mongoStore from "connect-mongo";
 import { passSession } from "./config/index.config.js";
 import { mongoUri } from "./db/index.db.js";
 import handleError from "./middleware/handleError.js";
-
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 import addLogger from "./middleware/logger.midleware.js";
+import __dirname from "./utils/util.js";
+import helmet from "helmet";
 
 export const app = express();
 
@@ -54,6 +57,23 @@ app.use(passport.session());
 app.use(cookieParser());
 // app.use(morgan("dev"));
 app.use(addLogger);
+
+//Swagger options
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentacion de Art Focus",
+      description: "una descripcion",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+export const specs = swaggerJsdoc(swaggerOptions);
+
+//Helmet
+app.use(helmet());
+// Router
 router(app);
 
 app.use(handleError);

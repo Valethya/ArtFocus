@@ -1,22 +1,27 @@
 @import "./colors.scss";
 @import "./typography.scss";
-@import "../../../components/NavBar/navBar.scss";
-@import "../../../components/Avatar/avatar.scss";
-@import "../../../components/Arrows/arrows.scss";
-@import "../../../components/Logo/logo.scss";
-@import "../../../components/Card/card.scss";
-@import "../../../components/Container/container.scss";
-@import "../../../components/Button/button.scss";
-@import "../../../components/Cart/cart.scss";
-@import "../../../components/Frame/frame.scss";
-@import "../../../components/Chat/chat.scss";
-@import "../../../components/Login/login.scss";
-@import "../../../components/Overlay/overlay.scss";
-@import "../../../components/passWordReset/recoverPassword.scss";
-@import "../../../components/Login/singUp.scss";
-@import "../../../components/Aside/aside.scss";
-@import "../../../components/Perfil/perfil.scss";
-@import "../../../components/Pagination/pagination.scss";
+@import "../../components/NavBar/navBar.scss";
+@import "../../components/Avatar/avatar.scss";
+@import "../../components/Arrows/arrows.scss";
+@import "../../components/Logo/logo.scss";
+@import "../../components/Card/card.scss";
+@import "../../components/Container/container.scss";
+@import "../../components/Button/button.scss";
+@import "../../components/Cart/cart.scss";
+@import "../../components/Frame/frame.scss";
+@import "../../components/Chat/chat.scss";
+@import "../../components/Login/login.scss";
+@import "../../components/Overlay/overlay.scss";
+@import "../../components/passWordReset/recoverPassword.scss";
+@import "../../components/Login/singUp.scss";
+@import "../../components/Aside/aside.scss";
+@import "../../components/Profile/_profile.scss";
+@import "../../components/Pagination/pagination.scss";
+@import "../../components/UserAccount/userAccount.scss";
+@import "../../components/SearchBar/searchBar.scss";
+@import "../../components/FilterBar/filterBar.scss";
+@import "../../components/Form/form.scss";
+@import "../../components/Counter/counter.scss";
 @keyframes scalar {
   0% {
     -webkit-transform: scale(1);
@@ -42,12 +47,25 @@
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%),
     0 1px 5px 0 rgb(0 0 0 / 20%);
 }
+%shadow {
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%),
+    0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+%center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 %hoverAnchor {
   letter-spacing: 5px;
-  border-bottom: 1px solid #81d4fa;
+  border-bottom: 1px solid $primary-color-dark;
 }
 %hoverList {
   letter-spacing: 5px;
+  color: $primary-color-dark;
+}
+%hoverColor {
+  color: $primary-color-dark;
 }
 a {
   text-decoration: none;
@@ -61,16 +79,6 @@ a {
   margin-left: 1em;
 }
 
-input {
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.425);
-  margin-bottom: 1em;
-}
-input:focus-visible {
-  outline: none;
-}
-
 .center {
   width: 100%;
   height: 100vh;
@@ -79,8 +87,4 @@ input:focus-visible {
 }
 li {
   list-style: none;
-  transition: 1s;
-  &:hover {
-    @extend %hoverList;
-  }
 }

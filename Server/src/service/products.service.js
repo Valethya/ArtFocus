@@ -4,6 +4,7 @@ import CustomError from "../utils/errors/custom.error.js";
 import { EnumError } from "../utils/errors/enums.errors.js";
 import messagesError from "../utils/errors/message.error.js";
 import causeError from "../utils/errors/cause.error.js";
+import { v4 as uuid } from "uuid";
 const manager = await managerFactory.getManager("products");
 
 //METODOS PARA PRODUCTOS
@@ -19,7 +20,7 @@ function processData(products, req) {
       price,
       thumbnail,
       stock,
-      code,
+
       category,
       owner,
     }) => ({
@@ -29,7 +30,7 @@ function processData(products, req) {
       price,
       thumbnail,
       stock,
-      code,
+
       category,
       owner,
     })
@@ -39,17 +40,17 @@ function processData(products, req) {
   const { totalPages, page, hasPrevPage, hasNextPage, prevPage, nextPage } =
     products;
   // determinando la urls de las pagina previa y posterior
-  const prevUrl = `${req.protocol}://${req.get("host")}${
-    req.baseUrl
-  }?${new URLSearchParams({ ...req.query, page: page - 1 })}`;
-  const nextUrl = `${req.protocol}://${req.get("host")}${
-    req.baseUrl
-  }?${new URLSearchParams({ ...req.query, page: page + 1 })}`;
-
+  const prevUrl = `${req.baseUrl}?${new URLSearchParams({
+    ...req.query,
+    page: page - 1,
+  })}`;
+  const nextUrl = `${req.baseUrl}?${new URLSearchParams({
+    ...req.query,
+    page: page + 1,
+  })}`;
   //se contruye un nuevo objeto con el fin de poder mostrar la informacion requerida como lo es por ejemplo el payload o prevLink y nextLink
   const response = {
-    code: "succes",
-    payload: documents,
+    totalDocs: products.docs.length,
     totalPages,
     prevPage,
     nextPage,
@@ -58,6 +59,7 @@ function processData(products, req) {
     hasPrevPage,
     prevLink: prevPage ? prevUrl : null,
     nextLink: nextPage ? nextUrl : null,
+    payload: documents,
   };
 
   return response;
@@ -65,21 +67,18 @@ function processData(products, req) {
 //busca todos los productos
 async function find(req) {
   try {
-    const code = req.query.code;
-    const category = req.query.category;
+    const queryParams = req.query;
     const title = req.query.title;
-    const owner = req.query.owner;
+    const query = { ...queryParams };
+    delete query.page;
+    delete query.limit;
+    delete query.sort;
+    delete query.pagination;
 
-    const query = code
-      ? { code: code }
-      : category
-      ? { category: category }
-      : title
-      ? { title: title }
-      : owner
-      ? { owner: owner }
-      : {};
-    console.log(owner, "esto es owner");
+    if (title) {
+      query.title = { $regex: new RegExp(title, "i") };
+    }
+
     const options = {
       page: req.query.page || 1,
       limit: req.query.limit || 10,
@@ -116,6 +115,7 @@ async function findById(pid) {
 //crea un producto
 async function create(prod) {
   try {
+    prod.code = uuid();
     await manager.persistCreate(prod);
     return "producto fue creado";
   } catch (error) {
@@ -130,7 +130,7 @@ async function findProducts() {
   if (fs.existsSync(file)) {
     const data = await fs.promises.readFile(file);
     const response = JSON.parse(data);
-    console.log(response);
+
     return response;
   }
   return "no se encuentra el archivo";
@@ -138,7 +138,11 @@ async function findProducts() {
 
 async function populate(product) {
   try {
-    await manager.persistPopulate(product);
+    const productsWithCodes = product.map((prod) => {
+      const code = uuid();
+      return { ...prod, code };
+    });
+    await manager.persistPopulate(productsWithCodes);
     return "productos cargados";
   } catch (error) {
     throw error;
@@ -191,6 +195,15 @@ async function update(id, ops) {
 async function verifyOwner(email, id) {
   try {
     const result = await manager.persistVerifyOwner(email, id);
+    if (result.modifiedCount == 0) {
+      CustomError.createError({
+        cause: causeError.ID_NOT_FOUND,
+        message: messagesError.PRODUCT_NOT_FOUND,
+        statusCode: 404,
+        code: EnumError.PRODUCT_NOT_FOUND,
+      });
+      next(error);
+    }
     return result;
   } catch (error) {
     throw error;

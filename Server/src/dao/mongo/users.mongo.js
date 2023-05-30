@@ -74,6 +74,12 @@ class usersManager {
       throw error;
     }
   }
+  async persistDeleteUser(id) {
+    try {
+      const result = await usersModel.deleteOne({ _id: pid });
+      return result;
+    } catch (error) {}
+  }
 }
 
 export default usersManager;

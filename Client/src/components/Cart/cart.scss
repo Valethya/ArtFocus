@@ -1,0 +1,58 @@
+.cart {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 4em;
+  .itemListCart {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    .itemCart {
+      display: flex;
+      flex-direction: row;
+      padding: 1em;
+      gap: 1em;
+      border: 1px solid rgba(128, 128, 128, 0.226);
+      .imgCart {
+        width: 55%;
+        overflow: hidden;
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+      }
+      .cartDetail {
+        width: 100%;
+        border: 1px solid rgba(128, 128, 128, 0.226);
+        padding: 1em;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        h4 {
+          margin-top: 0;
+          margin-bottom: 0.5em;
+          width: 100%;
+          b {
+            margin: 0;
+          }
+        }
+        p {
+          margin: 0.2em;
+          width: 60%;
+        }
+        span {
+          transition: 0.5s;
+          &:hover {
+            @extend %hoverColor;
+          }
+        }
+      }
+    }
+  }
+}
