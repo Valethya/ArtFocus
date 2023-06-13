@@ -5,6 +5,11 @@ import { EnumError } from "../utils/errors/enums.errors.js";
 import messagesError from "../utils/errors/message.error.js";
 import causeError from "../utils/errors/cause.error.js";
 import { v4 as uuid } from "uuid";
+import { tokenExtractor } from "../utils/tokenExtractor.js";
+import { verifyToken } from "../utils/jwt.utils.js";
+import path from "path";
+import { deleteOneFile } from "../utils/fs.utils.js";
+import __dirname from "../utils/util.js";
 const manager = await managerFactory.getManager("products");
 
 //METODOS PARA PRODUCTOS
@@ -20,7 +25,7 @@ function processData(products, req) {
       price,
       thumbnail,
       stock,
-
+      code,
       category,
       owner,
     }) => ({
@@ -30,7 +35,7 @@ function processData(products, req) {
       price,
       thumbnail,
       stock,
-
+      code,
       category,
       owner,
     })
@@ -113,10 +118,26 @@ async function findById(pid) {
   }
 }
 //crea un producto
-async function create(prod) {
+async function create(req) {
   try {
-    prod.code = uuid();
-    await manager.persistCreate(prod);
+    const { title, description, price, stock, category } = req.body;
+    const token = tokenExtractor(req);
+    const decoded = verifyToken(token);
+    const email = decoded.email;
+    const role = decoded.role;
+
+    const product = {
+      title,
+      description,
+      price,
+      thumbnail: [`/img/products/${req.file.filename}`],
+      stock,
+      code: uuid(),
+      category,
+      owner: role == "premium" ? email : "admin",
+    };
+
+    await manager.persistCreate(product);
     return "producto fue creado";
   } catch (error) {
     throw error;
@@ -168,6 +189,8 @@ async function deleteProduct() {
 // borra un producto por id
 async function deleteById(pid) {
   try {
+    const prod = await manager.persistFindById(pid);
+    deleteOneFile(path.join(__dirname, "/public", prod.thumbnail[0]));
     const productDeleted = await manager.persistDeleteById({ _id: pid });
     if (productDeleted.deletedCount == 0) {
       CustomError.createError({

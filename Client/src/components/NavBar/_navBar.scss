@@ -38,7 +38,9 @@
       justify-content: end;
     }
     .iconCart {
+      @extend %colorIcon;
       transition: 0.5s;
+
       &:hover {
         @extend %hoverColor;
         letter-spacing: 0px;

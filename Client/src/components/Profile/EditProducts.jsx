@@ -18,7 +18,7 @@ function EditProducts() {
   const [page, setPage] = useState("");
 
   const urlFilter = createUrlFilter(url, role, user);
-  console.log(urlFilter);
+
   useEffect(() => {
     fetchProducts(urlFilter, setPage, setProducts);
   }, [JSON.stringify(url)]);
@@ -27,19 +27,18 @@ function EditProducts() {
     setUrl(urlPage);
   }
 
-  //////FIN FECTH
-
   async function handleDelete(id) {
     const url = `/api/products/${id}`;
     try {
-      apiRequest(url, "DELETE");
-      fetchProducts(urlFilter, setPage, setProducts);
+      const response = await apiRequest(url, "DELETE");
+      if (response.status == "success") {
+        fetchProducts(urlFilter, setPage, setProducts);
+      }
       console.log("Borrado exitosamente");
     } catch (error) {
       console.error(error);
     }
   }
-
   return (
     <div>
       <FilterBar url={setUrl} />
@@ -67,7 +66,7 @@ function EditProducts() {
                   <tr key={prod.id} className={rowClass}>
                     <td>{prod.title}</td>
                     <td className="tdThumbnail">
-                      <img src={prod.thumbnail} alt="Thumbnail" />
+                      <img src={prod.thumbnail[0]} alt="Thumbnail" />
                     </td>
                     <td>{truncatedDescription}</td>
                     <td>{prod.price}</td>

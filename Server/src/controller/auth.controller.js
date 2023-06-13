@@ -5,26 +5,8 @@ import { generateToken } from "../utils/jwt.utils.js";
 import customRouter from "../custom/router.custom.js";
 import handleResponse from "../middleware/handleResponse.js";
 import handleErrorPassport from "../middleware/handleErrorPassport.js";
+import { updateUser } from "../service/users.service.js";
 
-// this.post("/", async (req, res,next) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     const user = await users.findOne(email, password);
-
-//     const data = user ? user : users.auth(password, email);
-
-//     req.session.user = {
-//       firstName: data.firstName,
-//       lastName: data.lastName,
-//       email: data.email,
-//     };
-
-//     res.json({ message: "sesion iniciada", user: data });
-//   } catch (error) {
-//     res.json(error);
-//   }
-// });
 class Auth extends customRouter {
   init() {
     this.get("/infoUser", ["PUBLIC"], (req, res, next) => {
@@ -37,13 +19,6 @@ class Auth extends customRouter {
       }
     });
 
-    // this.get("/logout", (req, res, next) => {
-    //   req.session.destroy((error) => {
-    //     if (error) return res.json({ error });
-    //     res.redirect("/login");
-    //   });
-    // });
-    //hola
     this.post("/probando", ["PUBLIC"], async (req, res, next) => {
       res.json({ payload: "bien", code: 200 });
     });
@@ -66,13 +41,20 @@ class Auth extends customRouter {
             lastName: req.user.lastName || "",
             role: req.user.role,
             cart: req.user.cart?._id || "",
+            document: req.user.document,
+            lastConnection: req.user.lastConnection || "",
           };
-
-          const token = generateToken(user, "180000s");
-
+          const options = {
+            uid: req.user._id,
+            options: {
+              lastConnection: new Date(),
+            },
+          };
+          await updateUser(options.uid, options.options);
+          const token = generateToken(user, "3600000s");
           res
             .cookie("authToken", token, {
-              maxAge: 180000,
+              maxAge: 3600000,
               httpOnly: true,
               sameSite: "none",
               secure: true,
@@ -89,6 +71,14 @@ class Auth extends customRouter {
         }
       }
     );
+    this.get("/logout", ["PUBLIC"], (req, res, next) => {
+      res.clearCookie("authToken", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
+      handleResponse(res, "Logout exitoso", 200);
+    });
 
     this.get("/failLogin", ["PUBLIC"], (req, res, next) => {
       handleResponse(res, "no se puso iniciar sesion", 401);

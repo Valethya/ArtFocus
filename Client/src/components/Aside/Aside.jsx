@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
-
-function Aside({ options, handleOptionClick }) {
+function Aside({ options, handleOptionClick, selectedOption }) {
   return (
     <aside className="aside">
       <ul>
         {options.map((op) => {
           return (
-            <li key={op} onClick={() => handleOptionClick(op)}>
+            <li
+              className={op === selectedOption ? "option selected" : "option"}
+              key={op}
+              onClick={() => handleOptionClick(op)}
+            >
               {op}
             </li>
           );

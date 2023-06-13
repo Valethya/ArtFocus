@@ -1,10 +1,9 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../Form/Input";
-import { ApiContext } from "../../context/ApiContext";
 import Frame from "../Frame/Frame";
+import { useNavigate } from "react-router-dom";
 function SignUp() {
-  const { getCurrentSession } = useContext(ApiContext);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -22,7 +21,7 @@ function SignUp() {
     },
   });
 
-  const url = "http://localhost:8080/users";
+  const url = "http://localhost:8080/api/users";
 
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();
@@ -38,6 +37,9 @@ function SignUp() {
       });
 
       const data = await response.json();
+      if (data.status == "success") {
+        navigate("/");
+      }
       console.log(data);
     } catch (error) {
       console.log(error);

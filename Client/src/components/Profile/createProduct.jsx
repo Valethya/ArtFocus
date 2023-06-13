@@ -5,8 +5,6 @@ import { ApiContext } from "../../context/ApiContext.jsx";
 import Select from "../Form/Select.jsx";
 
 function CreateProduct() {
-  const { getCurrentSession } = useContext(ApiContext);
-
   const {
     register,
     handleSubmit,
@@ -32,14 +30,18 @@ function CreateProduct() {
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();
 
+    const formData = new FormData();
+    formData.append("title", dataForm.title);
+    formData.append("description", dataForm.description);
+    formData.append("price", dataForm.price);
+    formData.append("stock", dataForm.stock);
+    formData.append("category", dataForm.category);
+    formData.append("image", dataForm.image[0]);
     try {
       const response = await fetch(url, {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataForm),
+        body: formData,
       });
 
       const data = await response.json();
@@ -47,21 +49,26 @@ function CreateProduct() {
     } catch (error) {
       console.log(error);
     }
-
-    // setValue("email");
-    // setValue("password");
   };
 
   const handleKeyDown = (event, dataForm) => {
     if (event.key == "Enter") {
+      const formData = new FormData();
+      formData.append("title", dataForm.title);
+      formData.append("description", dataForm.description);
+      formData.append("price", dataForm.price);
+      formData.append("stock", dataForm.stock);
+      formData.append("category", dataForm.category);
+      formData.append("image", dataForm.image[0]);
       event.preventDefault();
-      onSubmit(dataForm, event);
+      onSubmit(formData, event);
     }
   };
   return (
     <form
       action=""
       className="createProduct"
+      encType="multipart/form-data"
       onSubmit={handleSubmit(onSubmit)}
       onKeyDown={handleKeyDown}
     >
@@ -85,10 +92,10 @@ function CreateProduct() {
       )}
       <Input
         label="Url de la imagen"
-        type="text"
+        type="file"
         name="image"
         register={register}
-        required={{ value: true, message: "Ingrese una url" }}
+        required={{ value: true, message: "Ingrese una imagen" }}
       />
       {errors.image && <span className="invalid">{errors.image.message}</span>}
       <Input

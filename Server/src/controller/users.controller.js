@@ -3,9 +3,12 @@ import passport from "passport";
 import customRouter from "../custom/router.custom.js";
 import {
   createUser,
+  changeRole,
   deleteUser,
   findUserByEmail,
   updateUser,
+  upDocument,
+  findUser,
 } from "../service/users.service.js";
 import handleErrorPassport from "../middleware/handleErrorPassport.js";
 import generateUrl from "../mailing/generateUrl.mailing.js";
@@ -13,33 +16,16 @@ import transport from "../utils/gmail.util.js";
 import emailResetPassword from "../mailing/resetPassword.js";
 import { serialize } from "cookie";
 import handleResponse from "../middleware/handleResponse.js";
-import { verifyToken } from "../utils/jwt.utils.js";
+import { generateToken, verifyToken } from "../utils/jwt.utils.js";
 import { comparePassword } from "../service/users.service.js";
 import loggerFactory from "../factories/logger.factories.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import cript from "../utils/criptPassword.utils.js";
+import CustomError from "../utils/errors/custom.error.js";
+import { uploader } from "../utils/util.js";
+import { InfoUserDto } from "../DTO/infoUser.dto.js";
 const logger = await loggerFactory.getLogger();
 
-// const users = new userManager();
-
-// router.post("/", async (req, res) => {
-//   const { firstName, lastName, age, email, password } = req.body;
-//   const newUser = {
-//     firstName,
-//     lastName,
-//     age,
-//     email,
-//     password,
-//   };
-//   try {
-//     const response = await users.create(newUser);
-//
-
-//     res.status(201).json({ result: "succes", payload: response });
-//   } catch (error) {
-//     res.json({ message: error.message });
-//   }
-// });
 class User extends customRouter {
   init() {
     this.post(
@@ -59,17 +45,19 @@ class User extends customRouter {
       "/premium/:uid",
       ["PUBLIC"],
       asyncWrapper(async (req, res, next) => {
-        const email = req.params.uid;
-
-        const user = await findUserByEmail(email);
-
-        const role = user.role == "user" ? "premium" : "user";
-        const options = {
-          role,
-        };
-
-        const updatedUser = await updateUser(user.id, options);
-        handleResponse(res, `Ahora eres ${role}`, 200);
+        const options = await changeRole(req);
+        await updateUser(options.uid, options.options);
+        const user = await findUser(options.uid);
+        console.log(user);
+        const infoUser = new InfoUserDto(user);
+        const token = generateToken(infoUser, "3600000s");
+        res.cookie("authToken", token, {
+          maxAge: 3600000,
+          httpOnly: true,
+          sameSite: "none",
+          secure: true,
+        });
+        handleResponse(res, `Ahora eres ${options.options.role}`, 200);
       })
     );
     this.delete(
@@ -127,6 +115,19 @@ class User extends customRouter {
           password: cript.createHash(password),
         };
         const response = await updateUser(user._id, ops);
+        handleResponse(res, response, 200);
+      })
+    );
+    this.post(
+      "/:uid/document",
+      ["USER"],
+      uploader("documents").fields([
+        { name: "identification" },
+        { name: "proofOfResidence" },
+        { name: "accountStatementProof" },
+      ]),
+      asyncWrapper(async (req, res, next) => {
+        const response = await upDocument(req);
         handleResponse(res, response, 200);
       })
     );

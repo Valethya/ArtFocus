@@ -8,7 +8,7 @@ const generateProducts = () => {
     title: faker.lorem.words(2),
     description: faker.lorem.words(10),
     price: faker.commerce.price(1000, 100000, 0, "$"),
-    thumbnail: faker.image.abstract(),
+    thumbnail: [faker.image.abstract()],
     stock: faker.random.numeric(2, { bannedDigits: ["0"] }),
     code: faker.datatype.boolean(),
     category: "varios",

@@ -16,6 +16,8 @@ import asyncWrapper from "../utils/asyncWrapper.js";
 import { verifyToken } from "../utils/jwt.utils.js";
 import CustomError from "../utils/errors/custom.error.js";
 import { tokenExtractor } from "../utils/tokenExtractor.js";
+import __dirname, { uploader } from "../utils/util.js";
+import path from "path";
 
 class Products extends customRouter {
   init() {
@@ -41,26 +43,9 @@ class Products extends customRouter {
     this.post(
       "/",
       ["ADMIN", "PREMIUM"],
+      uploader("img/products").single("image"),
       asyncWrapper(async (req, res, next) => {
-        const { title, description, price, thumbnail, stock, category, code } =
-          req.body;
-        const token = tokenExtractor(req);
-        const decoded = verifyToken(token);
-        const email = decoded.email;
-        const role = decoded.role;
-
-        const product = {
-          title,
-          description,
-          price,
-          thumbnail,
-          stock,
-          code,
-          category,
-          owner: role == "premium" ? email : "admin",
-        };
-        const response = await create(product);
-
+        const response = await create(req);
         const allProducts = await find(req);
         io.emit("newProducts", allProducts);
         handleResponse(res, response, 201);
@@ -99,7 +84,6 @@ class Products extends customRouter {
 
         if (role !== "admin") {
           const isOwner = await verifyOwner(email, pid);
-
           if (!isOwner) {
             CustomError.createError({
               cause: "Usuario no es propietario del producto",

@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  document: [
+    {
+      name: { type: String },
+      reference: { type: String },
+    },
+  ],
+  lastConnection: String,
+  thumbnail: [String],
 });
 
 userSchema.pre("findOne", function () {

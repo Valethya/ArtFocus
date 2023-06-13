@@ -15,9 +15,11 @@ import swaggerUiExpress from "swagger-ui-express";
 import addLogger from "./middleware/logger.midleware.js";
 import __dirname from "./utils/util.js";
 import helmet from "helmet";
+import path from "path";
 
 export const app = express();
-
+console.log(path.join(__dirname, "/public"));
+app.use("/public", express.static(path.join(__dirname, "/public")));
 /*--EXPRESS--*/
 // app.use(
 //   session({
@@ -54,7 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /*--COOKIES--*/
-app.use(cookieParser());
+app.use(cookieParser({ sameSite: "none", secure: true }));
 // app.use(morgan("dev"));
 app.use(addLogger);
 

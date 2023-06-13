@@ -1,6 +1,6 @@
 .perfil {
   justify-content: flex-start;
-  width: 6%;
+  width: 9%;
   margin-left: 1em;
   transition: 0.5s;
   &:hover {
@@ -18,5 +18,12 @@
         color: goldenrod;
       }
     }
+  }
+}
+.logout {
+  @extend %colorIcon;
+  &:hover {
+    @extend %hoverColor;
+    letter-spacing: 0px;
   }
 }

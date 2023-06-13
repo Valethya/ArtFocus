@@ -54,6 +54,7 @@ function Profile() {
           <Aside
             options={options}
             handleOptionClick={handleOptionClick}
+            selectedOption={selectedOption}
           ></Aside>
           <h2 className="headerProfile">{h2[header]}</h2>
 

@@ -13,9 +13,8 @@ async function apiRequest(endpoint, method = "GET", data = null) {
   };
 
   const response = await fetch(url, options);
-
   const responseData = await response.json();
-
+  console.log(responseData);
   return responseData;
 }
 

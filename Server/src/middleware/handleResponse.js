@@ -7,6 +7,7 @@ function handleResponse(res, payload, code = 200) {
       statusCode: code,
     };
   }
+  console.log(response, " en el hanlde!!!");
   return res.status(code).json(response);
 }
 

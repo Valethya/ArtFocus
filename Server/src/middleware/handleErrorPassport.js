@@ -9,9 +9,10 @@ const handleErrorPassport = (strategy) => (req, res, next) => {
     }
 
     if (!user) {
-      const error = new Error("No hay una sesión iniciada");
-      error.code = 401;
-      return next(error);
+      // const error = new Error("No hay una sesión iniciada");
+      // error.code = 401;
+      req.user = {};
+      return next();
     }
 
     req.user = user;

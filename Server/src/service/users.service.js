@@ -4,6 +4,7 @@ import causeError from "../utils/errors/cause.error.js";
 import CustomError from "../utils/errors/custom.error.js";
 import { EnumError } from "../utils/errors/enums.errors.js";
 import messagesError from "../utils/errors/message.error.js";
+import { deleteManyFiles } from "../utils/fs.utils.js";
 
 const users = await managerFactory.getManager("users");
 const cartManager = await managerFactory.getManager("carts");
@@ -87,7 +88,6 @@ async function createUser(req, password) {
 async function findUserByEmail(email) {
   try {
     const user = await users.persistFindUserByEmail(email);
-
     if (!user) {
       CustomError.createError({
         cause: causeError.EMAIL_NOT_FOUND,
@@ -133,11 +133,69 @@ async function comparePassword(email, password) {
     throw error;
   }
 }
+async function changeRole(req) {
+  const email = req.params.uid;
+  let role;
+  const user = await findUserByEmail(email);
+  if (user.role === "premium") {
+    const options = {
+      role: "user",
+    };
+    return { options, uid: user.id, user: user };
+  }
+  if (user.document == 0) {
+    CustomError.createError({
+      cause: "no se han subido todos los documentos",
+      message: "porfavor suba todos los documentos",
+      code: 400,
+    });
+  }
+  role = "premium";
+  const options = {
+    role,
+  };
+  return { options, uid: user.id };
+}
+async function upDocument(req) {
+  const email = req.params.uid;
+  const upDoc = req.files;
+  const user = await findUserByEmail(email);
+  const documents = user.document;
+  if (documents.length == 3) {
+    deleteManyFiles(upDoc);
+    return "ya cuentas con todos los documentos";
+  }
+  if (documents.length < 3) {
+    for (const doc in upDoc) {
+      if (upDoc[doc]) {
+        const nameFile = upDoc[doc][0];
+        console.log(nameFile);
+        documents.push({
+          name: `${nameFile.fieldname}`,
+          reference: `/documents/${nameFile.filename}`,
+        });
+      } else {
+        throw `Debe subir toda la documentacion requerida`;
+      }
+    }
+  }
+  const ops = { document: documents };
+  await users.persistUpdateUser(user._id, ops);
+
+  return "Documentacion cargada exitosamente";
+}
+async function findUser(id) {
+  const user = await users.persistFindUser(id);
+  return user;
+}
 export {
   findUserByEmail,
+  findUser,
   createUser,
   comparePassword,
   register,
   updateUser,
   deleteUser,
+  changeRole,
+  upDocument,
 };

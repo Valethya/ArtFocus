@@ -25,7 +25,7 @@ export default function Card({ products }) {
       <div className="card" key={prod.id}>
         <div className="contentCard">
           <div className="contentImg">
-            <img src={prod.thumbnail}></img>
+            <img src={prod.thumbnail[0]}></img>
           </div>
 
           <div>

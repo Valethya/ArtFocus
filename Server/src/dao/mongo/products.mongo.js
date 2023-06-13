@@ -92,7 +92,6 @@ class productsManager {
   async persistVerifyOwner(email, id) {
     try {
       const result = await productsModel.findById(id);
-
       if (result && result.owner === email) {
         return true;
       } else {

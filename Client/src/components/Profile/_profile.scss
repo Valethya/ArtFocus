@@ -83,3 +83,21 @@ td {
 .headerProfile {
   grid-area: 1 / 2 / 2 / 6;
 }
+.cancelSuscription {
+  text-align: center;
+}
+.userCard {
+  margin-top: 3em;
+  display: flex;
+  .thumbnailProfile {
+    height: 10em;
+    width: 8em;
+    background: $primary-color-light;
+    display: grid;
+    place-content: center;
+    .iconProfile {
+      font-size: 7em;
+    }
+  }
+  gap: 2em;
+}
