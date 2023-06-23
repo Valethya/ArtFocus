@@ -4,10 +4,17 @@ import causeError from "../utils/errors/cause.error.js";
 import CustomError from "../utils/errors/custom.error.js";
 import { EnumError } from "../utils/errors/enums.errors.js";
 import messagesError from "../utils/errors/message.error.js";
-import { deleteManyFiles } from "../utils/fs.utils.js";
+import { deleteManyFiles, deleteOneFile } from "../utils/fs.utils.js";
+import __dirname from "../utils/util.js";
 
 const users = await managerFactory.getManager("users");
 const cartManager = await managerFactory.getManager("carts");
+async function findUsers() {
+  try {
+    const result = await users.persistFindUsers();
+    return result;
+  } catch (error) {}
+}
 async function register(req, password, username) {
   try {
     const userFound = await users.persistFindUserByEmail(username);
@@ -87,6 +94,7 @@ async function createUser(req, password) {
 }
 async function findUserByEmail(email) {
   try {
+    console.log(email);
     const user = await users.persistFindUserByEmail(email);
     if (!user) {
       CustomError.createError({
@@ -134,59 +142,120 @@ async function comparePassword(email, password) {
   }
 }
 async function changeRole(req) {
-  const email = req.params.uid;
-  let role;
-  const user = await findUserByEmail(email);
-  if (user.role === "premium") {
+  try {
+    const email = req.params.uid;
+    let role;
+    const user = await findUserByEmail(email);
+    if (user.role === "premium") {
+      const options = {
+        role: "user",
+      };
+      return { options, uid: user.id, user: user };
+    }
+    if (user.document == 0) {
+      CustomError.createError({
+        cause: "no se han subido todos los documentos",
+        message: "porfavor suba todos los documentos",
+        code: 400,
+      });
+    }
+    role = "premium";
     const options = {
-      role: "user",
+      role,
     };
-    return { options, uid: user.id, user: user };
-  }
-  if (user.document == 0) {
-    CustomError.createError({
-      cause: "no se han subido todos los documentos",
-      message: "porfavor suba todos los documentos",
-      code: 400,
-    });
-  }
-  role = "premium";
-  const options = {
-    role,
-  };
-  return { options, uid: user.id };
+    return { options, uid: user.id };
+  } catch (error) {}
 }
 async function upDocument(req) {
-  const email = req.params.uid;
-  const upDoc = req.files;
-  const user = await findUserByEmail(email);
-  const documents = user.document;
-  if (documents.length == 3) {
-    deleteManyFiles(upDoc);
-    return "ya cuentas con todos los documentos";
-  }
-  if (documents.length < 3) {
-    for (const doc in upDoc) {
-      if (upDoc[doc]) {
-        const nameFile = upDoc[doc][0];
-        console.log(nameFile);
-        documents.push({
-          name: `${nameFile.fieldname}`,
-          reference: `/documents/${nameFile.filename}`,
-        });
-      } else {
-        throw `Debe subir toda la documentacion requerida`;
+  try {
+    const email = req.params.uid;
+    const upDoc = req.files;
+    const user = await findUserByEmail(email);
+    const documents = user.document;
+    if (documents.length == 3) {
+      deleteManyFiles(upDoc);
+      return "ya cuentas con todos los documentos";
+    }
+    if (documents.length < 3) {
+      for (const doc in upDoc) {
+        if (upDoc[doc]) {
+          const nameFile = upDoc[doc][0];
+          console.log(nameFile);
+          documents.push({
+            name: `${nameFile.fieldname}`,
+            reference: `/documents/${nameFile.filename}`,
+          });
+        } else {
+          throw `Debe subir toda la documentacion requerida`;
+        }
       }
     }
-  }
-  const ops = { document: documents };
-  await users.persistUpdateUser(user._id, ops);
+    const ops = { document: documents };
+    await users.persistUpdateUser(user._id, ops);
 
-  return "Documentacion cargada exitosamente";
+    return "Documentacion cargada exitosamente";
+  } catch (error) {}
+}
+async function updateThumbnail(req) {
+  try {
+    const email = req.params.email;
+    const user = await findUserByEmail(email);
+    const thumbnail = user.thumbnail;
+    const img = `/img/profile/${req.file.filename}`;
+
+    if (!thumbnail.includes(img)) {
+      thumbnail.push(img);
+    }
+    const ops = { thumbnail };
+    const result = await users.persistUpdateUser(user._id, ops);
+    if (result.modifiedCount == 0) {
+      deleteOneFile(ops.thumbnail);
+    }
+
+    return "Foto de perfil actualizada";
+  } catch (error) {}
 }
 async function findUser(id) {
-  const user = await users.persistFindUser(id);
-  return user;
+  try {
+    const user = await users.persistFindUser(id);
+    return user;
+  } catch (error) {}
+}
+
+const deleteUserInactive = async () => {
+  try {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const findUser = await users.persistFindUsers(
+      { lastConnection: { $lt: twoDaysAgo } },
+      { email: 1 }
+    );
+    const deletedUser = findUser.map((user) => user.email);
+    const result = await users.persistDeleteUserInactive({
+      lastConnection: { $lt: twoDaysAgo },
+    });
+    if (result.deletedCount > 0) {
+      await sendDeletionNotification(deletedUser);
+    }
+    return `${result.deletedCount} usuarios eliminados.`;
+  } catch (error) {
+    console.error("Error al eliminar usuarios:", error);
+  }
+};
+async function sendDeletionNotification(emails) {
+  try {
+    await transport.sendMail({
+      from: "mailingartfocus@gmail.com",
+      to: emails,
+      subject: "Cuenta eliminada por inactividad",
+      html: "Tu cuenta ha sido eliminada debido a la inactividad.",
+      attachments: [],
+    });
+
+    return "Notificaciones enviadas a los usuarios eliminados.";
+  } catch (error) {
+    throw ("Error al enviar notificaciones:", error);
+  }
 }
 export {
   findUserByEmail,
@@ -198,4 +267,8 @@ export {
   deleteUser,
   changeRole,
   upDocument,
+  updateThumbnail,
+  findUsers,
+  deleteUserInactive,
+  sendDeletionNotification,
 };

@@ -8,6 +8,7 @@ import Login from "../Login/Login";
 import UserAccount from "../UserAccount/UserAccount";
 import { useSelector } from "react-redux";
 import CartIcon from "./CartIcon";
+import Overlay from "../Overlay/Overlay";
 
 // nombre de las paginas
 const pages = ["Cuadros", "Blog", "Nosotros"];
@@ -19,7 +20,6 @@ function NavBar() {
   const [color, setColor] = useState(["white", "none"]);
   const [shad, setShad] = useState("");
   const location = useLocation();
-  const [display, setDisplay] = useState("none");
 
   const user = useSelector((state) => state.user);
   const role = useSelector((state) => state.user.role);
@@ -69,12 +69,9 @@ function NavBar() {
     }
   }, [location.pathname, window.pageYOffset]);
   //mostrar u ocultar login
-  const handleLogin = () => {
-    if (user.user) {
-      setDisplay("none");
-    } else {
-      setDisplay(display === "flex" ? "none" : "flex");
-    }
+  const [displayOverlay, setDisplayOverlay] = useState(false);
+  const handleDisplay = () => {
+    setDisplayOverlay(!displayOverlay);
   };
 
   return (
@@ -104,12 +101,17 @@ function NavBar() {
             ""
           )}
           <li id="liAvatar" key="avatar">
-            <Avatar user={user.user} handle={handleLogin} />
+            <Avatar user={user.user} handle={handleDisplay} />
           </li>
         </ul>
         <UserAccount user={user.user} />
       </nav>
-      <Login display={display} />
+      {displayOverlay && <Login />}
+      <Overlay
+        style={displayOverlay ? "block" : "none"}
+        key="chat"
+        onClick={handleDisplay}
+      />
     </>
   );
 }

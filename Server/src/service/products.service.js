@@ -10,41 +10,16 @@ import { verifyToken } from "../utils/jwt.utils.js";
 import path from "path";
 import { deleteOneFile } from "../utils/fs.utils.js";
 import __dirname from "../utils/util.js";
+import productDto from "../DTO/productsDto.js";
 const manager = await managerFactory.getManager("products");
 
 //METODOS PARA PRODUCTOS
 
-//process data
 function processData(products, req) {
-  //mapeo de datos de documentos para mostrar la informacion correctamente
-  const documents = products.docs.map(
-    ({
-      _id,
-      title,
-      description,
-      price,
-      thumbnail,
-      stock,
-      code,
-      category,
-      owner,
-    }) => ({
-      id: _id,
-      title,
-      description,
-      price,
-      thumbnail,
-      stock,
-      code,
-      category,
-      owner,
-    })
-  );
-
-  //destructuracion de products para utilizar los parametros requeridos
+  const documents = products.docs.map((prod) => new productDto(prod));
   const { totalPages, page, hasPrevPage, hasNextPage, prevPage, nextPage } =
     products;
-  // determinando la urls de las pagina previa y posterior
+
   const prevUrl = `${req.baseUrl}?${new URLSearchParams({
     ...req.query,
     page: page - 1,
@@ -53,7 +28,7 @@ function processData(products, req) {
     ...req.query,
     page: page + 1,
   })}`;
-  //se contruye un nuevo objeto con el fin de poder mostrar la informacion requerida como lo es por ejemplo el payload o prevLink y nextLink
+
   const response = {
     totalDocs: products.docs.length,
     totalPages,
@@ -190,7 +165,7 @@ async function deleteProduct() {
 async function deleteById(pid) {
   try {
     const prod = await manager.persistFindById(pid);
-    deleteOneFile(path.join(__dirname, "/public", prod.thumbnail[0]));
+    deleteOneFile(prod.thumbnail[0]);
     const productDeleted = await manager.persistDeleteById({ _id: pid });
     if (productDeleted.deletedCount == 0) {
       CustomError.createError({

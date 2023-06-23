@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../Form/Input.jsx";
-import { ApiContext } from "../../context/ApiContext.jsx";
 import Select from "../Form/Select.jsx";
 
 function CreateProduct() {

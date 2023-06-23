@@ -1,8 +1,6 @@
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import Select from "../Form/Select.jsx";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
-import { ApiContext } from "../../context/ApiContext.jsx";
 
 function FilterBar({ url }) {
   const {

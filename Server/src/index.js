@@ -18,7 +18,8 @@ import helmet from "helmet";
 import path from "path";
 
 export const app = express();
-console.log(path.join(__dirname, "/public"));
+app.use(express.static(path.resolve(__dirname, "../client/build")));
+
 app.use("/public", express.static(path.join(__dirname, "/public")));
 /*--EXPRESS--*/
 // app.use(

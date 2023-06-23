@@ -2,6 +2,7 @@ import causeError from "../../utils/errors/cause.error.js";
 import CustomError from "../../utils/errors/custom.error.js";
 import { EnumError } from "../../utils/errors/enums.errors.js";
 import messagesError from "../../utils/errors/message.error.js";
+import { deleteOneFile } from "../../utils/fs.utils.js";
 import usersModel from "./models/users.models.js";
 
 class usersManager {
@@ -10,6 +11,7 @@ class usersManager {
   static getInstance() {
     return this.#instance ? this.#instance : new usersManager();
   }
+
   async persistFindUser(id) {
     try {
       const user = await usersModel.findById({ _id: id });
@@ -35,6 +37,12 @@ class usersManager {
       throw error;
     }
   }
+  async persistFindUsers() {
+    try {
+      const users = await usersModel.find();
+      return users;
+    } catch (error) {}
+  }
   async persistUpdateUser(id, ops) {
     try {
       const result = await usersModel.updateOne({ _id: id }, { $set: ops });
@@ -46,6 +54,12 @@ class usersManager {
   async persistDeleteUser(id) {
     try {
       const result = await usersModel.deleteOne({ _id: pid });
+      return result;
+    } catch (error) {}
+  }
+  async persistDeleteUserInactive() {
+    try {
+      const result = await usersModel.deleteMany();
       return result;
     } catch (error) {}
   }

@@ -3,7 +3,6 @@ import { setCartId, setRole, setUser } from "../store/slice/userSlice.js";
 
 async function fetchCurrent(dispatch) {
   const user = await apiRequest("/session/current");
-  console.log(user.data, " que es????");
   if (user.data) {
     const cartId = user.data.cartId;
     const role = user.data.role;
@@ -23,3 +22,14 @@ async function fetchCurrent(dispatch) {
   }
 }
 export default fetchCurrent;
+
+export async function fetchUsers(url, setUsers) {
+  try {
+    const data = await apiRequest(url);
+    // setPage(data.data);
+    console.log(data.data, "veamos!!!");
+    setUsers(data.data);
+  } catch (error) {
+    console.log(error);
+  }
+}

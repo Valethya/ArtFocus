@@ -1,16 +1,17 @@
 import Aside from "../components/Aside/Aside";
 import Container from "../components/Container/Container";
-import SubContainer from "../components/Container/SubContainer";
 import NavBar from "../components/NavBar/NavBar";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Setting from "../components/Profile/Setting";
 import Subscription from "../components/Profile/subscription";
 import Chat from "../components/Chat/Chat";
-
 import DataUser from "../components/Profile/Profile";
 import AdminProducts from "../components/Profile/AdminProducts";
 import ProfileContainer from "../components/Container/ProfileContainer";
 import { useSelector } from "react-redux";
+import Overlay from "../components/Overlay/Overlay";
+import IconChat from "../components/Chat/IconChat";
+import AdminUser from "../components/Profile/AdminUser";
 
 function Profile() {
   const [selectedOption, setSelectedOption] = useState("Perfil");
@@ -31,6 +32,7 @@ function Profile() {
     Configuracion: "Configuracion",
     Suscripcion: "Suscripcion",
     Productos: "Administra tus Productos",
+    Usuarios: "Administrar Usuarios",
   };
 
   const optionComponents = {
@@ -41,11 +43,17 @@ function Profile() {
     optionComponents["Suscripcion"] = <Subscription />;
   }
   if (role == "premium" || role == "admin") {
-    optionComponents["Productos"] = <AdminProducts user={user} />;
+    optionComponents["Productos"] = <AdminProducts />;
+  }
+  if (role == "admin") {
+    optionComponents["Usuarios"] = <AdminUser />;
   }
 
   const options = Object.keys(optionComponents);
-
+  const [displayOverlay, setDisplayOverlay] = useState(false);
+  const handleDisplay = () => {
+    setDisplayOverlay(!displayOverlay);
+  };
   return (
     <>
       <NavBar></NavBar>
@@ -59,7 +67,13 @@ function Profile() {
           <h2 className="headerProfile">{h2[header]}</h2>
 
           {optionComponents[selectedOption]}
-          <Chat />
+          {displayOverlay && <Chat />}
+          <Overlay
+            style={displayOverlay ? "flex" : "none"}
+            key="chat"
+            onClick={handleDisplay}
+          />
+          <IconChat onClick={handleDisplay} />
         </ProfileContainer>
       </Container>
     </>

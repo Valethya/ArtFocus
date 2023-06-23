@@ -10,7 +10,7 @@
 .login {
   @extend %form;
   border: 1px solid rgba(128, 128, 128, 0.226);
-  display: none;
+  display: flex;
   position: fixed;
   right: 1em;
   top: 5em;

@@ -3,7 +3,7 @@ import Input from "../Form/Input";
 import fetchCurrent from "../../services/userService";
 import { useDispatch, useSelector } from "react-redux";
 import apiRequest from "../../services/api";
-function Login({ display }) {
+function Login() {
   const user = useSelector((state) => state.user);
   const {
     register,
@@ -25,6 +25,7 @@ function Login({ display }) {
 
     if (data.status == "success") {
       await fetchCurrent(dispatch);
+      return null;
     } else {
       console.log("Inicio de sesión fallido: ", data.message);
     }
@@ -39,10 +40,6 @@ function Login({ display }) {
       onSubmit(dataForm, event);
     }
   };
-
-  if (user.user) {
-    return null;
-  }
   return (
     <div>
       <form
@@ -50,7 +47,6 @@ function Login({ display }) {
         className="login shadow"
         onSubmit={handleSubmit(onSubmit)}
         onKeyDown={handleKeyDown}
-        style={{ display: display }}
       >
         <Input
           label="email"

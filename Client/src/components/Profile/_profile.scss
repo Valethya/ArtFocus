@@ -89,15 +89,56 @@ td {
 .userCard {
   margin-top: 3em;
   display: flex;
+
   .thumbnailProfile {
     height: 10em;
     width: 8em;
     background: $primary-color-light;
-    display: grid;
-    place-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 2px;
+    .imageProfile {
+      object-fit: cover;
+      object-position: center;
+      height: 100%;
+      width: 100%;
+    }
     .iconProfile {
       font-size: 7em;
+      color: color("grey", "darken-2");
+    }
+    .iconCamera {
+      color: color("grey", "darken-2");
+      position: absolute;
+      bottom: 0.2em;
+      right: 0.2em;
+      opacity: 0;
+      transition: opacity 1s ease;
+      cursor: pointer;
+    }
+    &:hover .iconCamera {
+      opacity: 1;
     }
   }
   gap: 2em;
+}
+.chargeProfile {
+  padding: 3em;
+  top: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: grid;
+  place-content: center;
+  background: #fff;
+  z-index: 10000;
+  @extend %shadow;
+  form {
+    width: 100%;
+  }
+  h3 {
+    margin: 0;
+  }
 }

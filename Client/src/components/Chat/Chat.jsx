@@ -11,7 +11,6 @@ export default function Chat() {
   const socket = io("http://localhost:8080");
   const [allMessage, setAllMessage] = useState([]);
   const { user } = useContext(ApiContext);
-  const [display, setDisplay] = useState("none");
 
   /*--SEND MESSAGE--*/
   const onSubmit = async (data) => {
@@ -45,53 +44,40 @@ export default function Chat() {
     setAllMessage(data);
   });
 
-  const handleDisplay = () => {
-    if (display === "flex") {
-      setDisplay("none");
-    } else {
-      setDisplay("flex");
-    }
-  };
-
   return (
-    <>
-      <Overlay style={display} key="chat" onClick={handleDisplay}></Overlay>
-      <div className="chatBox shadow" style={{ display: display }}>
-        <div className="messageBox">
-          {allMessage.map((message) => {
-            if (user.email) {
-              return (
-                <div
-                  className={`message ${
-                    message.user === user.email ? "own" : "other"
-                  }`}
-                  key={message._id}
-                >
-                  <p>{message.message}</p>
-                </div>
-              );
-            }
-          })}
-        </div>
-        <div>
-          <form id="formMessage" onSubmit={handleSubmit(onSubmit)}>
-            <div className="formMessage">
-              <textarea
-                type="text"
-                id="userMessage"
-                placeholder="Escribe tu mensaje..."
-                name="userMessage"
-                {...register("userMessage")}
-              ></textarea>
-              <button type="submit" id="sendMessage">
-                <Icon>send</Icon>
-              </button>
-            </div>
-          </form>
-        </div>
+    <div className="chatBox shadow">
+      <div className="messageBox">
+        {allMessage.map((message) => {
+          if (user.email) {
+            return (
+              <div
+                className={`message ${
+                  message.user === user.email ? "own" : "other"
+                }`}
+                key={message._id}
+              >
+                <p>{message.message}</p>
+              </div>
+            );
+          }
+        })}
       </div>
-
-      <IconChat onClick={handleDisplay} />
-    </>
+      <div>
+        <form id="formMessage" onSubmit={handleSubmit(onSubmit)}>
+          <div className="formMessage">
+            <textarea
+              type="text"
+              id="userMessage"
+              placeholder="Escribe tu mensaje..."
+              name="userMessage"
+              {...register("userMessage")}
+            ></textarea>
+            <button type="submit" id="sendMessage">
+              <Icon>send</Icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

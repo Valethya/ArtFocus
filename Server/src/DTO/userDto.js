@@ -1,4 +1,4 @@
-class InfoDto {
+class InfoDtoCurrent {
   constructor(infoUser) {
     this.name = infoUser.firstName;
     this.lastname = infoUser.lastName ? infoUser.lastName : "";
@@ -13,7 +13,8 @@ class InfoDto {
     this.thumbnail = infoUser.thumbnail ? infoUser.thumbnail : [];
   }
 }
-export default InfoDto;
+export default InfoDtoCurrent;
+
 export class InfoUserDto {
   constructor(infoUser) {
     this.firstName = infoUser.firstName;

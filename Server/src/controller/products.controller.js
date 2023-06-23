@@ -92,6 +92,17 @@ class Products extends customRouter {
               code: 1009,
             });
           }
+        } else {
+          const isOwner = await verifyOwner(email, pid);
+          if (!isOwner) {
+            await transport.sendMail({
+              from: "mailingartfocus@gmail.com",
+              to: email,
+              subject: "Unos de tus productos ha sido eliminados",
+              html: `El producto con id ${pid} ha sido eliminado`,
+              attachments: [],
+            });
+          }
         }
 
         const response = await deleteById(pid);
@@ -109,13 +120,8 @@ class Products extends customRouter {
       ["ADMIN", "PREMIUM"],
       asyncWrapper(async (req, res, next) => {
         const { pid } = req.params;
-        const updateOps = {};
-        for (const [key, value] of Object.entries(req.body)) {
-          if (key != "_id" || key != "code") {
-            updateOps[key] = value;
-          }
-        }
-        const response = await update(pid, updateOps);
+        const ops = optionsUpDate(req.body);
+        const response = await update(pid, ops);
 
         handleResponse(res, response, 200);
       })

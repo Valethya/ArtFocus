@@ -101,5 +101,6 @@ class productsManager {
       throw error;
     }
   }
+  async;
 }
 export default productsManager;

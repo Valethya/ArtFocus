@@ -1,14 +1,14 @@
-// import userManager from "../dao/MongoManager/users.mongoManager.js";
-import passport from "passport";
 import customRouter from "../custom/router.custom.js";
 import {
-  createUser,
   changeRole,
   deleteUser,
   findUserByEmail,
   updateUser,
   upDocument,
   findUser,
+  updateThumbnail,
+  findUsers,
+  deleteUserInactive,
 } from "../service/users.service.js";
 import handleErrorPassport from "../middleware/handleErrorPassport.js";
 import generateUrl from "../mailing/generateUrl.mailing.js";
@@ -21,13 +21,21 @@ import { comparePassword } from "../service/users.service.js";
 import loggerFactory from "../factories/logger.factories.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import cript from "../utils/criptPassword.utils.js";
-import CustomError from "../utils/errors/custom.error.js";
 import { uploader } from "../utils/util.js";
-import { InfoUserDto } from "../DTO/infoUser.dto.js";
+import { InfoUserDto } from "../DTO/userDto.js";
 const logger = await loggerFactory.getLogger();
 
 class User extends customRouter {
   init() {
+    this.get(
+      "/",
+      ["ADMIN"],
+      asyncWrapper(async (req, res, next) => {
+        const response = await findUsers();
+        console.log(response);
+        handleResponse(res, response, 200);
+      })
+    );
     this.post(
       "/",
       ["PUBLIC"],
@@ -128,6 +136,23 @@ class User extends customRouter {
       ]),
       asyncWrapper(async (req, res, next) => {
         const response = await upDocument(req);
+        handleResponse(res, response, 200);
+      })
+    );
+    this.patch(
+      "/:email",
+      ["USER", "PREMIUM", "ADMIN"],
+      uploader("img/profile").single("profile"),
+      asyncWrapper(async (req, res, next) => {
+        const response = await updateThumbnail(req);
+        handleResponse(res, response, 200);
+      })
+    );
+    this.delete(
+      "/inactive",
+      ["ADMIN"],
+      asyncWrapper(async (req, res, next) => {
+        const response = await deleteUserInactive();
         handleResponse(res, response, 200);
       })
     );

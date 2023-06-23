@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-function Input({ type, label, name, register, required, validate }) {
+function Input({ type, label, name, register, required, validate, handle }) {
   const {
     formState: { errors },
   } = useForm();
@@ -12,6 +12,7 @@ function Input({ type, label, name, register, required, validate }) {
         type={type}
         {...register(name, { required, validate })}
         aria-invalid={errors[name] ? "true" : "false"}
+        onChange={handle}
       />
     </>
   );
