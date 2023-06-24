@@ -8,7 +8,7 @@
     "test": "npx mocha",
     "start:dev": " set NODE_ENV=dev&& nodemon src/app.js ",
     "start:prod": " set NODE_ENV=prod&& nodemon src/app.js ",
-    "start": " set NODE_ENV=dev&& nodemon src/app.js "
+    "start": " node src/app.js "
   },
   "keywords": [],
   "author": "",

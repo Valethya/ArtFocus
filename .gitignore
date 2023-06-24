@@ -25,5 +25,5 @@ dist-ssr
 .vscode
 #variables de entorno
 Server/.env
-Server/.env.mongo
-Server/.env.fs
+Server/.env.dev
+Server/.env.prod
