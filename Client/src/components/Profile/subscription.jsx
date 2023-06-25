@@ -28,7 +28,7 @@ function Subscription() {
   };
 
   const onSubmit = async (dataForm, event) => {
-    const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
+    const BASE_URL = "https://artfocus-production.up.railway.app";
     event.preventDefault();
     const formData = new FormData();
     formData.append("identification", dataForm.identification[0]);

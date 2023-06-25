@@ -1,8 +1,9 @@
 // services/api.js
-const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
+const BASE_URL = "https://artfocus-production.up.railway.app";
 
 async function apiRequest(endpoint, method = "GET", data = null) {
   const url = `${BASE_URL}${endpoint}`;
+
   const options = {
     method,
     credentials: "include",

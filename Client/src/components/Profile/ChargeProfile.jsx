@@ -6,7 +6,7 @@ import fetchCurrent from "../../services/userService";
 import { useDispatch } from "react-redux";
 
 function ChargeProfile({ user, setDisplayOverlay, displayOverlay }) {
-  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
+  const BASE_URL = "https://artfocus-production.up.railway.app";
   const [previewImage, setPreviewImage] = useState(null);
   const {
     register,

@@ -3,7 +3,7 @@ import Button from "../Button/Button.jsx";
 import Input from "../Form/Input.jsx";
 
 function PasswordResetRequestForm() {
-  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
+  const BASE_URL = "https://artfocus-production.up.railway.app";
   const {
     register,
     handleSubmit,

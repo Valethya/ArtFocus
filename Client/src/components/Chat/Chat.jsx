@@ -7,7 +7,7 @@ import { Icon } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 export default function Chat() {
-  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
+  const BASE_URL = "https://artfocus-production.up.railway.app";
   const { register, handleSubmit, reset } = useForm();
   const socket = io(BASE_URL);
   const [allMessage, setAllMessage] = useState([]);

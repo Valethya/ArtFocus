@@ -3,7 +3,7 @@ import Select from "../Form/Select.jsx";
 import { useForm } from "react-hook-form";
 
 function FilterBar({ url }) {
-  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
+  const BASE_URL = "https://artfocus-production.up.railway.app";
   const {
     register,
     handleSubmit,
