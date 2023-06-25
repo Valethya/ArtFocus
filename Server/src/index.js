@@ -48,7 +48,12 @@ app.use(express.urlencoded({ extended: true }));
 
 /*--CORS--*/
 
-app.use(cors({ credentials: true, origin: "http://127.0.0.1:5173" }));
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://127.0.0.1:5173", "https://art-focus.vercel.app/"],
+  })
+);
 
 /*--PASSPORT--*/
 
