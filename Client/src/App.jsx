@@ -38,7 +38,7 @@ function App() {
           ></Route>
           <Route path="/password/reset" element={<PasswordReset />}></Route>
           <Route
-            path="/signUp"
+            path="/signup"
             element={
               user ? <Navigate to="perfil" replace={true} /> : <SignUp />
             }

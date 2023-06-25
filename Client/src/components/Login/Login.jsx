@@ -78,13 +78,13 @@ function Login() {
           Olvide la contraseña
         </a>
         <button className="btn">
-          <a href="https://artfocus-production.up.railway.app/auth/github">
+          <a href="https://art-focus.vercel.app/auth/github">
             Entrar con Github
             <img className="icon" src="/img/github.png" />
           </a>
         </button>
         <button className="btn">
-          <a href="https://artfocus-production.up.railway.app/auth/google">
+          <a href="https://art-focus.vercel.app/auth/google">
             Entrar con Google
             <img className="icon" src="/img/google.png" />
           </a>
