@@ -3,6 +3,7 @@ import Input from "../Form/Input";
 import fetchCurrent from "../../services/userService";
 import { useDispatch, useSelector } from "react-redux";
 import apiRequest from "../../services/api";
+import { Link } from "react-router-dom";
 function Login() {
   const user = useSelector((state) => state.user);
   const {
@@ -71,12 +72,12 @@ function Login() {
         <button className="btn" type="submit">
           Iniciar Sesión
         </button>
-        <a className="register" href="/signup">
+        <Link className="register" to="/signup">
           registrate
-        </a>
-        <a className="register" href="/password/reset/request">
+        </Link>
+        <Link className="register" to="/password/reset/request">
           Olvide la contraseña
-        </a>
+        </Link>
         <button className="btn">
           <a href="https://art-focus.vercel.app/auth/github">
             Entrar con Github
