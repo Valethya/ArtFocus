@@ -3,6 +3,7 @@ import Button from "../Button/Button.jsx";
 import Input from "../Form/Input.jsx";
 
 function PasswordResetForm() {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const {
     register,
     handleSubmit,
@@ -16,7 +17,7 @@ function PasswordResetForm() {
       return "Las contraseñas no coinciden";
     }
   };
-  const url = "http://localhost:8080/users/password/reset";
+  const url = `${BASE_URL}/users/password/reset`;
 
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();

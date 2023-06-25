@@ -3,6 +3,7 @@ import Input from "../Form/Input.jsx";
 import Select from "../Form/Select.jsx";
 
 function CreateProduct() {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const {
     register,
     handleSubmit,
@@ -23,7 +24,7 @@ function CreateProduct() {
     { op: "blanco y negro", value: "blanco y negro" },
     { op: "color", value: "color" },
   ];
-  const url = "http://localhost:8080/api/products";
+  const url = `${BASE_URL}/api/products`;
 
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();

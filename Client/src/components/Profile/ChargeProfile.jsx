@@ -6,6 +6,7 @@ import fetchCurrent from "../../services/userService";
 import { useDispatch } from "react-redux";
 
 function ChargeProfile({ user, setDisplayOverlay, displayOverlay }) {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const [previewImage, setPreviewImage] = useState(null);
   const {
     register,
@@ -16,7 +17,7 @@ function ChargeProfile({ user, setDisplayOverlay, displayOverlay }) {
   } = useForm();
   const dispatch = useDispatch();
 
-  const url = `http://localhost:8080/api/users/${user.user.email}`;
+  const url = `${BASE_URL}/api/users/${user.user.email}`;
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();
 

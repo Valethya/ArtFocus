@@ -103,7 +103,7 @@ const initializePassport = () => {
       {
         clientID: idGithub,
         clientSecret: secretGithub,
-        callbackURL: "http://localhost:8080/auth/githubcallback",
+        callbackURL: `${process.env.REACT_APP_URL_BASE_SERVER}/auth/githubcallback`,
       },
       async (profile, done) => {
         try {
@@ -122,7 +122,7 @@ const initializePassport = () => {
       {
         clientID: idGoogle,
         clientSecret: secretGoogle,
-        callbackURL: "http://localhost:8080/auth/google/callback",
+        callbackURL: `${process.env.REACT_APP_URL_BASE_SERVER}/auth/google/callback`,
       },
       async (profile, done) => {
         try {

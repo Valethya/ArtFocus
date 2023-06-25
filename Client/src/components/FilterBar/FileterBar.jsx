@@ -3,6 +3,7 @@ import Select from "../Form/Select.jsx";
 import { useForm } from "react-hook-form";
 
 function FilterBar({ url }) {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const {
     register,
     handleSubmit,
@@ -23,7 +24,7 @@ function FilterBar({ url }) {
   ];
   const onSubmit = (data, event) => {
     event.preventDefault();
-    const baseUrl = "http://localhost:8080/api/products";
+    const baseUrl = `${BASE_URL}/api/products`;
     const query = Object.entries(data)
       .filter(([key, value]) => value !== "")
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)

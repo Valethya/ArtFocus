@@ -3,6 +3,7 @@ import Input from "../Form/Input";
 import Frame from "../Frame/Frame";
 import { useNavigate } from "react-router-dom";
 function SignUp() {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const navigate = useNavigate();
 
   const {
@@ -21,7 +22,7 @@ function SignUp() {
     },
   });
 
-  const url = "http://localhost:8080/api/users";
+  const url = `${BASE_URL}/api/users`;
 
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();

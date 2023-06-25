@@ -4,7 +4,7 @@ info:
   description: API para gestionar productos
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: https://artfocus-production.up.railway.app
 paths:
   /api/products:
     get:

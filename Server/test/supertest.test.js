@@ -1,7 +1,7 @@
 import chai from "chai";
 import supertest from "supertest";
 const expect = chai.expect;
-const requester = supertest("http://localhost:8080");
+const requester = supertest("https://artfocus-production.up.railway.app");
 describe("Testing ArtFocus", () => {
   let authToken;
   let authTokenUser;

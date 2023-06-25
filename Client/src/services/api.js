@@ -1,5 +1,5 @@
 // services/api.js
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
 
 async function apiRequest(endpoint, method = "GET", data = null) {
   const url = `${BASE_URL}${endpoint}`;

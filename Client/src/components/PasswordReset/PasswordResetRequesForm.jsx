@@ -3,13 +3,14 @@ import Button from "../Button/Button.jsx";
 import Input from "../Form/Input.jsx";
 
 function PasswordResetRequestForm() {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const url = "http://localhost:8080/users/password/reset/request";
+  const url = `${BASE_URL}/users/password/reset/request`;
 
   const onSubmit = async (dataForm, event) => {
     event.preventDefault();

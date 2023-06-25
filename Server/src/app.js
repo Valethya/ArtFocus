@@ -13,7 +13,10 @@ const httpServer = app.listen(port, () => {
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://127.0.0.1:5173", "http://localhost:8080"],
+    origin: [
+      "https://art-focus.vercel.app/",
+      process.env.REACT_APP_URL_BASE_SERVER,
+    ],
     methods: ["GET", "POST"],
     // credentials: true,
   },

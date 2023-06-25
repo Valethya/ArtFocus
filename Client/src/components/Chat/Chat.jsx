@@ -7,8 +7,9 @@ import { Icon } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 export default function Chat() {
+  const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
   const { register, handleSubmit, reset } = useForm();
-  const socket = io("http://localhost:8080");
+  const socket = io(BASE_URL);
   const [allMessage, setAllMessage] = useState([]);
   const { user } = useContext(ApiContext);
 
@@ -18,7 +19,7 @@ export default function Chat() {
       return;
     }
     try {
-      const url = "http://localhost:8080/api/message";
+      const url = `${BASE_URL}api/message`;
       const response = await fetch(url, {
         method: "POST",
         credentials: "include",

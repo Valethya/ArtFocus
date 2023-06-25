@@ -28,6 +28,7 @@ function Subscription() {
   };
 
   const onSubmit = async (dataForm, event) => {
+    const BASE_URL = process.env.REACT_APP_URL_BASE_SERVER;
     event.preventDefault();
     const formData = new FormData();
     formData.append("identification", dataForm.identification[0]);
@@ -35,14 +36,11 @@ function Subscription() {
     formData.append("accountStatementProof", dataForm.accountStatementProof[0]);
     // await apiRequest(`/api/users/${email}/document`, "POST", dataForm);
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/users/${email}/document`,
-        {
-          method: "POST",
-          credentials: "include",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/users/${email}/document`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
       const data = await response.json();
       if (data.status == "success") {
