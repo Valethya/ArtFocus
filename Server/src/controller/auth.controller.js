@@ -87,7 +87,7 @@ class Auth extends customRouter {
     this.get(
       "/github",
       ["PUBLIC"],
-      handleErrorPassport("github", { scope: ["user: email"] }),
+      handleErrorPassport("github", { scope: ["user"] }),
       async (req, res, next) => {}
     );
 
@@ -115,7 +115,7 @@ class Auth extends customRouter {
     this.get(
       "/google",
       ["PUBLIC"],
-      handleErrorPassport("google", { scope: ["user: email"] }),
+      handleErrorPassport("google", { scope: ["profile"] }),
       async (req, res, next) => {}
     );
 
