@@ -65,14 +65,10 @@ function validAdmin(username, password) {
 
 async function authGithub(profile) {
   try {
-    console.log(profile, profile._json, "profile");
-    console.log("entramos, veremos que pasa");
     const foundUser = await usersModel.findOne({ githubId: profile._json.id });
-    console.log("y lo encontro o no???", foundUser);
     if (!foundUser) {
-      console.log("voy pasando por aqui jejejej");
+      console.log(cartManager, "cart manager aqui!!");
       const cart = await cartManager.create();
-
       const newUserInfo = {
         githubId: profile._json.id,
         firstName: profile._json.name

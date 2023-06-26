@@ -12,7 +12,7 @@ import {
 } from "./index.config.js";
 import jwt, { ExtractJwt } from "passport-jwt";
 import { tokenExtractor } from "../utils/tokenExtractor.js";
-import { authLogin, authGithub } from "../service/auth.service.js";
+import { authLogin, authGithub, authGoogle } from "../service/auth.service.js";
 import usersModel from "../dao/mongo/models/users.models.js";
 import { register } from "../service/users.service.js";
 
