@@ -89,6 +89,7 @@ async function authGithub(profile) {
     }
     return user;
   } catch (error) {
+    console.log(error, " esto es el error");
     throw error;
   }
 }
