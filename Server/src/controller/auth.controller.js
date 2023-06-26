@@ -87,14 +87,14 @@ class Auth extends customRouter {
     this.get(
       "/github",
       ["PUBLIC"],
-      passport.authenticate("github", { scope: ["user: email"] }),
+      handleErrorPassport("github", { scope: ["user: email"] }),
       async (req, res, next) => {}
     );
 
     this.get(
       "/githubcallback",
       ["PUBLIC"],
-      passport.authenticate("github"),
+      handleErrorPassport("github"),
       async (req, res, next) => {
         const user = {
           firstName: req.user.firstName,
@@ -115,14 +115,14 @@ class Auth extends customRouter {
     this.get(
       "/google",
       ["PUBLIC"],
-      passport.authenticate("google", { scope: ["profile"] }),
+      handleErrorPassport("google", { scope: ["user: email"] }),
       async (req, res, next) => {}
     );
 
     this.get(
       "/google/callback",
       ["PUBLIC"],
-      passport.authenticate("google", { failureRedirect: "/login" }),
+      handleErrorPassport("google"),
       async (req, res, next) => {
         const user = {
           firstName: req.user.firstName,

@@ -68,6 +68,7 @@ async function authGithub(profile) {
     const foundUser = await usersModel.findOne({ githubId: profile._json.id });
 
     if (!foundUser) {
+      console.log("voy pasando por aqui jejejej");
       const cart = await cartManager.create();
 
       const newUserInfo = {
