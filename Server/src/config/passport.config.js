@@ -109,6 +109,7 @@ const initializePassport = () => {
         try {
           console.log(profile, " este es profile");
           const user = await authGithub(profile);
+          console.log(user, "esto es user");
           return done(null, user);
         } catch (error) {
           return done(error);
