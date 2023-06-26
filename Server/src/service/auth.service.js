@@ -68,7 +68,7 @@ async function authGithub(profile) {
     const foundUser = await usersModel.findOne({ githubId: profile._json.id });
     if (!foundUser) {
       console.log(cartManager, "cart manager aqui!!");
-      const cart = await cartManager.create();
+      const cart = await cartManager.persistCreate();
       const newUserInfo = {
         githubId: profile._json.id,
         firstName: profile._json.name
@@ -96,7 +96,7 @@ async function authGoogle(profile) {
     const user = await usersModel.findOne({ googleId: profile._json.sub });
 
     if (!user) {
-      const cart = await cartManager.create();
+      const cart = await cartManager.persistCreate();
       const newUserInfo = {
         googleId: profile._json.sub,
         firstName: profile._json.given_name ? profile._json.given_name : "",
