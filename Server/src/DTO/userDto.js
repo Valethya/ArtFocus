@@ -7,7 +7,7 @@ class InfoDtoCurrent {
       ? infoUser.firstName + " " + infoUser.lastName
       : infoUser.firstName;
     this.email = infoUser.email ? infoUser.email : "";
-    this.cartId = infoUser.cart;
+    this.cartId = infoUser.cart._id;
     this.document = infoUser.document;
     this.lastConnection = infoUser.lastConnection;
     this.thumbnail = infoUser.thumbnail ? infoUser.thumbnail : [];
@@ -21,7 +21,7 @@ export class InfoUserDto {
     this.lastName = infoUser.lastName ? infoUser.lastName : "";
     this.role = infoUser.role;
     this.email = infoUser.email ? infoUser.email : "";
-    this.cartId = infoUser.cart;
+    this.cartId = infoUser.cart._id;
     this.document = infoUser.document;
     this.lastConnection = infoUser.lastConnection;
     this.thumbnail = infoUser.thumbnail ? infoUser.thumbnail : [];

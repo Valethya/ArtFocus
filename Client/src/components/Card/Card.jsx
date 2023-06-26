@@ -12,6 +12,7 @@ export default function Card({ products }) {
   const dispatch = useDispatch();
 
   function handleAdd(prod) {
+    console.log(cartId, prod);
     try {
       const endPoint = `/api/carts/${cartId}/product/${prod}`;
       apiRequest(endPoint, "POST");

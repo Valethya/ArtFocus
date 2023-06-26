@@ -6,7 +6,7 @@ async function fetchCurrent(dispatch) {
   if (user.data) {
     const cartId = user.data.cartId;
     const role = user.data.role;
-
+    console.log(cartId, " veamos");
     dispatch(setUser(user.data));
     dispatch(setCartId(cartId));
     dispatch(setRole(role));
