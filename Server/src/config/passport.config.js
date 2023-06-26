@@ -105,7 +105,7 @@ const initializePassport = () => {
         clientSecret: secretGithub,
         callbackURL: `https://artfocus-production.up.railway.app/auth/githubcallback`,
       },
-      async (profile, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         try {
           console.log(profile, " este es profile");
           const user = await authGithub(profile);
@@ -126,7 +126,7 @@ const initializePassport = () => {
         clientSecret: secretGoogle,
         callbackURL: `https://artfocus-production.up.railway.app/auth/google/callback`,
       },
-      async (profile, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         try {
           console.log(profile, " este es profile");
           const user = await authGoogle(profile);
