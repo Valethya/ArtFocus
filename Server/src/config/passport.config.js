@@ -103,7 +103,7 @@ const initializePassport = () => {
       {
         clientID: idGithub,
         clientSecret: secretGithub,
-        callbackURL: `${process.env.URL_BASE_SERVER}/auth/githubcallback`,
+        callbackURL: `https://artfocus-production.up.railway.app/auth/githubcallback`,
       },
       async (profile, done) => {
         try {
@@ -122,7 +122,7 @@ const initializePassport = () => {
       {
         clientID: idGoogle,
         clientSecret: secretGoogle,
-        callbackURL: `${process.env.URL_BASE_SERVER}/auth/google/callback`,
+        callbackURL: `https://artfocus-production.up.railway.app/auth/google/callback`,
       },
       async (profile, done) => {
         try {
