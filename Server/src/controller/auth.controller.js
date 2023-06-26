@@ -94,7 +94,7 @@ class Auth extends customRouter {
     this.get(
       "/githubcallback",
       ["PUBLIC"],
-      passport.authenticate("github", { failureRedirect: "/login" }),
+      passport.authenticate("github"),
       async (req, res, next) => {
         const user = {
           firstName: req.user.firstName,

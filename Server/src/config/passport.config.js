@@ -107,6 +107,7 @@ const initializePassport = () => {
       },
       async (profile, done) => {
         try {
+          console.log(profile, " este es profile");
           const user = await authGithub(profile);
           return done(null, user);
         } catch (error) {
@@ -126,6 +127,7 @@ const initializePassport = () => {
       },
       async (profile, done) => {
         try {
+          console.log(profile, " este es profile");
           const user = await authGoogle(profile);
           return done(null, user);
         } catch (error) {
