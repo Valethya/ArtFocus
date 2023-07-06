@@ -4,6 +4,7 @@ import loggerFactory from "../factories/logger.factories.js";
 
 export const mongoUri = urlMongo;
 // export const mongoUri = `mongodb://admin:admin@localhost:27017/test`;
+//probando
 mongoose.set("strictQuery", false);
 
 const logger = await loggerFactory.getLogger();
