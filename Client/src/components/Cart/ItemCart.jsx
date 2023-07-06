@@ -1,20 +1,18 @@
 import React from "react";
-import { useContext } from "react";
 import { useState, useEffect } from "react";
-import { ApiContext } from "../../context/ApiContext";
-
 import Icon from "@mui/material/Icon";
 import { useDispatch, useSelector } from "react-redux";
 import { decrement } from "../../store/slice/conuterSlice";
 import apiRequest from "../../services/api";
-import fetchSummaryCart from "../../services/cartService";
+import fetchSummaryCartByProduct from "../../services/cartService";
+
 export function ItemCart() {
-  const [summaryCart, setSummaryCart] = useState("");
+  const [summaryProductInCart, setSummaryProductInCart] = useState("");
   const cartId = useSelector((state) => state.user.cartId);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchSummaryCart(setSummaryCart, cartId);
+    fetchSummaryCartByProduct(setSummaryCart, cartId);
   }, [cartId]);
 
   async function handleRemove(prod) {
@@ -24,7 +22,7 @@ export function ItemCart() {
 
       if (response.status == "success") {
         dispatch(decrement());
-        fetchSummaryCart(setSummaryCart, cartId);
+        fetchSummaryCartByProduct(setSummaryProductInCart, cartId);
       }
     } catch (error) {
       console.log(error);
@@ -32,8 +30,8 @@ export function ItemCart() {
   }
 
   return (
-    summaryCart &&
-    summaryCart.map((prod) => {
+    summaryProductInCart &&
+    summaryProductInCart.map((prod) => {
       return (
         <div className="itemCart shadow" key={prod.productId}>
           <div className="imgCart">

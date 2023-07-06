@@ -6,7 +6,6 @@ async function fetchCurrent(dispatch) {
   if (user.data) {
     const cartId = user.data.cartId;
     const role = user.data.role;
-    console.log(cartId, " veamos");
     dispatch(setUser(user.data));
     dispatch(setCartId(cartId));
     dispatch(setRole(role));
@@ -27,7 +26,6 @@ export async function fetchUsers(url, setUsers) {
   try {
     const data = await apiRequest(url);
     // setPage(data.data);
-    console.log(data.data, "veamos!!!");
     setUsers(data.data);
   } catch (error) {
     console.log(error);
