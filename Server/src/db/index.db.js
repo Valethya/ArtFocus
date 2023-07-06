@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { pass } from "../config/index.config.js";
+import { urlMongo } from "../config/index.config.js";
 import loggerFactory from "../factories/logger.factories.js";
 
-export const mongoUri = `mongodb://BackendCoder:${pass}@ac-iwvbtxh-shard-00-00.fwtrhw6.mongodb.net:27017,ac-iwvbtxh-shard-00-01.fwtrhw6.mongodb.net:27017,ac-iwvbtxh-shard-00-02.fwtrhw6.mongodb.net:27017/?ssl=true&replicaSet=atlas-azcxpo-shard-0&authSource=admin&retryWrites=true&w=majority`;
+export const mongoUri = urlMongo;
 // export const mongoUri = `mongodb://admin:admin@localhost:27017/test`;
 mongoose.set("strictQuery", false);
 

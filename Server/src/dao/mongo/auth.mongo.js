@@ -26,7 +26,7 @@ class authManager {
     }
   }
 
-  async persistGoogle(profile) {
+  async persistGoogle(newUserInfo) {
     try {
       const newUser = await usersModel.create(newUserInfo);
 
