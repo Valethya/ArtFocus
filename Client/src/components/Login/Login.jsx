@@ -4,6 +4,7 @@ import fetchCurrent from "../../services/userService";
 import { useDispatch, useSelector } from "react-redux";
 import apiRequest from "../../services/api";
 import { Link } from "react-router-dom";
+import BASE_URL from "../../config";
 function Login() {
   const user = useSelector((state) => state.user);
   const {
@@ -79,13 +80,13 @@ function Login() {
           Olvide la contraseña
         </Link>
         <button className="btn">
-          <a href="https://artfocus-production.up.railway.app/auth/github">
+          <a href={`${BASE_URL}/auth/github`}>
             Entrar con Github
             <img className="icon" src="/img/github.png" />
           </a>
         </button>
         <button className="btn">
-          <a href="https://artfocus-production.up.railway.app/auth/google">
+          <a href={`${BASE_URL}/auth/google`}>
             Entrar con Google
             <img className="icon" src="/img/google.png" />
           </a>

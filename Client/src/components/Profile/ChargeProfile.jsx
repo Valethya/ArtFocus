@@ -4,9 +4,9 @@ import Button from "../Button/Button";
 import { useState } from "react";
 import fetchCurrent from "../../services/userService";
 import { useDispatch } from "react-redux";
+import BASE_URL from "../../config";
 
 function ChargeProfile({ user, setDisplayOverlay, displayOverlay }) {
-  const BASE_URL = "https://artfocus-production.up.railway.app";
   const [previewImage, setPreviewImage] = useState(null);
   const {
     register,

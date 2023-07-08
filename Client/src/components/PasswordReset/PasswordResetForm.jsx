@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import Button from "../Button/Button.jsx";
 import Input from "../Form/Input.jsx";
+import BASE_URL from "../../config.js";
 
 function PasswordResetForm() {
-  const BASE_URL = "https://artfocus-production.up.railway.app";
   const {
     register,
     handleSubmit,

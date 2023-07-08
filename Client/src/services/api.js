@@ -1,9 +1,7 @@
-// services/api.js
-const BASE_URL = "https://artfocus-production.up.railway.app";
+import BASE_URL from "../config";
 
 async function apiRequest(endpoint, method = "GET", data = null) {
   const url = `${BASE_URL}${endpoint}`;
-
   const options = {
     method,
     credentials: "include",

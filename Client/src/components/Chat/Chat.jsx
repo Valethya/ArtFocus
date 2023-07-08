@@ -5,9 +5,9 @@ import { ApiContext } from "../../context/ApiContext";
 import Overlay from "../Overlay/Overlay";
 import { Icon } from "@mui/material";
 import { useForm } from "react-hook-form";
+import BASE_URL from "../../config";
 
 export default function Chat() {
-  const BASE_URL = "https://artfocus-production.up.railway.app";
   const { register, handleSubmit, reset } = useForm();
   const socket = io(BASE_URL);
   const [allMessage, setAllMessage] = useState([]);

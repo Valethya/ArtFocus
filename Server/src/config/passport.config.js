@@ -15,6 +15,7 @@ import { tokenExtractor } from "../utils/tokenExtractor.js";
 import { authLogin, authGithub, authGoogle } from "../service/auth.service.js";
 import usersModel from "../dao/mongo/models/users.models.js";
 import { register } from "../service/users.service.js";
+import BASE_URL from "../../../Client/src/config.js";
 
 const users = await managerFactory.getManager("users");
 
@@ -103,7 +104,7 @@ const initializePassport = () => {
       {
         clientID: idGithub,
         clientSecret: secretGithub,
-        callbackURL: `https://artfocus-production.up.railway.app/auth/githubcallback`,
+        callbackURL: `${BASE_URL}/auth/githubcallback`,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -124,7 +125,7 @@ const initializePassport = () => {
       {
         clientID: idGoogle,
         clientSecret: secretGoogle,
-        callbackURL: `https://artfocus-production.up.railway.app/auth/google/callback`,
+        callbackURL: `${BASE_URL}/auth/google/callback`,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

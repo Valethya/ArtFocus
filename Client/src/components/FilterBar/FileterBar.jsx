@@ -1,9 +1,9 @@
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import Select from "../Form/Select.jsx";
 import { useForm } from "react-hook-form";
+import BASE_URL from "../../config.js";
 
 function FilterBar({ url }) {
-  const BASE_URL = "https://artfocus-production.up.railway.app";
   const {
     register,
     handleSubmit,

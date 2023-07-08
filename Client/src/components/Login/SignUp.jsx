@@ -3,7 +3,6 @@ import Input from "../Form/Input";
 import Frame from "../Frame/Frame";
 import { useNavigate } from "react-router-dom";
 function SignUp() {
-  const BASE_URL = "https://artfocus-production.up.railway.app";
   const navigate = useNavigate();
 
   const {

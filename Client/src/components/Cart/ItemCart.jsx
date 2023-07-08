@@ -4,17 +4,14 @@ import Icon from "@mui/material/Icon";
 import { useDispatch, useSelector } from "react-redux";
 import { decrement } from "../../store/slice/conuterSlice";
 import apiRequest from "../../services/api";
-import fetchSummaryCartByProduct from "../../services/cartService";
+import fetchSummaryCartByProduct, {
+  fetchCart,
+} from "../../services/cartService";
 
 export function ItemCart() {
-  const [summaryProductInCart, setSummaryProductInCart] = useState("");
   const cartId = useSelector((state) => state.user.cartId);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    fetchSummaryCartByProduct(setSummaryCart, cartId);
-  }, [cartId]);
-
+  const summaryProductInCart = useSelector((state) => state.cart.summary);
   async function handleRemove(prod) {
     try {
       const endPoint = `/api/carts/${cartId}/product/${prod}`;
@@ -22,7 +19,7 @@ export function ItemCart() {
 
       if (response.status == "success") {
         dispatch(decrement());
-        fetchSummaryCartByProduct(setSummaryProductInCart, cartId);
+        fetchCart(`/api/carts/summary/${cartId}`, dispatch);
       }
     } catch (error) {
       console.log(error);

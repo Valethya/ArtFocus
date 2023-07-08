@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import Input from "../Form/Input.jsx";
 import Select from "../Form/Select.jsx";
+import BASE_URL from "../../config.js";
 
 function CreateProduct() {
-  const BASE_URL = "https://artfocus-production.up.railway.app";
   const {
     register,
     handleSubmit,

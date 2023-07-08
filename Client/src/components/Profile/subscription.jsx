@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import fetchCurrent from "../../services/userService";
 import { useForm } from "react-hook-form";
 import Input from "../Form/Input";
+import BASE_URL from "../../config";
 
 function Subscription() {
   const {
@@ -28,7 +29,6 @@ function Subscription() {
   };
 
   const onSubmit = async (dataForm, event) => {
-    const BASE_URL = "https://artfocus-production.up.railway.app";
     event.preventDefault();
     const formData = new FormData();
     formData.append("identification", dataForm.identification[0]);
