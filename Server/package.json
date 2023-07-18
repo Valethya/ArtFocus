@@ -39,7 +39,7 @@
     "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0",
     "winston": "^3.8.2",
-    "mongodb": "8.13.3"
+    "mongodb": "5.7.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
