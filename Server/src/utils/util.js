@@ -19,5 +19,5 @@ const storage = (folder) => {
 export const uploader = (folder) => {
   return multer({ storage: storage(folder) });
 };
-
+console.log(__dirname + `/upload/${folder}`);
 export default __dirname;
