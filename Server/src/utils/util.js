@@ -9,6 +9,7 @@ const storage = (folder) => {
   return multer.diskStorage({
     destination: (res, file, cb) => {
       cb(null, __dirname + `/upload/${folder}`);
+      console.log(__dirname + `/upload/${folder}`);
     },
     filename: (req, file, cb) => {
       cb(null, Date.now() + file.originalname);
@@ -19,5 +20,5 @@ const storage = (folder) => {
 export const uploader = (folder) => {
   return multer({ storage: storage(folder) });
 };
-console.log(__dirname + `/upload/${folder}`);
+
 export default __dirname;
